@@ -10,8 +10,20 @@
             "minecraft:physics": { "has_collision": true, "has_gravity": true},
             "minecraft:navigation.generic": { "avoid_damage_blocks": false, "avoid_portals": false, "can_float": true, "can_jump": true, "can_walk": true},
             "minecraft:movement": { "value": 0 },
-            "minecraft:damage_sensor": { "triggers": { "cause": "fall", "on_damage": { "event": "atomic:kill", "target": "self" }}},
+            "minecraft:movement.basic": {
+                "max_turn": 30
+            },
+            "minecraft:damage_sensor": { 
+                "triggers": 
+                { "cause": "fall", 
+                "on_damage": 
+                { "event": 
+                "atomic:kill", 
+                "target": "self" }
+                }   
+            },
             "minecraft:collision_box": { "height": 4, "width": 1 }
+
         },
         "events": { "atomic:kill": { "add": { "component_groups": [ "atomic:explode" ]}}}
     }

@@ -15,6 +15,9 @@
             "minecraft:movement": {
                 "value": 0
             },
+            "minecraft:movement.basic": {
+                "max_turn": 30
+            },
             "minecraft:pushable": {
                 "is_pushable": false,
                 "is_pushable_by_piston": true

@@ -12,6 +12,9 @@
 			"minecraft:movement": {
 				"value": 0
 			},
+			"minecraft:movement.basic": {
+				"max_turn": 30
+			},
 			"minecraft:physics": {
 				"has_collision": true,
 				"has_gravity": true

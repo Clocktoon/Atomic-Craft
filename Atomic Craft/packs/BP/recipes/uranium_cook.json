@@ -1,4 +1,11 @@
 {
     "format_version": "1.21.100",
-    "minecraft:recipe_furnace": {"description": {"identifier": "atomic:uranium_cook"}, "tags": ["blast_furnace", "furnace"], "input": "atomic:raw_uranium", "output": "atomic:uranium_cooked"}
+    "minecraft:recipe_furnace": 
+    {"description": 
+    {"identifier": "atomic:uranium_cook"}, 
+    "tags": ["blast_furnace", "furnace"], 
+    "input": "atomic:raw_uranium", 
+    "output": "atomic:uranium_cooked",
+    "unlock": [{"item": "atomic:raw_uranium"}]
+}
 }
