@@ -1,0 +1,38 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "atomic:remote_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"Q Q",
+			"QAQ",
+			"Q Q"
+		],
+		"key": {
+			"A": {
+				"item": "redstone_torch"
+			},
+			"Q": {
+				"item": "iron_ingot",
+				"data": 2
+			}
+		},
+		"unlock": [
+			{
+				"item": "redstone"
+			},
+			{
+				"item": "iron_ingot"
+			}
+		],
+		"result": {
+			"count": 10,
+			"data": 2,
+			"item": "atomic:missile_button"
+		}
+	}
+}

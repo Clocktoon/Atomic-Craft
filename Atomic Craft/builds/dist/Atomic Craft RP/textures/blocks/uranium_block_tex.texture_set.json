@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "uranium_block_tex",
+		"metalness_emissive_roughness": "uranium_block_tex_mer",
+		"heightmap": "uranium_block_tex_height"
+	}
+}

@@ -1,0 +1,48 @@
+{
+	"resource_pack_name": "Atomic Craft",
+	"texture_name": "atlas.items",
+	"texture_data": {
+		"atomic_raw_uranium": {
+			"textures": "textures/items/uraniumver2"
+		},
+		"atomic_uranium_cooked": {
+			"textures": "textures/items/uranium_cooked"
+		},
+		"atomic_core": {
+			"textures": "textures/items/core_texture"
+		},
+		"atomic_grenade": {
+			"textures": "textures/items/grenade"
+		},
+		"atomic_missile_button": {
+			"textures": "textures/items/missile_button"
+		},
+		"atomic_siren_spawn": {
+			"textures": "textures/items/siren_spawn"
+		},
+		"atomic_tablet": {
+			"textures": "textures/items/tablet"
+		},
+		"atomic_gas_mask": {
+			"textures": "textures/items/gas_maskitem"
+		},
+		"atomic_gas_tank": {
+			"textures": "textures/items/gas_tank"
+		},
+		"atomic_gas_storage": {
+			"textures": "textures/items/gas_storage"
+		},
+		"atomic_uranium_vita_egg": {
+			"textures": "textures/items/vita_spawn"
+		},
+		"atomic_plane_item": {
+			"textures": "textures/items/plane_item"
+		},
+		"atomic_engine": {
+			"textures": "textures/items/engine_tex"
+		},
+		"atomic_shell": {
+			"textures": "textures/items/shell"
+		}
+	}
+}

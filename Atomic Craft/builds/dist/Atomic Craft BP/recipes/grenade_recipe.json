@@ -1,0 +1,33 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "atomic:grenade_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"  ",
+			"IBI",
+			"I"
+		],
+		"key": {
+			"B": {
+				"item": "gunpowder",
+				"data": 1
+			},
+			"I": {
+				"item": "iron_nugget"
+			}
+		},
+		"unlock": {
+			"context": "AlwaysUnlocked"
+		},
+		"result": {
+			"count": 6,
+			"data": 1,
+			"item": "atomic:grenade"
+		}
+	}
+}

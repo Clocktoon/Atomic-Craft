@@ -1,0 +1,50 @@
+{
+	"num_mip_levels": 4,
+	"padding": 8,
+	"resource_pack_name": "Atomic Craft",
+	"texture_name": "atlas.terrain",
+	"texture_data": {
+		"atomic_uranium_ore": {
+			"textures": "textures/blocks/uranium ore texture"
+		},
+		"atomic_atom_bomb": {
+			"textures": "textures/blocks/Nuke_block_texture"
+		},
+		"atomic_radiation_block": {
+			"textures": "textures/blocks/radiationtex"
+		},
+		"atomic_burned_log_up": {
+			"textures": "textures/blocks/burnedlogup"
+		},
+		"atomic_burned_log_sides": {
+			"textures": "textures/blocks/burnedlogtex"
+		},
+		"atomic_radiation_diamond_block": {
+			"textures": "textures/blocks/radiation_diamond"
+		},
+		"atomic_enhanced_tnt": {
+			"textures": "textures/blocks/enchanced_tnt"
+		},
+		"atomic_uranium_deepslate": {
+			"textures": "textures/blocks/uranium_deepslate1"
+		},
+		"atomic_landmine": {
+			"textures": "textures/blocks/landminetex"
+		},
+		"atomic_dead_grass_side": {
+			"textures": "textures/blocks/dead_grass_side"
+		},
+		"atomic_dead_grass_up": {
+			"textures": "textures/blocks/dead_grass_top"
+		},
+		"atomic_dead_grass_bottom": {
+			"textures": "textures/blocks/dead_grass_bottom"
+		},
+		"atomic_radiation_plank": {
+			"textures": "textures/blocks/radi_plank"
+		},
+		"atomic_uranium_block": {
+			"textures": "textures/blocks/uranium_block_tex"
+		}
+	}
+}

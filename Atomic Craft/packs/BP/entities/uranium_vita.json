@@ -1,0 +1,31 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:entity": {
+        "description": { "identifier": "atomic:uranium_vita", "is_spawnable": true, "is_summonable": true, "is_experimental": false},
+        "component_groups": {},
+        "components": {
+            "minecraft:health": { "value": 5 },
+            "minecraft:attack": { "damage": 2 },
+            "minecraft:movement": { "value": 0.3 },
+            "minecraft:navigation.generic": { "avoid_damage_blocks": true, "can_float": true, "can_jump": true, "can_walk": true},
+            "minecraft:physics": { "has_collision": true, "has_gravity": true},
+            "minecraft:movement.generic": { "max_turn": 135 },
+            "minecraft:jump.dynamic": {},
+            "minecraft:behavior.random_stroll": { "priority": 1 },
+            "minecraft:behavior.nearest_attackable_target": {
+                "must_see": true,
+                "reselect_targets": true,
+                "within_radius": 25,
+                "priority": 2,
+                "must_see_forget_duration": 23,
+                "entity_types": [{ "filters": { "test": "is_family", "subject": "other", "value": "player" }, "max_dist": 20 }]
+            },
+            "minecraft:behavior.defend_trusted_target": { "priority": 5, "must_see": false, "must_see_forget_duration": 10 },
+            "minecraft:behavior.melee_attack": { "priority": 3, "melee_fov": 90, "speed_multiplier": 1, "track_target": true, "require_complete_path": false},
+            "minecraft:loot": { "table": "loot_tables/vita_loot.json" },
+            "minecraft:collision_box": { "height": 1, "width": 1 },
+            "minecraft:behavior.hurt_by_target": { "alert_same_type": true, "priority": 3 }
+        },
+        "events": {}
+    }
+}

@@ -1,0 +1,43 @@
+{
+	"format_version": [
+		1,
+		1,
+		0
+	],
+	"atomic:uranium_ore": {
+		"sound": "stone",
+		"textures": "atomic_uranium_ore"
+	},
+	"atomic:atom_bomb": {
+		"sound": "netherite"
+	},
+	"atomic:radiation_block": {
+		"sound": "tuff",
+		"textures": "atomic_radiation_block"
+	},
+	"atomic:burned_log": {
+		"sound": "wood"
+	},
+	"atomic:radiation_diamond_block": {
+		"sound": "tuff"
+	},
+	"atomic:enhanced_tnt": {
+		"sound": "stone"
+	},
+	"atomic:uranium_deepslate": {
+		"sound": "deepslate",
+		"textures": "atomic_uranium_deepslate"
+	},
+	"atomic:landmine": {
+		"sound": "iron"
+	},
+	"atomic:dead_grass": {
+		"sound": "grass"
+	},
+	"atomic:radiation_plank": {
+		"sound": "wood"
+	},
+	"atomic:uranium_block": {
+		"sound": "amethyst_block"
+	}
+}

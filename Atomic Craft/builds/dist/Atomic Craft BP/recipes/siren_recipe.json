@@ -1,0 +1,36 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shapeless": {
+		"description": {
+			"identifier": "atomic:siren_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"priority": 0,
+		"ingredients": [
+			{
+				"item": "iron_block",
+				"count": 2,
+				"data": 9
+			},
+			{
+				"item": "noteblock",
+				"count": 1
+			}
+		],
+		"unlock": [
+			{
+				"item": "iron_ingot"
+			},
+			{
+				"item": "noteblock"
+			}
+		],
+		"result": {
+			"count": 1,
+			"item": "atomic:siren_spawn",
+			"data": 9
+		}
+	}
+}

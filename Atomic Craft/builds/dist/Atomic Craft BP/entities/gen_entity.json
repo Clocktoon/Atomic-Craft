@@ -1,0 +1,37 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "atomic:gen_entity",
+			"is_spawnable": false,
+			"is_summonable": true,
+			"is_experimental": false
+		},
+		"component_groups": {},
+		"components": {
+			"minecraft:movement": {
+				"value": 0
+			},
+			"minecraft:physics": {
+				"has_collision": true,
+				"has_gravity": true
+			},
+			"minecraft:navigation.generic": {
+				"can_walk": false,
+				"can_float": true
+			},
+			"minecraft:collision_box": {
+				"height": 1,
+				"width": 1
+			},
+			"minecraft:health": {
+				"value": 1
+			},
+			"minecraft:tick_world": {
+				"never_despawn": true,
+				"radius": 6
+			}
+		},
+		"events": {}
+	}
+}

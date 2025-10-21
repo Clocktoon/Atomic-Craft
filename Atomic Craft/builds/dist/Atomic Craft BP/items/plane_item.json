@@ -1,0 +1,18 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "atomic:plane_item",
+			"menu_category": {
+				"category": "items"
+			}
+		},
+		"components": {
+			"minecraft:icon": "atomic_plane_item",
+			"minecraft:max_stack_size": 64,
+			"minecraft:entity_placer": {
+				"entity": "atomic:plane"
+			}
+		}
+	}
+}

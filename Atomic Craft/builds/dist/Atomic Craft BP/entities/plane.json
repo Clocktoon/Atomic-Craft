@@ -1,0 +1,114 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "atomic:plane",
+			"is_spawnable": false,
+			"is_summonable": true,
+			"is_experimental": false
+		},
+		"component_groups": {
+			"atomic:ground": {
+				"minecraft:physics": {
+					"has_gravity": true
+				}
+			},
+			"atomic:flying": {
+				"minecraft:physics": {
+					"has_gravity": false
+				},
+				"minecraft:flying_speed": {
+					"value": 0.09
+				},
+				"minecraft:interact": {
+					"interactions": {
+						"interact_text": "action.interact.use",
+						"cooldown": 7
+					}
+				}
+			}
+		},
+		"components": {
+			"minecraft:health": {
+				"value": 10
+			},
+			"minecraft:input_air_controlled": {
+				"backwards_movement_modifier": 0.5,
+				"strafe_speed_modifier": 0.4
+			},
+			"minecraft:type_family": {
+				"family": [
+					"plane"
+				]
+			},
+			"minecraft:rideable": {
+				"seat_count": 1,
+				"interact_text": "action.interact.ride.horse",
+				"family_types": [
+					"player"
+				],
+				"seats": {
+					"position": [
+						0,
+						0.63,
+						0
+					]
+				},
+				"on_rider_enter_event": "atomic:fly",
+				"on_rider_exit_event": "atomic:grounded",
+				"rider_can_interact": true
+			},
+			"minecraft:damage_sensor": {
+				"triggers": {
+					"cause": "fall",
+					"deals_damage": "no"
+				}
+			},
+			"minecraft:movement": {
+				"value": 0.55
+			},
+			"minecraft:jump.dynamic": {},
+			"minecraft:navigation.generic": {
+				"can_walk": true,
+				"can_float": true,
+				"can_jump": true
+			},
+			"minecraft:movement.basic": {
+				"max_turn": 135
+			},
+			"minecraft:collision_box": {
+				"height": 2.8,
+				"width": 2
+			},
+			"minecraft:loot": {
+				"table": "loot_tables/plane_loot.json"
+			}
+		},
+		"events": {
+			"atomic:grounded": {
+				"add": {
+					"component_groups": [
+						"atomic:ground"
+					]
+				},
+				"remove": {
+					"component_groups": [
+						"atomic:flying"
+					]
+				}
+			},
+			"atomic:fly": {
+				"add": {
+					"component_groups": [
+						"atomic:flying"
+					]
+				},
+				"remove": {
+					"component_groups": [
+						"atomic:ground"
+					]
+				}
+			}
+		}
+	}
+}

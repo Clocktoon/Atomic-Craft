@@ -1,0 +1,35 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "atomic:uranium_vita",
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"default": "textures/entity/vita_tex"
+			},
+			"geometry": {
+				"default": "geometry.uranium_vita"
+			},
+			"render_controllers": [
+				"controller.render.uranium_vita"
+			],
+			"spawn_egg": {
+				"texture": "atomic_uranium_vita_egg",
+				"texture_index": 0
+			},
+			"animations": {
+				"idle": "animation.vita.idle",
+				"attack": "animation.vita.attack",
+				"walk": "animation.vita.walk",
+				"vita": "controller.animation.vita"
+			},
+			"scripts": {
+				"animate": [
+					"vita"
+				]
+			}
+		}
+	}
+}

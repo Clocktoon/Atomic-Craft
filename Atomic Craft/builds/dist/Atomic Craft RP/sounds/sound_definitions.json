@@ -1,0 +1,47 @@
+{
+	"format_version": "1.14.0",
+	"sound_definitions": {
+		"atomic.nukesoundd": {
+			"sounds": [
+				"sounds/nukesound"
+			],
+			"category": "block"
+		},
+		"atomic.siren": {
+			"sounds": [
+				"sounds/fullsiren"
+			],
+			"category": "block"
+		},
+		"atomic.beep": {
+			"sounds": [
+				"sounds/beepingsound"
+			],
+			"category": "block"
+		},
+		"atomic.explosions": {
+			"category": "block",
+			"sounds": [
+				{
+					"name": "sounds/explosions3",
+					"load_on_low_memory": true
+				},
+				"sounds/explosions1",
+				"sounds/explosions2",
+				"sounds/explosions4",
+				"sounds/explosions5",
+				"sounds/explosions6"
+			]
+		},
+		"atomic.plane": {
+			"sounds": [
+				"sounds/plane_sound"
+			]
+		},
+		"atomic.plane.missile": {
+			"sounds": [
+				"sounds/missile_plane_sound"
+			]
+		}
+	}
+}

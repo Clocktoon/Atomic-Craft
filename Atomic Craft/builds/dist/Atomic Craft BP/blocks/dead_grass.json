@@ -1,0 +1,36 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "atomic:dead_grass"
+		},
+		"components": {
+			"minecraft:material_instances": {
+				"east": {
+					"texture": "atomic_dead_grass_side"
+				},
+				"north": {
+					"texture": "atomic_dead_grass_side"
+				},
+				"south": {
+					"texture": "atomic_dead_grass_side"
+				},
+				"west": {
+					"texture": "atomic_dead_grass_side"
+				},
+				"down": {
+					"texture": "atomic_dead_grass_bottom"
+				},
+				"up": {
+					"texture": "atomic_dead_grass_up"
+				}
+			},
+			"minecraft:collision_box": true,
+			"minecraft:selection_box": true,
+			"minecraft:light_dampening": 15,
+			"minecraft:light_emission": 0,
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"atomic:step": {}
+		}
+	}
+}

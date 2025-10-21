@@ -1,0 +1,116 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "atomic:burned_log",
+            "menu_category": {
+                "category": "nature",
+                "group": "minecraft:itemGroup.name.log"
+            },
+            "traits": {
+                "minecraft:placement_position": {
+                    "enabled_states": [
+                        "minecraft:block_face"
+                    ]
+                }
+            }
+        },
+        "components": {
+            "minecraft:collision_box": true,
+            "minecraft:selection_box": true,
+            "minecraft:material_instances": {
+                "up": {
+                    "texture": "atomic_burned_log_up"
+                },
+                "down": {
+                    "texture": "atomic_burned_log_up"
+                },
+                "north": {
+                    "texture": "atomic_burned_log_sides"
+                },
+                "east": {
+                    "texture": "atomic_burned_log_sides"
+                },
+                "south": {
+                    "texture": "atomic_burned_log_sides"
+                },
+                "west": {
+                    "texture": "atomic_burned_log_sides"
+                }
+            },
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:destructible_by_explosion": true,
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 3,
+                "item_specific_speeds": [
+                    {
+                        "item": "wooden_axe",
+                        "destroy_speed": 20
+                    },
+                    {
+                        "item": "iron_axe",
+                        "destroy_speed": 3
+                    },
+                    {
+                        "item": "stone_axe",
+                        "destroy_speed": 10
+                    },
+                    {
+                        "item": "golden_axe",
+                        "destroy_speed": 1
+                    },
+                    {
+                        "item": "diamond_axe",
+                        "destroy_speed": 2
+                    },
+                    {
+                        "item": "netherite_axe",
+                        "destroy_speed": 0
+                    }
+                ]
+            },
+            "minecraft:light_dampening": 15,
+            "minecraft:light_emission": 0,
+            "minecraft:map_color": "#594C4C",
+            "atomic:step": {}
+        },
+        "permutations": [
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            0,
+                            90
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            90,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "format_version": 2,
+    "metadata": {
+        "authors": [
+            "Abbadon"
+        ],
+        "generated_with": {
+            "bridge": [
+                "2.7.50"
+            ],
+            "dash": [
+                "0.11.7"
+            ]
+        }
+    },
+    "header": {
+        "name": "pack.name",
+        "description": "pack.description",
+        "min_engine_version": [
+            1,
+            21,
+            90
+        ],
+        "uuid": "081bbb30-42ce-438e-a98e-42f1cdf10512",
+        "version": [
+            1,
+            0,
+            0
+        ]
+    },
+    "modules": [
+        {
+            "type": "data",
+            "uuid": "56d4f6b7-d9fe-4b15-8d30-dbe4e51f2f48",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "type": "script",
+            "version": [
+                1,
+                0,
+                0
+            ],
+            "uuid": "69cd2217-a7fe-44d6-8eb4-952e0f93a53b",
+            "language": "javascript",
+            "entry": "main.js"
+        }
+    ],
+    "capabilities": [
+        "pbr",
+        "script_eval"
+    ],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "2.1.0"
+        },
+        {
+            "module_name": "@minecraft/server-ui",
+            "version": "2.0.0"
+        }
+    ]
+}
