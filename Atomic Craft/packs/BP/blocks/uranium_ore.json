@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:destructible_by_mining": {
-				"seconds_to_destroy": 6,
+				"seconds_to_destroy": 11,
 				"item_specific_speeds": [
 					{
 						"item": "wooden_pickaxe",

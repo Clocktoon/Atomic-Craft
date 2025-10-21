@@ -41,7 +41,7 @@
             "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:destructible_by_explosion": true,
             "minecraft:destructible_by_mining": {
-                "seconds_to_destroy": 3,
+                "seconds_to_destroy": 30,
                 "item_specific_speeds": [
                     {
                         "item": "wooden_axe",
