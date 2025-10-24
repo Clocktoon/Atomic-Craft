@@ -37,7 +37,33 @@
                 "height": 7.5,
                 "width": 1
             },
-            "minecraft:can_fly": true
+            "minecraft:can_fly": true,
+            "minecraft:type_family": {
+                "family": ["missile"]
+            },
+            "minecraft:hurt_on_condition": {
+                "damage_conditions": [
+                    {
+                        "cause": "fall"
+                    }
+                ]
+            },
+            "minecraft:tick_world": {
+                "never_despawn": true,
+                "radius": 2
+            },
+            "minecraft:conditional_bandwidth_optimization": {
+                "conditional_values": [],
+                "default_values": {}
+            },
+            "minecraft:interact": {
+                "interactions": [
+                    {"interact_text": "action.interact.use"}
+                ]
+            },
+            "minecraft:loot": {
+                "table": "loot_tables/icbm.json"
+            }
         }
 }
 }

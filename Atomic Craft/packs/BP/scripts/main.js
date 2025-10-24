@@ -14,6 +14,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./sirenCode.js")
     import("./planeCode.js")
     import("./welcomeText")
+    import("./icbmCode.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
 

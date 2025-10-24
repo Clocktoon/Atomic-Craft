@@ -19,6 +19,9 @@
 				"base_color": "#000000",
 				"overlay_color": "#FFFFFF"
 			},
+			"particle_effects": {
+				"missile_smoke": "minecraft:campfire_smoke_particle"
+			},
 			"animations": {
 				"idle": "animation.missile.idle",
 				"moving": "animation.missile.moving",

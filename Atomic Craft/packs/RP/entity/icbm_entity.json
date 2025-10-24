@@ -13,7 +13,7 @@
                 "default": "entity_alphatest"
             },
             "textures": {
-                "default": "textures/entity/icbm_texture"
+                "default": "textures/entity/icmb_texture"
             }
         }
     }

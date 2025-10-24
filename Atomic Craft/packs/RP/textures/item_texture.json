@@ -43,6 +43,12 @@
 		},
 		"atomic_shell": {
 			"textures": "textures/items/shell"
+		},
+		"atomic_icbm_icon": {
+			"textures": "textures/items/icbm_icon"
+		},
+		"atomic_steel_icon": {
+			"textures": "textures/items/steel_ingot_tex"
 		}
 	}
 }

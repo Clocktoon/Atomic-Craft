@@ -43,3 +43,5 @@ item.atomic:shell=Shell
 tile.atomic:uranium_block.name=Uranium Block
 tile.atomic:ballistic_missile_console.name=Ballistic missile console
 tile.atomic:hydrogen_bomb.name=Hydrogen bomb
+entity.atomic:icbm.name=ICBM
+tile.atomic:icbm_item.name=ICBM
