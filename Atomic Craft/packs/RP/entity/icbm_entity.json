@@ -1,0 +1,20 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:icbm",
+            "render_controllers": [
+                "controller.render.icbm_entity"
+            ],
+            "geometry": {
+                "default": "geometry.icbm"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "default": "textures/entity/icbm_texture"
+            }
+        }
+    }
+}

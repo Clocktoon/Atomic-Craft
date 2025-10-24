@@ -1,0 +1,43 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "atomic:icbm",
+            "is_spawnable": false,
+            "is_summonable": true,
+            "is_experimental": false
+        },
+        "components": {
+            "minecraft:health": {
+                "value": 100
+            },
+            "minecraft:attack": {
+                "damage": 0
+            },
+            "minecraft:movement": {
+                "value": 1
+            },
+            "minecraft:navigation.fly": {
+                "can_walk": false,
+                "can_jump": false,
+                "can_sink": true
+            },
+            "minecraft:movement.fly": {
+                "max_turn": 30
+            },
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": true
+            },
+            "minecraft:pushable": {
+                "is_pushable": false,
+                "is_pushable_by_piston": false
+            },
+            "minecraft:collision_box": {
+                "height": 7.5,
+                "width": 1
+            },
+            "minecraft:can_fly": true
+        }
+}
+}
