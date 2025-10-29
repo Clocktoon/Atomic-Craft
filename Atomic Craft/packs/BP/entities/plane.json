@@ -32,8 +32,8 @@
             "minecraft:health": {
                 "value": 10
             },
-            "minecraft:input_air_controlled": {
-                "backwards_movement_modifier": 0.5,
+            "minecraft:free_camera_controlled": {
+                 "backwards_movement_modifier": 0.5,
                 "strafe_speed_modifier": 0.4
             },
             "minecraft:type_family": {

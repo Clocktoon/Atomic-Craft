@@ -33,7 +33,13 @@
 			"minecraft:tick_world": {
 				"never_despawn": true,
 				"radius": 6
-			}
+			},
+			"minecraft:breathable": {
+                "total_supply": 3000,
+                "breathes_air": true,
+                "inhale_time": 0,
+                "suffocate_time": 20
+            }
 		},
 		"events": {}
 	}

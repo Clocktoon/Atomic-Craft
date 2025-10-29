@@ -1,13 +1,144 @@
 {
-    "format_version": "1.21.110",
+    "format_version": "1.21.120",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:icbm",
             "is_spawnable": false,
             "is_summonable": true,
-            "is_experimental": false
+            "is_experimental": false,
+            "properties": {
+                "atomic:blue": {
+                    "type": "bool",
+                    "default": false
+                },
+                "atomic:green": {
+                    "type": "bool",
+                    "default": false
+                },
+                "atomic:purple": {
+                    "type": "bool",
+                    "default": false
+                },
+                "atomic:white": {
+                    "type": "bool",
+                    "default": false
+                },
+                "atomic:yellow": {
+                    "type": "bool",
+                    "default": false
+                },
+                "atomic:red": {
+                    "type": "bool",
+                    "default": false
+                }
+            }
         },
         "components": {
+
+             "minecraft:behavior.nearest_attackable_target": {
+              "priority": 0,
+              "reselect_targets": true,
+              "target_search_height": 1000,
+              "within_radius": 1000,
+                "must_see": false,
+                "entity_types": [
+                    {
+                        "filters": [
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:blue",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            },
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:green",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            },
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:purple",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            },
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:white",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            },
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:yellow",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            },
+                            {
+                                "all_of": [
+                                    {
+                                        "test": "bool_property",
+                                        "domain": "atomic:red",
+                                        "operator": "==",
+                                        "value": true
+                                    },
+                                    {
+                                        "test": "is_family",
+                                        "subject": "other",
+                                        "value": "mark"
+                                    }
+                                ]
+                            }
+                        ],
+                        "max_dist": 1000
+                    }
+                ]
+            },
             "minecraft:health": {
                 "value": 100
             },
@@ -63,7 +194,17 @@
             },
             "minecraft:loot": {
                 "table": "loot_tables/icbm.json"
-            }
+            },
+            "minecraft:behavior.melee_attack": {
+                 "priority": 0,
+                "require_complete_path": true,
+                    "track_target": true
+                        },
+                    "minecraft:follow_range": {
+                        "value": 1000,
+                         "max": 1000
+                        }
+           
         }
 }
 }

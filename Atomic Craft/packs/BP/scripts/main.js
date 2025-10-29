@@ -7,6 +7,7 @@ import("./missileSummon.js")
 import("./remoteMissile.js")
 import("./landMineCode.js")
 import("./hBombCode.js")
+import("./icbmComp.js")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")
     import("./projectileScript.js")
