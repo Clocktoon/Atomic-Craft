@@ -1,4 +1,4 @@
-import { world, system, Dimension, BlockVolume, BlockVolumeBase } from "@minecraft/server"
+import { world} from "@minecraft/server"
 
 
 world.afterEvents.playerInteractWithBlock.subscribe((Event) => {
@@ -8,9 +8,6 @@ world.afterEvents.playerInteractWithBlock.subscribe((Event) => {
 
      if (block.typeId === "atomic:enhanced_tnt" && itemstack.typeId === "minecraft:flint_and_steel" && block.permutation.getState("atomic:on") == false) {
           block.dimension.playSound("entity.tnt.primed", block.location)
-          block.setPermutation(block.permutation.withState("atomic:on", true))
-          system.runTimeout(() => {
-               block.dimension.createExplosion(block.location, 16, { allowUnderwater: true })
-          }, 240)
+          block.dimension.spawnEntity("atomic:enhanced_mob",{x: block.location.x, y: block.location.y + 1, z: block.location.z})
      }
 })

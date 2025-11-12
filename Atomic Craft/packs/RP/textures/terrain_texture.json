@@ -57,9 +57,6 @@
 		},
 		"atomic_hydrogen_bomb": {
 			"textures": "textures/blocks/hbomb_tex"
-		},
-		"atomic_enhanced_tnt_light": {
-			"textures": "textures/blocks/enchanced_tnt_light"
 		}
 	}
 }

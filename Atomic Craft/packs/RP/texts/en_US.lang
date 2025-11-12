@@ -59,3 +59,6 @@ item.atomic:green_chip.name=Green chip
 item.atomic:red_chip.name=Red chip
 item.atomic:white_chip.name=White chip
 item.atomic:yellow_chip.name=Yellow chip
+entity.non_icbm.name=Non Nuclear Icbm
+item.atomic:non_icbm_item.name=Non Nuclear ICBM
+entity.enhanced_mob.name=Enhanced tnt mob

@@ -8,6 +8,8 @@ import("./remoteMissile.js")
 import("./landMineCode.js")
 import("./hBombCode.js")
 import("./icbmComp.js")
+import("./consoleCode.js")
+import("./nonComp.js")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")
     import("./projectileScript.js")

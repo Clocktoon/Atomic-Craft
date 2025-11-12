@@ -43,6 +43,7 @@ const Clicky = {
                 block.dimension.spawnParticle("atomic:nukepart2", block.location)
                 block.dimension.createExplosion(block.location, 20,
                     { causesFire: true, allowUnderwater: false })
+                
 
                 // Sound code by MapleStar // TC (discord)
                 function playExplosionAudio(dimension, center, magnitude) {
@@ -108,15 +109,15 @@ const Clicky = {
                 yield
 
                 const from = {
-                    x: block.location.x - 150,
+                    x: block.location.x - 200,
                     y: block.location.y - 20,
-                    z: block.location.z - 150
+                    z: block.location.z - 200
                 }
 
                 const to = {
-                    x: block.location.x + 150,
+                    x: block.location.x + 200,
                     y: block.location.y + 30,
-                    z: block.location.z + 150
+                    z: block.location.z + 200
 
                 }
 
@@ -128,6 +129,12 @@ const Clicky = {
 
                 block.dimension.spawnEntity("atomic:gen_entity", { x: px + 80, y: py, z: pz + 80 })
                 block.dimension.spawnEntity("atomic:gen_entity", { x: px - 80, y: py, z: pz - 80 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 140, y: py, z: pz + 140 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 140, y: py, z: pz - 140 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 170, y: py, z: pz + 170 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 170, y: py, z: pz - 170 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 230, y: py, z: pz + 230 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 230, y: py, z: pz - 230 })
 
 
                 const blocklist = block.dimension.getBlocks(blockvol, {
@@ -176,15 +183,15 @@ const Clicky = {
                 }
                 yield
                 const from2 = {
-                    x: block.location.x - 230,
-                    y: block.location.y - 40,
-                    z: block.location.z - 230
+                    x: block.location.x - 500,
+                    y: block.location.y - 70,
+                    z: block.location.z - 500
                 }
 
                 const to2 = {
-                    x: block.location.x + 230,
+                    x: block.location.x + 500,
                     y: block.location.y + 60,
-                    z: block.location.z + 230
+                    z: block.location.z + 500
                 }
 
                 const blockvol2 = new BlockVolume(from2, to2)
@@ -200,11 +207,18 @@ const Clicky = {
 
                 block.dimension.runCommand(`tickingarea add 
                 ${px - 195} 0 ${pz - 195} ${px - 330} 0 ${pz - 330} hb5`)
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 140, y: py, z: pz + 140 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 140, y: py, z: pz - 140 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 170, y: py, z: pz + 170 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 170, y: py, z: pz - 170 })
-
+                yield
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 200, y: py, z: pz - 200 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 200, y: py, z: pz + 200 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 270, y: py, z: pz - 270 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 270, y: py, z: pz + 270 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 330, y: py, z: pz - 330 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 330, y: py, z: pz + 330 })
+                yield
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 400, y: py, z: pz - 400 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 400, y: py, z: pz + 400 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 490, y: py, z: pz + 490 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 490, y: py, z: pz - 490 })
                 yield
                 const getGrass = block.dimension.getBlocks(blockvol2,
                     { includeTypes: ["minecraft:grass"] })

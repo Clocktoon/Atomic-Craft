@@ -1,27 +1,25 @@
 {
-    "format_version": "1.21.110",
+    "format_version": "1.21.120",
     "minecraft:client_entity": {
         "description": {
-            "identifier": "atomic:icbm",
-            "render_controllers": [
-                "controller.render.icbm_entity"
-            ],
+            "identifier": "atomic:non_icbm",
             "geometry": {
-                "default": "geometry.icbm"
+                "default": "geometry.non_nuclear_icbm"
             },
             "materials": {
                 "default": "entity_alphatest"
             },
             "textures": {
-                "default": "textures/entity/icmb_texture"
+                "default": "textures/entity/non_texture"
             },
+            "render_controllers": ["controller.render.non"],
             "particle_effects": {
                 "icbm_trail_partcc": "atomic:icbm_trail_partcc"
             },
             "animations": {
-                "idleny": "animation.icbm.idle",
-                "flying": "animation.icbm.fly",
-                "con": "controller.animation.icbm"
+                "nonidle": "animation.non_nuclear_icbm.idle",
+                "nonflying": "animation.non_nuclear_icbm.flying",
+                "con": "controller.animation.non"
             },
             "scripts": {
                 "animate": [

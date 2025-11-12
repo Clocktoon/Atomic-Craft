@@ -1,0 +1,75 @@
+{
+    "format_version": "1.21.120",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "atomic:ballistic_missile",
+            "is_spawnable": false,
+            "is_summonable": true
+        },
+        "components": {
+            "minecraft:health": {
+                "value": 100
+            },
+            "minecraft:interact": {
+                "interactions": [
+                    {
+                        "interact_text": "action.interact.use"
+                    }
+                ]
+            },
+            "minecraft:collision_box": {
+                "height": 6,
+                "width": 1
+            },
+            "minecraft:behavior.nearest_attackable_target": {
+                "priority": 0,
+                "reselect_targets": true,
+                "target_search_height": 1000,
+                "within_radius": 1000,
+                "must_see": false,
+                "entity_types": [
+                    {
+                    "filters": [
+                        {
+                        "test": "is_family",
+                        "subject": "other",
+                        "value": "hate"
+                        }
+            ],
+            "max_dist": 1000
+        }
+    ]
+        },
+    "minecraft:attack": {
+    "damage": 0
+        },
+    "minecraft:behavior.melee_attack": {
+    "priority": 0,
+    "require_complete_path": true,
+    "track_target": true
+        },
+    "minecraft:follow_range": {
+    "value": 1000,
+    "max": 1000
+    },
+    "minecraft:movement": {
+        "value": 1
+    },
+    "minecraft:movement.fly": {
+        "max_turn": 30
+    },
+    "minecraft:can_fly": true,
+    "minecraft:jump.dynamic": {},
+    "minecraft:tick_world": {
+        "never_despawn": true,
+        "radius": 2
+    },
+    "minecraft:navigation.fly": {
+        "avoid_damage_blocks": false,
+        "can_walk": false,
+        "can_sink": true,
+        "can_jump": true
+    }
+        }
+    }
+}

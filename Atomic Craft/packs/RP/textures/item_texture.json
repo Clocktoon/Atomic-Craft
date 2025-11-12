@@ -67,6 +67,9 @@
 		},
 		"atomic_yellow": {
 			"textures": "textures/items/yellow_card"
+		},
+		"atomic_non": {
+			"textures": "textures/items/non_item"
 		}
 	}
 }

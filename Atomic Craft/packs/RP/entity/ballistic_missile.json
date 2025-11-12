@@ -1,0 +1,20 @@
+{
+    "format_version": "1.21.120",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:ballistic_missile",
+            "geometry": {
+                "default": "geometry.tatical_ballistic_missile"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "default": "textures/entity/tactical_ballistic_texture"
+            },
+            "render_controllers": [
+                "controller.render.balllis"
+            ]
+        }
+    }
+}

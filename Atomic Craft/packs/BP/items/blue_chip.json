@@ -2,7 +2,11 @@
     "format_version": "1.21.120",
     "minecraft:item": {
         "description": {
-            "identifier": "atomic:blue_chip"
+            "identifier": "atomic:blue_chip",
+            "menu_category": {
+                "category": "items"
+            }
+
         },
         "components": {
             "minecraft:max_stack_size": 64,

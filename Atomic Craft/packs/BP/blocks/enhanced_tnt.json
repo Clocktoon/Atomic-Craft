@@ -56,17 +56,7 @@
 			"minecraft:map_color": "#D93737"
 		},
 		"permutations": [
-			{
-				"components": {
-					"minecraft:material_instances": {
-						"*": {
-							"texture": "atomic_enhanced_tnt_light",
-							"render_method": "alpha_test"
-						}
-					}
-				},
-				"condition": "query.block_state('atomic:on') == true"
-			}
+			
 		]
 	}
 }
