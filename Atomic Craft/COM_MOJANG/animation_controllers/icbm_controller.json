@@ -1,0 +1,30 @@
+{
+    "format_version": "1.10.0",
+    "animation_controllers": {
+        "controller.animation.icbm": {
+            "initial_state": "idle",
+            "states": {
+                "idle": {
+                    "animations": [
+                        "idleny"
+                    ],
+                    "transitions": [
+                        {
+                            "flying": "!query.is_on_ground"
+                        }
+                    ]
+                },
+                "flying": {
+                    "animations": [
+                        "flying"
+                    ],
+                    "transitions": [
+                        {
+                            "idle": "query.is_on_ground"
+                        }
+                    ]
+                }
+            }
+        } 
+    }
+}

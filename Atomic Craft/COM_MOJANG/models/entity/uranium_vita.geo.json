@@ -1,0 +1,278 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.uranium_vita",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [
+					0,
+					0.75,
+					0
+				]
+			},
+			"bones": [
+				{
+					"name": "bone",
+					"pivot": [
+						0,
+						7,
+						0
+					]
+				},
+				{
+					"name": "gemone",
+					"parent": "bone",
+					"pivot": [
+						0,
+						7,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								8,
+								-1
+							],
+							"size": [
+								2,
+								8,
+								2
+							],
+							"pivot": [
+								0,
+								8,
+								0
+							],
+							"rotation": [
+								106.52967,
+								73.95931,
+								93.32245
+							],
+							"uv": [
+								0,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lefteye",
+					"parent": "gemone",
+					"pivot": [
+						0,
+						6,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-2,
+								11,
+								-3
+							],
+							"size": [
+								2,
+								2,
+								1
+							],
+							"pivot": [
+								-1,
+								11,
+								-3
+							],
+							"rotation": [
+								12.08681,
+								3.21132,
+								-14.65993
+							],
+							"uv": [
+								16,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "gemtwo",
+					"parent": "bone",
+					"pivot": [
+						0,
+						8,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								1,
+								8,
+								-1
+							],
+							"size": [
+								2,
+								8,
+								2
+							],
+							"pivot": [
+								2,
+								8,
+								0
+							],
+							"rotation": [
+								0,
+								-30,
+								22.5
+							],
+							"uv": [
+								8,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "righteye",
+					"parent": "gemtwo",
+					"pivot": [
+						3,
+						11,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								3,
+								10,
+								-1
+							],
+							"size": [
+								2,
+								2,
+								1
+							],
+							"pivot": [
+								4,
+								10,
+								-1
+							],
+							"rotation": [
+								2.61882,
+								-39.22325,
+								29.32589
+							],
+							"uv": [
+								16,
+								3
+							]
+						}
+					]
+				},
+				{
+					"name": "gemthree",
+					"parent": "bone",
+					"pivot": [
+						0,
+						7,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								0,
+								8,
+								-1
+							],
+							"size": [
+								2,
+								8,
+								2
+							],
+							"pivot": [
+								1,
+								8,
+								0
+							],
+							"rotation": [
+								-15,
+								0,
+								0
+							],
+							"uv": [
+								0,
+								10
+							]
+						}
+					]
+				},
+				{
+					"name": "gemfour",
+					"parent": "bone",
+					"pivot": [
+						1,
+						8,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								0,
+								8,
+								-1
+							],
+							"size": [
+								2,
+								6,
+								2
+							],
+							"pivot": [
+								1,
+								8,
+								0
+							],
+							"rotation": [
+								-24.77485,
+								0.89257,
+								-24.64681
+							],
+							"uv": [
+								8,
+								14
+							]
+						}
+					]
+				},
+				{
+					"name": "body",
+					"parent": "bone",
+					"pivot": [
+						-1,
+						11,
+						-3
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								6,
+								-1
+							],
+							"size": [
+								4,
+								2,
+								2
+							],
+							"uv": [
+								8,
+								10
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

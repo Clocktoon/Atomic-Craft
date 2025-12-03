@@ -1,0 +1,49 @@
+{
+    "format_version": "1.10.0",
+    "animation_controllers": {
+        "controller.animation.himar": {
+            "initial_state": "idle3",
+            "states": {
+                "idle3": {
+                    "animations": [
+                        "idle3"
+                    ],
+                    "transitions": [
+                        {
+                            "driving": "q.ground_speed"
+                        },
+                        {
+                            "launch": "q.property('atomic:launching')== true"
+                        }
+                    ]
+                },
+                "driving": {
+                    "animations": [
+                        "driving"
+                    ],
+                    "transitions": [
+                        {
+                            "idle3": "!q.ground_speed"
+                        },
+                        {
+                            "launch": "q.property('atomic:launching')== true"
+                        }
+                    ]
+                },
+                "launch": {
+                    "animations": [
+                        "launch"
+                    ],
+                    "transitions": [
+                        {
+                            "idle3": "q.property('atomic:launching')== false"
+                        },
+                        {
+                            "driving": "q.property('atomic:launching')== false"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

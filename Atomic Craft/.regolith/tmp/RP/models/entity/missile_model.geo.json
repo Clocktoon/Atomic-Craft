@@ -1,0 +1,197 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.missile",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 6,
+				"visible_bounds_offset": [
+					0,
+					2,
+					0
+				]
+			},
+			"bones": [
+				{
+					"name": "bone",
+					"pivot": [
+						0,
+						0,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								53,
+								16
+							],
+							"uv": [
+								0,
+								0
+							]
+						},
+						{
+							"origin": [
+								-6,
+								53,
+								-6
+							],
+							"size": [
+								12,
+								2,
+								12
+							],
+							"uv": [
+								64,
+								0
+							]
+						},
+						{
+							"origin": [
+								-4,
+								55,
+								-4
+							],
+							"size": [
+								8,
+								3,
+								8
+							],
+							"uv": [
+								64,
+								14
+							]
+						},
+						{
+							"origin": [
+								-1,
+								58,
+								-1
+							],
+							"size": [
+								2,
+								7,
+								2
+							],
+							"uv": [
+								64,
+								59
+							]
+						}
+					],
+					"locators": {
+						"locator": [
+							0,
+							-1,
+							0
+						]
+					}
+				},
+				{
+					"name": "sides",
+					"parent": "bone",
+					"pivot": [
+						0,
+						0,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-19,
+								0,
+								0
+							],
+							"size": [
+								11,
+								15,
+								0
+							],
+							"uv": [
+								66,
+								27
+							]
+						},
+						{
+							"origin": [
+								8,
+								0,
+								0
+							],
+							"size": [
+								11,
+								15,
+								0
+							],
+							"uv": [
+								66,
+								44
+							]
+						},
+						{
+							"origin": [
+								7,
+								0,
+								0
+							],
+							"size": [
+								11,
+								15,
+								0
+							],
+							"pivot": [
+								-1,
+								0,
+								0
+							],
+							"rotation": [
+								0,
+								90,
+								0
+							],
+							"uv": [
+								66,
+								44
+							]
+						},
+						{
+							"origin": [
+								7,
+								0,
+								0
+							],
+							"size": [
+								11,
+								15,
+								0
+							],
+							"pivot": [
+								-1,
+								0,
+								0
+							],
+							"rotation": [
+								0,
+								-90,
+								0
+							],
+							"uv": [
+								66,
+								44
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

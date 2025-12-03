@@ -1,0 +1,8 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:ore_feature": {
+        "description": { "identifier": "atomic:uranium_deepslate_feature" },
+        "count": 9,
+        "replace_rules": [{ "places_block": { "name": "atomic:uranium_deepslate", "states": {}}, "may_replace": [{ "name": "deepslate" }]}]
+    }
+}

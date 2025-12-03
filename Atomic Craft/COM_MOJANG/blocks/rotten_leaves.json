@@ -1,0 +1,32 @@
+{
+    "format_version": "1.21.120",
+    "minecraft:block": {
+        "description": {
+            "identifier": "atomic:radi_leave",
+            "menu_category": {
+                "category": "nature"
+            }
+        },
+        "components": {
+            "minecraft:collision_box": true,
+            "minecraft:light_dampening": 15,
+            "minecraft:light_emission": 0,
+            "minecraft:geometry": {
+                "identifier": "minecraft:geometry.full_block"
+            },
+            "minecraft:material_instances": {
+                "*": {
+                    "render_method": "alpha_test",
+                    "texture": "atomic_rotten_leaf"
+                }
+            },
+            "minecraft:selection_box": true,
+            "minecraft:destructible_by_explosion": {
+                "explosion_resistance": 0
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            }
+        }
+    }
+}

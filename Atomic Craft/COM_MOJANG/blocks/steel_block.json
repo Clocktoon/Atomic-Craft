@@ -1,0 +1,31 @@
+{
+    "format_version": "1.21.120",
+    "minecraft:block": {
+        "description": {
+            "identifier": "atomic:steel_block",
+            "menu_category": {
+                "category": "construction"
+            }
+        },
+        "components": {
+            "minecraft:collision_box":true,
+            "minecraft:geometry": {
+                "identifier": "geometry.steel_block"
+            },
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "atomic_steel_block"
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 3
+            },
+            "minecraft:destructible_by_explosion": {
+                "explosion_resistance": 3
+            },
+            "minecraft:selection_box": true,
+            "minecraft:light_dampening": 15,
+            "minecraft:light_emission": 0
+        }
+    }
+}

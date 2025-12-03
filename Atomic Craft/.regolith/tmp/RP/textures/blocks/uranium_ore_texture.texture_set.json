@@ -1,0 +1,8 @@
+{
+	"format_version": "1.21.30",
+	"minecraft:texture_set": {
+		"color": "uranium ore texture",
+		"metalness_emissive_roughness_subsurface": [6, 5, 6, 9],
+		"heightmap": "uranium ore texture_height"
+	}
+}

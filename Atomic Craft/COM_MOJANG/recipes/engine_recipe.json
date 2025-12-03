@@ -1,0 +1,36 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "atomic:engine_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"key": {
+			"J": {
+				"item": "copper_ingot"
+			},
+			"R": {
+				"item": "blast_furnace"
+			}
+		},
+		"pattern": [
+			"JJJ",
+			"JRJ",
+			"JJJ"
+		],
+		"unlock": [
+			{
+				"item": "copper_ingot"
+			},
+			{
+				"item": "blast_furnace"
+			}
+		],
+		"result": {
+			"count": 1,
+			"item": "atomic:engine"
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"format_version": "1.21.30",
+	"minecraft:texture_set": {
+		"color": "enchanced_tnt",
+		"metalness_emissive_roughness_subsurface": [0, 0, 0, 1],
+		"heightmap": "enchanced_tnt_height"
+	}
+}

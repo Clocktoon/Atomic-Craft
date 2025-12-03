@@ -1,0 +1,23 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shapeless": {
+		"description": {
+			"identifier": "atomic:radiation_plank_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"ingredients": [
+			{
+				"item": "atomic:burned_log"
+			}
+		],
+		"unlock": {
+			"context": "PlayerHasManyItems"
+		},
+		"result": {
+			"item": "atomic:radiation_plank",
+			"count": 1
+		}
+	}
+}

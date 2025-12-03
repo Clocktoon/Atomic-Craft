@@ -1,0 +1,20 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:hate",
+            "geometry": {
+                "default": "geometry.hate"
+            },
+            "textures": {
+                "default": "textures/entity/hate_texture"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "render_controllers": [
+                "controller.render.hate"
+            ]
+        }
+    }
+}

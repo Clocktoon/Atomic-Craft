@@ -1,0 +1,43 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "atomic:grenade_entity",
+            "is_spawnable": false,
+            "is_summonable": true,
+            "runtime_identifier": "minecraft:snowball"
+        },
+        "components": {
+            "minecraft:collision_box": {
+                "width": 0.25,
+                "height": 0.25
+            },
+            "minecraft:projectile": {
+                "on_hit": {
+                    "impact_damage": {
+                        "damage": 6
+                    },
+                    "stick_in_ground": {
+                        "shake_time": 1
+                    }
+                },
+                "power": 0.7,
+                "gravity": 0.03,
+                "angle_offset": -20,
+                "hit_sound": "iron"
+            },
+            "minecraft:physics": {},
+            "minecraft:pushable": {
+                "is_pushable": true,
+                "is_pushable_by_piston": true
+            },
+            "minecraft:conditional_bandwidth_optimization": {
+                "default_values": {
+                    "max_optimized_distance": 80,
+                    "max_dropped_ticks": 10,
+                    "use_motion_prediction_hints": true
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:attachable": {
+        "description": {
+            "identifier": "atomic:gas_mask",
+            "item": {
+                "atomic:gas_mask": "query.is_owner_identifier_any('minecraft:player')"
+            },
+            "materials": {
+                "default": "armor",
+                "enchanted": "armor_enchanted"
+            },
+            "textures": {
+                "default": "textures/entity/gas_mask_tex",
+                "enchanted": "textures/misc/enchanted_item_glint"
+            },
+            "geometry": {
+                "default": "geometry.gas_mask"
+            },
+            "scripts": {
+                "pre_animation": [
+                    "variable.helmet_layer_visible = 0.0;"
+                ]
+            },
+            "render_controllers": [
+                "controller.render.armor"
+            ]
+        }
+    }
+}
