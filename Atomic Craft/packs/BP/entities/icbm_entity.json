@@ -191,7 +191,7 @@
                 "height": 5,
                 "width": 1
             },
-            "minecraft:can_fly": true,
+            "minecraft:can_fly": {},
             "minecraft:type_family": {
                 "family": ["missile"]
             },

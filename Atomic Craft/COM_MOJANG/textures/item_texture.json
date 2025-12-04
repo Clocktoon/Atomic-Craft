@@ -70,6 +70,12 @@
 		},
 		"atomic_non": {
 			"textures": "textures/items/non_item"
+		},
+		"atomic_blass": {
+			"textures": "textures/items/blass_item"
+		},
+		"atomic_himar": {
+			"textures": "textures/items/himar_item"
 		}
 	}
 }

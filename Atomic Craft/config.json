@@ -20,9 +20,7 @@
 				"export": {
 					"build": "standard",
 					"readOnly": false,
-					"target": "exact",
-					"bpPath": "COM_MOJANG",
-					"rpPath": "COM_MOJANG"
+					"target": "development"
 				},
 				"filters": [
 					{

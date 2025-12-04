@@ -75,6 +75,10 @@
     "minecraft:attack": {
     "damage": 1
         },
+        "minecraft:physics": {
+            "has_collision": true,
+            "has_gravity": true
+        },
     "minecraft:behavior.melee_attack": {
     "priority": 0,
     "require_complete_path": true,
@@ -90,7 +94,7 @@
     "minecraft:movement.fly": {
         "max_turn": 30
     },
-    "minecraft:can_fly": true,
+    "minecraft:can_fly": {},
     "minecraft:jump.dynamic": {},
     "minecraft:tick_world": {
         "never_despawn": true,

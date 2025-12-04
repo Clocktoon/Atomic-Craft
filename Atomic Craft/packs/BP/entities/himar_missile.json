@@ -56,7 +56,11 @@
     "minecraft:movement.fly": {
         "max_turn": 30
     },
-    "minecraft:can_fly": true,
+    "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": true
+    },
+    "minecraft:can_fly": {},
     "minecraft:jump.dynamic": {},
     "minecraft:tick_world": {
         "never_despawn": true,

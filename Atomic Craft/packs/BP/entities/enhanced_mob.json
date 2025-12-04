@@ -9,8 +9,9 @@
         "component_groups": {},
         "components": {
             "minecraft:health": {
-                "value": 10
+                "value": 100
             },
+            "minecraft:fire_immune": {},
             "minecraft:hurt_on_condition": {
                 "damage_conditions": [
                     {"cause": "self_destruct"}

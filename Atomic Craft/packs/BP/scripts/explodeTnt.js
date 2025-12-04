@@ -8,6 +8,7 @@ world.afterEvents.playerInteractWithBlock.subscribe((Event) => {
 
      if (block.typeId === "atomic:enhanced_tnt" && itemstack.typeId === "minecraft:flint_and_steel" && block.permutation.getState("atomic:on") == false) {
           block.dimension.playSound("entity.tnt.primed", block.location)
+          block.setType("minecraft:air")
           block.dimension.spawnEntity("atomic:enhanced_mob",{x: block.location.x, y: block.location.y + 1, z: block.location.z})
      }
 })

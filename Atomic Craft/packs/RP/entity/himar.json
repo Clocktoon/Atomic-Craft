@@ -12,6 +12,9 @@
             "textures": {
                 "default": "textures/entity/himar_tex"
             },
+            "render_controllers": [
+            "controller.render.himar"
+            ],
             "animations": {
                 "idle3": "animation.himar.idlehimar",
                 "launch": "animation.himar.launch",

@@ -65,3 +65,7 @@ entity.enhanced_mob.name=Enhanced tnt mob
 entity.ballistic_missile.name=Ballistic missile
 tile.atomic:steel_block.name=Steel block
 tile.atomic:radi_leave.name=Radiation leaf
+entity.entity.himar.name=Hiamr
+entity.himar_missile.name=Himar missile
+item.atomic:blass.name=Ballistic missile
+item.atomic:himar_item.name=Himar

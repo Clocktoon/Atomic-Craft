@@ -10,7 +10,7 @@ const Spawning = {
             z: block.location.z
         }
 
-        block.dimension.spawnEntity("atomic:non_icbm_code", location)
+        block.dimension.spawnEntity("atomic:non_icbm", location)
     }
 }
 

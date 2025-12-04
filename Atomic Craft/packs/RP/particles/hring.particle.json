@@ -18,9 +18,9 @@
 			},
 			"minecraft:emitter_shape_disc": {
 				"offset": [
-					0,
+					1,
 					14,
-					0
+					1
 				],
 				"radius": 18,
 				"surface_only": true,
