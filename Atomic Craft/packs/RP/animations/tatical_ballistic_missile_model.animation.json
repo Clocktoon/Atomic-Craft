@@ -9,7 +9,8 @@
 			"animation_length": 219.4167,
 			"bones": {
 				"missile": {
-					"rotation": [0, "-query.anim_time*25", 0]
+					"rotation": [90, "-query.anim_time*25", 0],
+					"position": [0, 9, 9]
 				},
 				"bone": {
 					"rotation": {

@@ -22,6 +22,7 @@
             "minecraft:behavior.nearest_attackable_target": {
                 "priority": 0,
                 "reselect_targets": true,
+                "attack_interval": 1,
                 "target_search_height": 1000,
                 "within_radius": 1000,
                 "must_see": false,
@@ -47,11 +48,10 @@
     "track_target": true
         },
     "minecraft:follow_range": {
-    "value": 100,
-    "max": 100
-    },
+        "value": 100000
+                            },
     "minecraft:movement": {
-        "value": 1
+        "value": 0.7
     },
     "minecraft:movement.fly": {
         "max_turn": 30

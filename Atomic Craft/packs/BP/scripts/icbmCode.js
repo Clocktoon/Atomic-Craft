@@ -5,22 +5,22 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
     const entity = ev.target
     const itemstack = ev.itemStack
 
-    if(itemstack.typeId === "atomic:blue_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:blue_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
             entity.setProperty("atomic:blue", true)
     }
-    if(itemstack.typeId === "atomic:green_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:green_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
         entity.setProperty("atomic:green", true)
     }
-    if(itemstack.typeId === "atomic:purple_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:purple_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
         entity.setProperty("atomic:purple", true)
     }
-    if(itemstack.typeId === "atomic:white_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:white_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
         entity.setProperty("atomic:white", true)
     }
-    if(itemstack.typeId === "atomic:red_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:red_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
         entity.setProperty("atomic:red", true)
     }
-    if(itemstack.typeId === "atomic:yellow_chip" && entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
+    if(entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:yellow_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
         entity.setProperty("atomic:yellow", true)
     }
 })

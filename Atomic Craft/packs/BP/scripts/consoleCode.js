@@ -20,18 +20,18 @@ const ConsoleCode = {
         form.show(player).then((r => {
 
             const [countdown,xY,zY] = r.formValues
-            const x = new Number(xY)
-            const z = new Number(zY)
-            const y = block.dimension.getTopmostBlock({x: x, z: z}).location.y
+            const x = Number(xY)
+            const z = Number(zY)
+            const y = block.dimension.getTopmostBlock({x: x, z: z}, -59).location.y
             
-         const time = new Number(countdown)
+         const time = Number(countdown)
 
             system.runTimeout(() => {
           const entityGet =  block.dimension.getEntities({location: block.location, maxDistance: 20})
                 
                 for(let entity of entityGet) {
                     if(entity.typeId === "atomic:icbm" || entity.typeId === "atomic:non_icbm") {
-                    entity.runCommand(`tickingarea add ${x - 20} ${z - 20} ${x + 20} ${z + 20} spawnarea`)
+                    entity.runCommand(`tickingarea add ${x - 20} 0 ${z - 20} ${x + 20} 0 ${z + 20} spawnarea`)
                     
                     if(entity.getProperty("atomic:blue") === true) {
                         dimension.spawnEntity("atomic:blue_mark",{x: x,y: y,z: z})
@@ -51,7 +51,7 @@ const ConsoleCode = {
                     }
                     if(entity.getProperty("atomic:red") === true) {
                         dimension.spawnEntity("atomic:red_mark",{x: x,y: y,z: z})
-                    }
+                    }   
                     entity.runCommand("tickingarea remove spawnarea")
                 }
                 }

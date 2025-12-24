@@ -1,7 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "enchanced_tnt_light",
-		"heightmap": "enchanced_tnt_light_height"
-	}
-}
