@@ -60,8 +60,8 @@
             "minecraft:behavior.nearest_attackable_target": {
                 "priority": 1,
                 "reselect_targets": true,
-                "target_search_height": 100.0,
-                "within_radius": 100.0,
+                "target_search_height": 10.0,
+                "within_radius": 10.0,
                 "must_see": false,
                 "entity_types": [
                     {
@@ -72,7 +72,7 @@
                         "value": "hate"
                         }
             ],
-            "max_dist": 100000
+            "max_dist": 10.0
         }
     ]
         },
