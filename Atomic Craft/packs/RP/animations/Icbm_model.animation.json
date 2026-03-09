@@ -9,11 +9,8 @@
 			"animation_length": 213.7083,
 			"bones": {
 				"bone": {
-					"rotation": [
-						0,
-						"query.anim_time*25",
-						0
-					]
+					"rotation": [90, "-query.anim_time*25", 0],
+					"position": [0, 15, 9]
 				},
 				"bone2": {
 					"rotation": [-5, 0, 0]

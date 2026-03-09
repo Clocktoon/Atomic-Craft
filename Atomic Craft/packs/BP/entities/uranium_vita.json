@@ -1,5 +1,5 @@
 {
-  "format_version": "1.21.100",
+  "format_version": "1.26.2",
   "minecraft:entity": {
     "description": {
       "identifier": "atomic:uranium_vita",
@@ -17,14 +17,19 @@
         "can_jump": true,
         "can_walk": true
       },
-      "minecraft:physics": { "has_collision": true, "has_gravity": true },
+      "minecraft:physics": { "has_collision": true, 
+        "has_gravity": true 
+    },
       "minecraft:movement.generic": { "max_turn": 135 },
+
       "minecraft:jump.dynamic": {},
+
       "minecraft:behavior.random_stroll": { "priority": 1 },
+
       "minecraft:behavior.nearest_attackable_target": {
         "must_see": true,
         "reselect_targets": true,
-         "attack_interval": 1,
+        "attack_interval": [0, 1],
         "within_radius": 25,
         "priority": 2,
         "must_see_forget_duration": 23,

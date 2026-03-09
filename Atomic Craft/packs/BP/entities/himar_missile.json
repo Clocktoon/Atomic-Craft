@@ -1,5 +1,5 @@
 {
-    "format_version": "1.21.120",
+    "format_version": "1.26.2",
     "minecraft:entity": {
            "description": {
             "identifier": "atomic:himar_missile",
@@ -22,7 +22,6 @@
             "minecraft:behavior.nearest_attackable_target": {
                 "priority": 0,
                 "reselect_targets": true,
-                "attack_interval": 1,
                 "target_search_height": 1000,
                 "within_radius": 1000,
                 "must_see": false,

@@ -13,7 +13,7 @@
                             "driving": "q.ground_speed"
                         },
                         {
-                            "launch": "q.property('atomic:launching') > 0.0"
+                            "launch": "q.property('atomic:launching')"
                         }
                     ]
                 },
@@ -26,7 +26,7 @@
                             "idle3": "!q.ground_speed"
                         },
                         {
-                            "launch": "q.property('atomic:launching') == true"
+                            "launch": "q.property('atomic:launching')"
                         }
                     ]
                 },
@@ -36,10 +36,10 @@
                     ],
                     "transitions": [
                         {
-                            "idle3": "q.property('atomic:launching') == false && q.anim_time > 14.5417"
+                            "idle3": "!q.property('atomic:launching')"
                         },
                         {
-                            "driving": "q.property('atomic:launching') == false && q.anim_time > 14.5417"
+                            "driving": "!q.property('atomic:launching') && q.ground_speed"
                         }
                     ]
                 }

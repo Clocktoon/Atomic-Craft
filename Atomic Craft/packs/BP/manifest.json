@@ -16,11 +16,7 @@
 	"header": {
 		"name": "Bombs of Glory",
 		"description": "pack.description",
-		"min_engine_version": [
-			1,
-			21,
-			110
-		],
+		"min_engine_version": [1,26,0],
 		"uuid": "081bbb30-42ce-438e-a98e-42f1cdf10512",
 		"version": [
 			1,
@@ -57,7 +53,7 @@
 	"dependencies": [
 		{
 			"module_name": "@minecraft/server",
-			"version": "2.3.0"
+			"version": "2.5.0"
 		},
 		{
 			"module_name": "@minecraft/server-ui",

@@ -19,12 +19,13 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
         let [xO, zO] = r.formValues;
         let x = Number(xO);
         let z = Number(zO);
-        const y = player.dimension.getTopmostBlock({ x: x, z: z }, -59).location.y;
+        const y = player.dimension.getTopmostBlock({ x: x, z: z }, 0).location.y;
 
         entity.dimension.runCommand(
-          `tickingarea add ${x - 20} 0 ${z - 20} ${x + 20} 0 ${z + 20} spawnarea`,
+          `tickingarea add ${x - 30} 0 ${z - 30} ${x + 30} 0 ${z + 30} spawnarea`,
         );
         entity.dimension.spawnEntity("atomic:hate", { x: x, y: y, z: z });
+        entity.runCommand("say spawned hate at " + x + " " + y + " " + z);
 
         entity.runCommand("tickingarea remove spawnarea");
       })

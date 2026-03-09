@@ -34,25 +34,32 @@ const ConsoleCode = {
                     entity.runCommand(`tickingarea add ${x - 20} 0 ${z - 20} ${x + 20} 0 ${z + 20} spawnarea`)
                     
                     if(entity.getProperty("atomic:blue") === true) {
-                        dimension.spawnEntity("atomic:blue_mark",{x: x,y: y,z: z})
+                        dimension.spawnEntity("atomic:blue_mark",{x: x,y: y,z: z});
+                        dimension.runCommand(`say Spawned blue mark at ${x} ${y} ${z}`)
                         
                     }
                     if(entity.getProperty("atomic:green") === true) {
-                        dimension.spawnEntity("atomic:purple_mark",{x: x,y: y,z: z})
+                        dimension.spawnEntity("atomic:green_mark",{x: x,y: y,z: z});
+                        dimension.runCommand(`tellraw ${player.name} {"text":"Spawned green mark at ${x} ${y} ${z}"}`)
                     }
                     if(entity.getProperty("atomic:white") === true) {
                         dimension.spawnEntity("atomic:white_mark",{x: x,y: y,z: z})
+                        dimension.runCommand(`tellraw ${player.name} {"text":"Spawned white mark at ${x} ${y} ${z}"}`)
                     }
                     if(entity.getProperty("atomic:yellow") === true) {
                         dimension.spawnEntity("atomic:yellow_mark",{x: x,y: y,z: z})
+                        dimension.runCommand(`tellraw ${player.name} {"text":"Spawned yellow mark at ${x} ${y} ${z}"}`)
                     }
                     if(entity.getProperty("atomic:purple") === true) {
                         dimension.spawnEntity("atomic:purple_mark",{x: x,y: y,z: z})
+                        dimension.runCommand(`tellraw ${player.name} {"text":"Spawned purple mark at ${x} ${y} ${z}"}`)
                     }
                     if(entity.getProperty("atomic:red") === true) {
                         dimension.spawnEntity("atomic:red_mark",{x: x,y: y,z: z})
+                        dimension.runCommand(`tellraw ${player.name} {"text":"Spawned red mark at ${x} ${y} ${z}"}`)
                     }   
                     entity.runCommand("tickingarea remove spawnarea")
+                    
                 }
                 }
                 },time)

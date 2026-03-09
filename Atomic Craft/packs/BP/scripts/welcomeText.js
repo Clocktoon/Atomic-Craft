@@ -5,6 +5,6 @@ world.afterEvents.playerSpawn.subscribe((ev) => {
     const player = ev.player
 
     if (initialspawn) {
-        player.sendMessage("Thank you for playing bombs of glory")
+        player.sendMessage("§6Thank you for playing §jbombs of glory")
     }
 })

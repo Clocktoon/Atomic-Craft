@@ -1,17 +1,22 @@
 {
-    "format_version": "1.21.100",
-    "minecraft:block": {
-        "description": { "identifier": "atomic:radiation_block", "menu_category": { "category": "nature" }},
-        "components": {
-            "minecraft:collision_box": true,
-            "minecraft:selection_box": true,
-            "minecraft:light_dampening": 15,
-            "minecraft:geometry": "minecraft:geometry.full_block",
-            "minecraft:light_emission": 0,
-            "minecraft:destructible_by_explosion": { "explosion_resistance": 10 },
-            "minecraft:material_instances": { "*": { "texture": "atomic_radiation_block" }},
-            "minecraft:map_color": "#5B5B5B",
-            "atomic:step": {}
-        }
+  "format_version": "1.26.2",
+  "minecraft:block": {
+    "description": {
+      "identifier": "atomic:radiation_block",
+      "menu_category": { "category": "nature" }
+    },
+    "components": {
+      "minecraft:collision_box": true,
+      "minecraft:selection_box": true,
+      "minecraft:light_dampening": 15,
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:light_emission": 0,
+      "minecraft:destructible_by_explosion": { "explosion_resistance": 10 },
+      "minecraft:material_instances": {
+        "*": { "texture": "atomic_radiation_block" }
+      },
+      "minecraft:map_color": "#5B5B5B",
+      "atomic:step": {}
     }
+  }
 }

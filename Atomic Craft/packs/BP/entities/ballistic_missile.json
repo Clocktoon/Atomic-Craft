@@ -1,5 +1,5 @@
 {
-    "format_version": "1.21.120",
+    "format_version": "1.26.2",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:ballistic_missile",
@@ -36,7 +36,7 @@
             "minecraft:interact": {
                 "interactions": [
                     {
-                        "interact_text": "action.interact.use"
+                        "interact_text": "Open Missile GUI"
                     }
                 ]
             },
@@ -58,14 +58,11 @@
                 }
             },
             "minecraft:behavior.nearest_attackable_target": {
-                "priority": 0,
+                "priority": 1,
                 "reselect_targets": true,
-                "target_search_height": 100000,
-                "within_radius": 100000,
-                "attack_interval": 1,
-                "scan_interval": 10,
+                "target_search_height": 100.0,
+                "within_radius": 100.0,
                 "must_see": false,
-                "must_reach": false,
                 "entity_types": [
                     {
                     "filters": [
@@ -87,12 +84,12 @@
             "has_gravity": true
         },
     "minecraft:behavior.melee_attack": {
-    "priority": 0,
+    "priority": 2,
     "require_complete_path": true,
     "track_target": true
     },
     "minecraft:follow_range": {
-    "value": 100000
+    "value": 100.0
     },
     "minecraft:movement": {
         "value": 5
