@@ -1,5 +1,5 @@
 {
-	"format_version": "1.26.2",
+	"format_version": "1.26.10",
 	"minecraft:entity": {
 		"description": {
 			"identifier": "atomic:plane_bomb",

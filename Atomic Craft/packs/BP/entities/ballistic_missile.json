@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.2",
+    "format_version": "1.26.10",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:ballistic_missile",
@@ -105,9 +105,7 @@
     },
     "minecraft:navigation.fly": {
         "avoid_damage_blocks": false,
-        "can_walk": false,
-        "can_sink": true,
-        "can_jump": true
+        "can_walk": false
     }
         },
         "events": {

@@ -13,6 +13,7 @@ const Clicky = {
 
         block.dimension.runCommand(`tickingarea add 
                 ${px - 70} 0 ${pz - 70} ${px + 60} 0 ${pz + 60} hb1`)
+        
 
         let seconds = 20
         player.sendMessage(`You have ${seconds} seconds to run`)

@@ -25,11 +25,16 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
 
             entity.setProperty("atomic:launching",true)
             
-            entity.dimension.runCommand(`tickingarea add ${x - 20} ${z - 20} ${x + 20} ${z + 20} spawnarea`)
+            // entity.dimension.runCommand(`tickingarea add ${x - 20} ${z - 20} ${x + 20} ${z + 20} spawnarea`)
+            world.tickingAreaManager.createTickingArea("spawnarea", {
+                from: {x: x - 20, y: 0, z: z - 20},
+                to: {x: x + 20, y: 0, z: z + 20},
+                dimension: entity.dimension
+            })
             entity.dimension.spawnEntity("atomic:hate",{x: x, y: y, z: z})
             entity.dimension.spawnEntity("atomic:himar_missile",{x: entity.location.x, y: entity.location.y + 4, z: entity.location.z})
 
-            entity.runCommand("tickingarea remove spawnarea")
+            world.tickingAreaManager.removeTickingArea("spawnarea")
             entity.setProperty("atomic:launching",false)
         }).catch(e => {
             console.error(e, e.stack)
