@@ -3,7 +3,7 @@
 	"sound_definitions": {
 		"atomic.nukesound": {
 			"sounds": [
-				"sounds/nuclear_explosion"
+				"sounds/nukesound"
 			]
 		},
 		"atomic.siren": {

@@ -1,4 +1,5 @@
-import { system, BlockVolume } from "@minecraft/server"
+import { system, BlockVolume, world } from "@minecraft/server"
+import { createCrater } from "./crater"
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 const Clicky = {
@@ -11,9 +12,29 @@ const Clicky = {
         const pz = block.location.z
         const py = block.y
 
-        block.dimension.runCommand(`tickingarea add 
+        /* block.dimension.runCommand(`tickingarea add 
                 ${px - 70} 0 ${pz - 70} ${px + 60} 0 ${pz + 60} hb1`)
-        
+                */
+        // Create multiple ticking areas to cover the large region (each under 255 chunks)
+        const createTickingAreas = async () => {
+            const areas = [
+                { name: "hb1", from: { x: px - 100, y: -100, z: pz - 100 }, to: { x: px + 100, y: 100, z: pz + 100 } },
+                { name: "hb2", from: { x: px + 80, y: -100, z: pz + 80 }, to: { x: px + 210, y: 100, z: pz + 210 } },
+                { name: "hb3", from: { x: px - 80, y: -100, z: pz - 80 }, to: { x: px - 210, y: 100, z: pz - 210 } },
+                { name: "hb4", from: { x: px + 195, y: -100, z: pz + 195 }, to: { x: px + 330, y: 100, z: pz + 330 } },
+                { name: "hb5", from: { x: px - 195, y: -100, z: pz - 195 }, to: { x: px - 330, y: 100, z: pz - 330 } }
+            ];
+
+            for (const area of areas) {
+                await world.tickingAreaManager.createTickingArea(area.name, {
+                    from: area.from,
+                    to: area.to,
+                    dimension: block.dimension
+                });
+            }
+        };
+
+        createTickingAreas().then(() => {
 
         let seconds = 20
         player.sendMessage(`You have ${seconds} seconds to run`)
@@ -33,17 +54,25 @@ const Clicky = {
         system.runTimeout(() => {
             function* blockGen() {
 
-                for (const eny of block.dimension.getEntities({ location: block.location, maxDistance: 100 })) {
+                for (const eny of block.dimension.getEntities({ location: block.location, maxDistance: 70 })) {
                     if (eny.typeId == "minecraft:player") {
                         eny.runCommand("camera @s fade time 1 3 1 color 255 255 255")
                         eny.runCommand("camerashake add @s 1 10")
                     }
-                    eny.setOnFire(10)
+                    eny.setOnFire(4)
+                    eny.applyDamage(3)
+                    if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 && eny.typeId !== "atomic:gen_entity") {
+                    eny.addTag("atomic:rad_effect")
+                    }
                 }
-
-                block.dimension.spawnParticle("atomic:nukepart2", block.location)
+                
+                
+                block.dimension.spawnParticle("atomic:nukepart2", 
+                    {x: block.location.x, y: block.location.y - 26, z: block.location.z})
                 block.dimension.createExplosion(block.location, 20,
                     { causesFire: true, allowUnderwater: false })
+                // Crater code
+                createCrater(block.location, block.dimension.id, "minecraft:air", 60, 30)
                 
 
                 // Sound code by MapleStar // TC (discord)
@@ -136,8 +165,8 @@ const Clicky = {
                 block.dimension.spawnEntity("atomic:gen_entity", { x: px - 140, y: py, z: pz - 140 })
                 block.dimension.spawnEntity("atomic:gen_entity", { x: px + 170, y: py, z: pz + 170 })
                 block.dimension.spawnEntity("atomic:gen_entity", { x: px - 170, y: py, z: pz - 170 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 230, y: py, z: pz + 230 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 230, y: py, z: pz - 230 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 200, y: py, z: pz + 200 })
+                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 200, y: py, z: pz - 200 })
 
 
                 const blocklist = block.dimension.getBlocks(blockvol, {
@@ -199,31 +228,35 @@ const Clicky = {
 
                 const blockvol2 = new BlockVolume(from2, to2)
                 // It is not a large enough size, some chunks are unloaded 
-                block.dimension.runCommand(`tickingarea add 
-                ${px + 80} 0 ${pz + 80} ${px + 210} 0 ${pz + 210} hb2`)
-
-                block.dimension.runCommand(`tickingarea add 
-                ${px - 80} 0 ${pz - 80} ${px - 210} 0 ${pz - 210} hb3`)
-
-                block.dimension.runCommand(`tickingarea add 
-                ${px + 195} 0 ${pz + 195} ${px + 330} 0 ${pz + 330} hb4`)
-
-                block.dimension.runCommand(`tickingarea add 
-                ${px - 195} 0 ${pz - 195} ${px - 330} 0 ${pz - 330} hb5`)
                 yield
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 200, y: py, z: pz - 200 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 200, y: py, z: pz + 200 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 250, y: py, z: pz - 250 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 250, y: py, z: pz + 250 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 300, y: py, z: pz - 300 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 300, y: py, z: pz + 300 })
+                const entity1 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 200, y: py, z: pz - 200 })
+                const entity2 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 200, y: py, z: pz + 200 })
+                const entity3 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 250, y: py, z: pz - 250 })
+                const entity4 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 250, y: py, z: pz + 250 })
+                const entity5 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 300, y: py, z: pz - 300 })
+                const entity6 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 300, y: py, z: pz + 300 })
+                const entity7 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 350, y: py, z: pz - 350 })
                 yield
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 350, y: py, z: pz - 350 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 350, y: py, z: pz + 350 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 400, y: py, z: pz - 400 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 400, y: py, z: pz + 400 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px + 440, y: py, z: pz + 440 })
-                block.dimension.spawnEntity("atomic:gen_entity", { x: px - 440, y: py, z: pz - 440 })
+                const entity8 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 350, y: py, z: pz + 350 })
+                const entity9 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 400, y: py, z: pz - 400 })
+                const entity10 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 400, y: py, z: pz + 400 })
+                const entity11 = block.dimension.spawnEntity("atomic:gen_entity", { x: px + 440, y: py, z: pz + 440 })
+                const entity12 = block.dimension.spawnEntity("atomic:gen_entity", { x: px - 440, y: py, z: pz - 440 })
+                // Spawning entities in a large area to prevent chunk unloading and ensure the explosion's effects are visible across the entire radius
+                entity1
+                entity2
+                entity3
+                entity4
+                entity5
+                entity6
+                entity7
+                yield
+                entity8
+                entity9
+                entity10
+                entity11
+                entity12
+
                 yield
                 const getGrass = block.dimension.getBlocks(blockvol2,
                     { includeTypes: ["minecraft:grass"] })
@@ -246,15 +279,30 @@ const Clicky = {
                 }
                 yield;
 
-                block.dimension.runCommand("tickingarea remove hb1")
-                block.dimension.runCommand("tickingarea remove hb2")
-                block.dimension.runCommand("tickngarea remove hb3")
-                block.dimension.runCommand("tickngarea remove hb4")
-                block.dimension.runCommand("tickngarea remove hb5")
-                block.dimension.runCommand("kill @e[type=atomic:gen_entity]")
+                // Removing ticking areas and kill entities after the explosion
+                world.tickingAreaManager.removeTickingArea("hb1")
+                world.tickingAreaManager.removeTickingArea("hb2")
+                world.tickingAreaManager.removeTickingArea("hb3")
+                world.tickingAreaManager.removeTickingArea("hb4")
+                world.tickingAreaManager.removeTickingArea("hb5")
+                entity1.kill()
+                entity2.kill()
+                entity3.kill() 
+                entity4.kill()
+                entity5.kill()
+                entity6.kill()
+                entity7.kill()
+                entity8.kill()
+                entity9.kill()
+                entity10.kill()
+                entity11.kill()
+                entity12.kill()
             }
             system.runJob(blockGen())
+            // this is it
+            
         }, 400)
+        })
     }
 }
 

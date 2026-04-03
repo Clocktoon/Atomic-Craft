@@ -20,6 +20,8 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./icbmCode.js")
     import("./ballisticCode.js")
     import("./himarCode.js")
+    import("./radEffect.js")
+    import("./crater.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
 

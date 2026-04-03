@@ -12,69 +12,16 @@
 			},
 			"bones": [
 				{
-					"name": "root",
-					"pivot": [0, 0, 0]
-				},
-				{
-					"name": "waist",
-					"parent": "root",
-					"pivot": [0, 12, 0]
-				},
-				{
-					"name": "body",
-					"parent": "waist",
-					"pivot": [0, 24, 0]
-				},
-				{
-					"name": "head",
-					"parent": "body",
-					"pivot": [0, 24, 0]
-				},
-				{
 					"name": "bone",
-					"parent": "head",
-					"pivot": [0, 25, -5],
+					"pivot": [0, 24, -5],
 					"cubes": [
-						{"origin": [-6, 24, -6], "size": [12, 3, 2], "uv": [0, 0]},
-						{"origin": [-5, 25, 0], "size": [5, 2, 2], "pivot": [-5, 25, 1], "rotation": [0, 90, 0], "uv": [0, 5]},
-						{"origin": [5, 25, 0], "size": [5, 2, 2], "pivot": [5, 25, 1], "rotation": [0, 90, 0], "uv": [0, 9]},
-						{"origin": [-4, 24, -8], "size": [3, 3, 2], "pivot": [-3, 25, -7], "rotation": [0, 20, 0], "uv": [0, 13]},
-						{"origin": [1, 24, -8], "size": [3, 3, 2], "pivot": [2, 25, -7], "rotation": [0, -15, 0], "uv": [10, 13]},
-						{"origin": [-1, 24, -8], "size": [2, 4, 2], "uv": [14, 5]}
+						{"origin": [-6, 23, -6], "size": [12, 3, 2], "uv": [0, 0]},
+						{"origin": [-5, 24, 0], "size": [5, 2, 2], "pivot": [-5, 24, 1], "rotation": [0, 90, 0], "uv": [0, 5]},
+						{"origin": [5, 24, 0], "size": [5, 2, 2], "pivot": [5, 24, 1], "rotation": [0, 90, 0], "uv": [0, 9]},
+						{"origin": [-4, 23, -8], "size": [3, 3, 2], "pivot": [-3, 24, -7], "rotation": [0, 20, 0], "uv": [0, 13]},
+						{"origin": [1, 23, -8], "size": [3, 3, 2], "pivot": [2, 24, -7], "rotation": [0, -15, 0], "uv": [10, 13]},
+						{"origin": [-1, 23, -8], "size": [2, 4, 2], "uv": [14, 5]}
 					]
-				},
-				{
-					"name": "leftArm",
-					"parent": "body",
-					"pivot": [5, 22, 0]
-				},
-				{
-					"name": "leftItem",
-					"parent": "leftArm",
-					"pivot": [6, 15, 1]
-				},
-				{
-					"name": "rightArm",
-					"parent": "body",
-					"pivot": [-5, 22, 0]
-				},
-				{
-					"name": "rightItem",
-					"parent": "rightArm",
-					"pivot": [-6, 15, 1],
-					"locators": {
-						"lead_hold": [-6, 15, 1]
-					}
-				},
-				{
-					"name": "leftLeg",
-					"parent": "root",
-					"pivot": [1.9, 12, 0]
-				},
-				{
-					"name": "rightLeg",
-					"parent": "root",
-					"pivot": [-1.9, 12, 0]
 				}
 			]
 		}
