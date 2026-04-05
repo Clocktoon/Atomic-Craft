@@ -10,6 +10,8 @@ import("./hBombCode.js")
 import("./icbmComp.js")
 import("./consoleCode.js")
 import("./nonComp.js")
+import("./EatEffects.js")
+import("./rottenEat.js")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")
     import("./projectileScript.js")
@@ -22,8 +24,10 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./himarCode.js")
     import("./radEffect.js")
     import("./crater.js")
-    //import("./smokePart.js")
-    //import("./gasMaskCode.js")
+    import("./aftermath.js")
+    import("./itempickups.js")
+    import("./smokePart.js")
+    import("./gasMaskCode.js")
 
 }
 )

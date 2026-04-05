@@ -2,6 +2,10 @@ import { world, system, Dimension, } from "@minecraft/server";
 
 // Radiation effect script
 
+//TODO:Add DynamicProperty system that has levels of radiation for player
+
+world.setDynamicProperty("")
+
 const runny = system.runInterval( () => {
 
 const dimensionIds = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];

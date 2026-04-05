@@ -42,7 +42,7 @@ const Clicky = {
 
         const sys = system.runInterval(() => {
             if (seconds >= 1) {
-                player.runCommand(`title @s actionbar ${seconds}`)
+                player.onScreenDisplay.setActionBar(`${seconds} seconds left`)
                 seconds--
             }
             if (seconds <= 0) {

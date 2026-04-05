@@ -1,13 +1,13 @@
 import { world } from "@minecraft/server"
 //WIP
-world.beforeEvents.explosion.subscribe((Event) => {
+world.afterEvents.explosion.subscribe((event) => {
 
-    const source = Event.source
-    const dimension = Event.dimension
+    const dimension = event.dimension
+    const source = event.source
 
 
     dimension.spawnParticle("atomic:smoke", source.location)
-    dimension.playSound("atomic.explosions", source.location)
+   // dimension.playSound("atomic.explosions", source.location)
 
 
 })

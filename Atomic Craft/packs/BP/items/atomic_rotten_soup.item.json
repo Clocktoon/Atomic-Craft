@@ -1,0 +1,42 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:item": {
+    "description": {
+      "identifier": "atomic:rotten_soup",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+        "minecraft:use_animation": "eat",
+        "minecraft:use_modifiers": {
+            "use_duration": 2
+        },
+        "minecraft:food": {
+            "can_always_eat": true,
+            "nutrition": 1,
+            "saturation_modifier": 0.1,
+            "using_converts_to": "minecraft:bowl"
+        },
+        "minecraft:icon": {
+            "textures": {
+                "default": "atomic_rotten_soup"
+            }
+        },
+        "atomic:eat_effect": [
+          {
+        "name": "weakness",
+        "duration": 30,
+        "amplifier": 1
+    },
+    {
+        "name": "blindness",
+        "duration": 20,
+        "amplifier": 2
+    }
+        ],
+
+        "minecraft:max_stack_size": 1
+    }
+  }
+}

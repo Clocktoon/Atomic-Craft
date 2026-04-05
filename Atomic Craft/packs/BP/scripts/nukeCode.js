@@ -26,7 +26,7 @@ const OnClick = {
 
         const sys = system.runInterval(() => {
           if (seconds >= 1) {
-            player.runCommand(`title @s actionbar ${seconds}`);
+            player.onScreenDisplay.setActionBar(`${seconds} seconds left`)
             seconds--;
           }
           if (seconds <= 0) {
@@ -34,8 +34,10 @@ const OnClick = {
           }
         }, 20);
         block.dimension.playSound("atomic.beep", block.location);
+        
         system.runTimeout(() => {
-          function* blockGen() {
+
+          async function* blockGen() {
             for (const eny of block.dimension.getEntities({
               location: block.location,
               maxDistance: 100,
@@ -125,7 +127,7 @@ const OnClick = {
 
             yield;
             const math = Math.floor(Math.random() * 9);
-
+            // No clue what this was for
             const point1 = {
               x: block.location.x - 2 + math,
               y: block.location.y - 6,
@@ -140,7 +142,7 @@ const OnClick = {
             const vol = new BlockVolume(point1, point2);
 
             yield;
-
+            // Sets area for nuclear effects
             const from = {
               x: block.location.x - 80,
               y: block.location.y - 20,
@@ -246,28 +248,46 @@ const OnClick = {
               dima.setType("atomic:radiation_diamond_block");
               yield;
             }
+            // second row
             yield;
             const from2 = {
-              x: block.location.x - 80,
-              y: block.location.y - 20,
-              z: block.location.z - 80,
+              x: block.location.x + 80,
+              y: block.location.y + 40,
+              z: block.location.z + 80,
             };
 
             const to2 = {
-              x: block.location.x + 80,
-              y: block.location.y + 30,
-              z: block.location.z + 80,
+              x: block.location.x + 100,
+              y: block.location.y + 40,
+              z: block.location.z + 100,
             };
             const from3 = {
               x: block.location.x - 80,
               y: block.location.y - 20,
               z: block.location.z - 80,
             };
+            //third-ish, more so just the otherside of the second row
             const to3 = {
-              x: block.location.x + 80,
-              y: block.location.y + 30,
-              z: block.location.z + 80,
+              x: block.location.x - 100,
+              y: block.location.y - 20,
+              z: block.location.z - 100,
             };
+          //Kills the og ticking area and creates 2 new ones on each side
+          world.tickingAreaManager.removeTickingArea("nukearea")
+          await world.tickingAreaManager.createTickingArea(
+            "nukearea2", {
+              dimension: block.dimension,
+              from: from2,
+              to: to2
+            }
+          )
+          await world.tickingAreaManager.createTickingArea("nukearea3",
+            {
+              dimension: block.dimension,
+              from: from3,
+              to: to3
+            }
+          )
 
             const blockvol2 = new BlockVolume(from2, to2);
             // It is not a large enough size, some chunks are unloaded
@@ -326,7 +346,9 @@ const OnClick = {
                 block.dimension.runCommand("tickingarea remove nukearea5")
                 block.dimension.runCommand("kill @e[type=atomic:gen_entity]")
                 */
-            world.tickingAreaManager.removeTickingArea("nukearea");
+            
+                world.tickingAreaManager.removeTickingArea("nukearea2");
+                world.tickingAreaManager.removeTickingArea("nukearea3");
           }
           system.runJob(blockGen());
         }, 400);

@@ -23,6 +23,9 @@
 		"atomic_tablet": {
 			"textures": "textures/items/tablet"
 		},
+		"atomic_rotten_soup": {
+			"textures": "textures/items/bowlofrot"
+		},
 		"atomic_gas_mask": {
 			"textures": "textures/items/gas_maskitem"
 		},
@@ -76,6 +79,9 @@
 		},
 		"atomic_himar": {
 			"textures": "textures/items/himar_item"
+		},
+		"atomic_glove": {
+			"textures": "textures/items/gloveitem"
 		}
 	}
 }
