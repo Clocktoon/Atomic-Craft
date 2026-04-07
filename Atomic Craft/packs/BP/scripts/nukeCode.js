@@ -75,7 +75,7 @@ const OnClick = {
               30,
               20,
             );
-
+            
             // Sound code by MapleStar // TC (discord)
             function playExplosionAudio(dimension, center, magnitude) {
               if (!center) return;
@@ -114,7 +114,6 @@ const OnClick = {
                 const delayMs = delayTicks * 50;
 
                 system.runTimeout(() => {
-                  shockwaveBlast(block.dimension.id,block.location,3,50,{x: 6, z: 4}, 1)
                   try {
                     dimension.runCommand(
                       `playsound "atomic.nukesound" ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
@@ -126,10 +125,11 @@ const OnClick = {
             const playdi = player.dimension;
 
             playExplosionAudio(playdi, block.location, 19);
-
+            await shockwaveBlast(block.dimension.id, block.location, 3, 50, { x: 6, z: 4 }, 1)
+            
             yield;
             const math = Math.floor(Math.random() * 9);
-            // No clue what this was for
+            // No clue what this was for, lowk forgot
             const point1 = {
               x: block.location.x - 2 + math,
               y: block.location.y - 6,

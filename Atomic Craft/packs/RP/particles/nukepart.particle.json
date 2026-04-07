@@ -11,7 +11,7 @@
 		"events": {
 			"mushroom": {
 				"particle_effect": {
-					"effect": "atomic:nuke6",
+					"effect": "atomic:mushroomcloud",
 					"type": "emitter"
 				}
 			},
@@ -26,6 +26,12 @@
 					"effect": "atomic:ashcloud2",
 					"type": "emitter"
 				}
+			},
+			"nukecloudring": {
+				"particle_effect": {
+					"effect": "atomic:nukering",
+					"type": "emitter"
+				}
 			}
 		},
 		"components": {
@@ -37,7 +43,7 @@
 				"active_time": 200
 			},
 			"minecraft:emitter_lifetime_events": {
-				"creation_event": ["mushroom", "ring", "ash"]
+				"creation_event": ["mushroom", "ring", "ash", "nukecloudring"]
 			},
 			"minecraft:emitter_shape_disc": {
 				"radius": 3,

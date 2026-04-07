@@ -1,6 +1,7 @@
 import { world, system } from "@minecraft/server";
 
-export function shockwaveBlast(dimensionid, center, strength, maxDist, upVec, shake) {
+export async function shockwaveBlast(dimensionid, center, strength, maxDist, upVec, shake) {
+  
   let currentRadius = 0;
   const maxDis = center.location;
   const dimension = world.getDimension(dimensionid);
@@ -11,11 +12,13 @@ export function shockwaveBlast(dimensionid, center, strength, maxDist, upVec, sh
     const entities = dimension.getEntities({
       location: center,
       maxDistance: plus,
+      minDistance: plus - 1
     });
 
     const players = dimension.getPlayers({
       location: center,
       maxDistance: plus,
+      minDistance: plus - 1
     });
     for (const entity of entities) {
       entity.applyKnockback(upVec, strength);
@@ -27,5 +30,5 @@ export function shockwaveBlast(dimensionid, center, strength, maxDist, upVec, sh
     if (currentRadius >= maxDist) {
       system.clearRun(sir);
     }
-  }, 20);
+  }, 1);
 }
