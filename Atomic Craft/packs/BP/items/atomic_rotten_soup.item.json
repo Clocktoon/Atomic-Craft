@@ -36,7 +36,8 @@
     }
         ],
 
-        "minecraft:max_stack_size": 1
+        "minecraft:max_stack_size": 1,
+        "atomic:rotten": {}
     }
   }
 }

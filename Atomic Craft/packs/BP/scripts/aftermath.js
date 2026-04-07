@@ -7,7 +7,6 @@ Local toxic rain via getting mobs around ground zero
 Toxic area
 Other cool nuclear shit I can't think of, just stuff you'd see after a real nuclear explsion all in a
 function file */
-
     export function aftermath(dimensionid, radius, location, chance) {
         let time = 24000
         const dimension = world.getDimension(dimensionid);

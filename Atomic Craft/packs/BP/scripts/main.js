@@ -25,9 +25,10 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./radEffect.js")
     import("./crater.js")
     import("./aftermath.js")
+    import("./shockwave.js")
     import("./itempickups.js")
     import("./smokePart.js")
-    import("./gasMaskCode.js")
+    //import("./gasMaskCode.js")
 
 }
 )

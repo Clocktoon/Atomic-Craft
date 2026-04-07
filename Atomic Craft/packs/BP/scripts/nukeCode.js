@@ -1,5 +1,7 @@
 import { system, world, BlockVolume } from "@minecraft/server";
 import { createCrater } from "./crater.js";
+import { shockwaveBlast } from "./shockwave.js"
+import { aftermath } from "./aftermath.js"
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 const OnClick = {
@@ -44,7 +46,6 @@ const OnClick = {
             })) {
               if (eny.typeId == "minecraft:player") {
                 eny.runCommand("camera @s fade time 1 3 1 color 255 255 255");
-                eny.runCommand("camerashake add @s 1 10");
               }
               eny.setOnFire(20);
               if (
@@ -113,6 +114,7 @@ const OnClick = {
                 const delayMs = delayTicks * 50;
 
                 system.runTimeout(() => {
+                  shockwaveBlast(block.dimension.id,block.location,3,50,{x: 6, z: 4}, 1)
                   try {
                     dimension.runCommand(
                       `playsound "atomic.nukesound" ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
@@ -338,6 +340,7 @@ const OnClick = {
               yield;
             }
             yield;
+            aftermath(block.dimension.id, 40, block.location, 5)
             /*
                 block.dimension.runCommand("tickingarea remove nukearea")
                 block.dimension.runCommand("tickingarea remove nukearea2")

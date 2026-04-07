@@ -3,9 +3,6 @@
     "minecraft:attachable": {
         "description": {
             "identifier": "atomic:gloves",
-            "item": {
-                "atomic:gloves": "query.is_owner_identifier_any('minecraft:player')"
-            },
             "materials": {
                 "default": "armor",
                 "enchanted": "armor_enchanted"
@@ -24,10 +21,10 @@
             "scripts": {
                 "animate": [
                     {
-                        "first_person": "c.is_first_person"
+                        "first_person": "c.is_first_person == 1.0"
                     },
                     {
-                        "third_person": "c.is_first_person"
+                        "third_person": "c.is_first_person == 1.0"
                     }
                 ],
                 "parent_setup": "v.chest_layer_visible = false;",
