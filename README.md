@@ -5,4 +5,6 @@ The idea with this github is to make it easy for anyone to look at or fork Bombs
 I have worked hard to make this a very high quality addon, though I warn you, the code is messy and I've only started commenting it as of recent. 
 
 --------------------------------------------------------------------------------------------------
-YOU CAN NOT ADD TO THIS, BUT YOU ARE ALLOWED TO TAKE ANY AMOUNT OF CODE YOU WANT AND ALSO FORK IT
+How this works:
+YOU ARE ALLOWED TO TAKE ANY AMOUNT OF CODE YOU WANT AND ALSO FORK IT
+I will not be allowing people to add files to the addon itself
