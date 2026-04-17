@@ -1,34 +1,51 @@
-import { world, system } from "@minecraft/server";
+import { world, system, Dimension, GameMode } from "@minecraft/server";
 
-export async function shockwaveBlast(dimensionid, center, strength, maxDist, upVec, shake) {
-  
-  let currentRadius = 0;
-  const maxDis = center.location;
+/**
+ * Causes a shockwave to hit players
+ * @function shockwaveBlast 
+ * @param {Dimension} dimensionid Dimension.id to use
+ * @param {Location} center The center location to start from
+ * @param {Number} strength Strength of the shockwave for players
+ * @param {Number} maxDist Max distance of the shockwave
+ * @param {Number} upVec Force backwards of the shockwave
+ * @param {Number} shake How hard the shake of the screen from the shockwave is
+ */
+export async function shockwaveBlast(
+  dimensionid,
+  center,
+  strength,
+  maxDist,
+  upVec,
+  shake,
+) {
   const dimension = world.getDimension(dimensionid);
+  let currentRadiusmax = 1;
+  let currentRadiusmin = 1;
+  let m = maxDist;
 
-  const sir = system.runInterval(() => {
-    let plus = maxDis + 1;
-    currentRadius + 1
-    const entities = dimension.getEntities({
-      location: center,
-      maxDistance: plus,
-      minDistance: plus - 1
-    });
+  for (let max = currentRadiusmax; max < maxDist; currentRadiusmax++) {
+    for (let min = currentRadiusmin; min < maxDist; currentRadiusmin++) {
+      
+          const entities = dimension.getEntities({
+          location: center,
+          maxDistance: currentRadiusmax,
+          minDistance: currentRadiusmin,
+          excludeTypes: "minecraft:item",
+        });
 
-    const players = dimension.getPlayers({
-      location: center,
-      maxDistance: plus,
-      minDistance: plus - 1
-    });
-    for (const entity of entities) {
-      entity.applyKnockback(upVec, strength);
+        const players = dimension.getPlayers({
+          location: center,
+          maxDistance: currentRadiusmax,
+          minDistance: currentRadiusmin,
+        });
+        for (const entity of entities) {
+          entity.applyImpulse(upVec);
+        }
+        for (const player of players) {
+          player.runCommand(`camerashake add @s ${shake} 10`);
+          player.applyKnockback(upVec, strength);
+        }
+
     }
-    for (const player of players) {
-      player.runCommand(`camerashake add @s ${shake} 10`);
-      player.applyKnockback(upVec, strength);
-    }
-    if (currentRadius >= maxDist) {
-      system.clearRun(sir);
-    }
-  }, 1);
+  }
 }

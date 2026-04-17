@@ -1,4 +1,5 @@
-import {system} from "@minecraft/server"
+import {system, world} from "@minecraft/server"
+import { chunkTicker } from "./chunkLoader";
 
 //Missile system, needs changing
 
@@ -84,4 +85,3 @@ function spawnSmokeTrajectory(center, dimension, angle, verticalAngle, maxDistan
     }, j * 2 + timingJitter);
   }
 };
-

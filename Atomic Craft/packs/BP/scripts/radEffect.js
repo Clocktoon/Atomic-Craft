@@ -4,16 +4,19 @@ import { world, system, Dimension, } from "@minecraft/server";
 
 //TODO:Add DynamicProperty system that has levels of radiation for player
 
-world.setDynamicProperty("")
+
 
 const runny = system.runInterval( () => {
 
-const dimensionIds = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];
-for (const dimId of dimensionIds) {
+
+    /**
+     * Function to apply the radiation effect to mobs and players
+     */
+function applyRadiationEffect() {
+    const dimensionIds = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];
+    for (const dimId of dimensionIds) {
     const dimension = world.getDimension(dimId)
     const entities = dimension.getEntities({ tags: ["atomic:rad_effect"] })
-
-function applyRadiationEffect() {
 
     for (const entity of entities) {
         
@@ -54,14 +57,3 @@ for (const entity of entities) {
 }
 }
 }, 600)
-
-
-
-world.afterEvents.itemUse.subscribe( (event) => {
-    const item = event.itemStack
-    const entity = event.source
-    
-    if(item.typeId == "minecraft:milk_bucket" && entity.hasTag("atomic:rad_effect")) {
-            entity.removeTag("atomic:rad_effect")
-    }
-})
