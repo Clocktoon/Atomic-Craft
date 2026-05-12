@@ -23,10 +23,8 @@
 				"gravity": 0.04,
 				"angle_offset": -20
 			},
-			"minecraft:physics": {},
-			"minecraft:pushable": {
-				"is_pushable": true
-			}
+			"minecraft:physics": {}
+		
 		},
 		"events": {}
 	}

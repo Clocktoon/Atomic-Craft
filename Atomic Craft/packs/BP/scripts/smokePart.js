@@ -4,9 +4,11 @@ world.afterEvents.explosion.subscribe((event) => {
 
     const dimension = event.dimension
     const source = event.source
-
-
-    dimension.spawnParticle("atomic:smoke", source.location)
+    const blocks = event.getImpactedBlocks()
+    
+    for(const block of blocks) {
+        dimension.spawnParticle("atomic:smoke", block.location)
+    }
    // dimension.playSound("atomic.explosions", source.location)
 
 

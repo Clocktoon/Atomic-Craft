@@ -1,3 +1,4 @@
+// https://tenor.com/view/far-cry-3-vass-montenegro-did-i-ever-tell-you-the-definition-of-insanity-insanity-gif-9162815073500878983    
 import {
   system,
   world,
@@ -6,13 +7,14 @@ import {
   Vector3,
   Block,
 } from "@minecraft/server";
-import { chunkLoad } from "./chunkLoad";
-import { chunkTicker } from "./chunkLoader";
+import { loadChunk } from "./chunky";
 
 /**
- * @description Function to fill the nuclear area, is reuseable
- * @param {Dimension} dimensionid The dimension.id to use
- * @param {Vector3} location The location to use
+ * @description A Function to fill the nuclear area.
+ * 
+ * Can be used for most if not all nuclear explosions
+ * @param {import("@minecraft/server").DimensionType} dimensionid The dimension.id to use
+ * @param {import("@minecraft/server").Vector3} location The location to use
  * @param {Block} blocky The block to use (useless)
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
@@ -26,33 +28,34 @@ export async function nuclearArea(dimensionid, location, blocky, size, change) {
   let endz = location.z + size;
   for (let x = startx; x < endx; x += 16) {
     for (let z = startz; z < endz; z += 16) {
-      if (!dimension.isChunkLoaded({ x: x, y: 64, z: z })) {
+      if (!dimension.isChunkLoaded({ x, y: 64,z })) {
         // Uses the chunkticker
-        await new chunkTicker({x: x, y: 64, z: z}, dimension)
-          .load({ x: x, y: 64, z: z }, "atomic:nucleararea");
-        // do I need this? I think it's a console log in the smokey code but I also can't tell, might be important
-        console.log(loadedChunks++);
+        await loadChunk({ x, y: 64, z },"atomic:nucleararea", dimensionid);
       }
-      const blockvolume = new BlockVolume(
-        {
-          x: x,
-          y: 40,
-          z: z,
-        },
-        {
-          x: x + 15,
-          y: 20,
-          z: z + 15,
-        },
-      );
+      let split = size - change
+            
       /**
        * Gets all the blocks in a chunk and fills them
-       * @param {block} block
+       * @param {import("@minecraft/server").Block} blockw
        */
-      function* get(block) {
-        if (x < size - change) {
+      function get(blockw) {
+        const from = {
+              x: x,
+              y: location.y - 20,
+              z: z,
+            };
+
+            const to = {
+              x: x + 15,
+              y: location.y + 30,
+              z: z + 15,
+            };
+            const blockvolum = new BlockVolume(from, to);
+            
+        const blop = blockw
+    
           const blocklist = dimension.getBlocks(
-            blockvolume,
+            blockvolum,
             {
               excludeTypes: [
                 "minecraft:air",
@@ -89,14 +92,16 @@ export async function nuclearArea(dimensionid, location, blocky, size, change) {
             true,
           );
 
-          for (const locy of blocklist.getBlockLocationIterator()) {
-            const blocc = dimension.getBlock(locy);
-            blocc.setType("atomic:radiation_block");
-            yield;
+          for (const locationblock of blocklist.getBlockLocationIterator()) {
+            const block = dimension.getBlock(locationblock);
+            // keeps being undefined
+            if(block.isValid) {
+            block.setType("atomic:radiation_block");
+            }
           }
 
           const blockGet = dimension.getBlocks(
-            blockvolume,
+            blockvolum,
             {
               includeTypes: [
                 "minecraft:jungle_leaves",
@@ -118,66 +123,26 @@ export async function nuclearArea(dimensionid, location, blocky, size, change) {
 
           for (const location of blockGet.getBlockLocationIterator()) {
             const blocks = dimension.getBlock(location);
+            if(blocks.isValid) {
             blocks.setType("minecraft:air");
-            yield;
+            }
           }
-          yield;
-          const dim = dimension.getBlocks(blockvol, {
+
+          const dim = dimension.getBlocks(blockvolum, {
             includeTypes: ["minecraft:coal_ore"],
           });
+
           for (const di of dim.getBlockLocationIterator()) {
             const dima = dimension.getBlock(di);
-            dima.setType("atomic:radiation_diamond_block");
-            yield;
+            if(dima.isValid) {
+             dima.setType("atomic:radiation_diamond_block");
+            }
+            
           }
-        }
-        
-        //checks if in the otherer ranges
-        if (x >= size - change) {
-          // code for grass and dirt and maybe more
-
-          //Grass
-          const getGrass = dimension.getBlocks(blockvolume, {
-            includeTypes: [
-              "minecraft:grass",
-              "minecraft:podzol",
-              "minecraft:mycelium",
-              "minecraft:grass_path",
-            ],
-          });
-
-          for (const location of getGrass.getBlockLocationIterator()) {
-            const blocks = dimension.getBlock(location);
-            blocks.setType("atomic:dead_grass");
-            yield;
-          }
-          //Leaves
-          const getLeaves = dimension.getBlocks(blockvolume, {
-            includeTypes: [
-              "minecraft:jungle_leaves",
-              "minecraft:azalea_leaves",
-              "minecraft:oak_leaves",
-              "minecraft:birch_leaves",
-              "minecraft:spruce_leaves",
-              "minecraft:acacia_leaves",
-              "minecraft:dark_oak_leaves",
-              "minecraft:azalea_leaves_flowered",
-              "minecraft:cherry_leaves",
-              "minecraft:pale_oak_leaves",
-            ],
-          });
-          for (const location of getLeaves.getBlockLocationIterator()) {
-            const blocks = dimension.getBlock(location);
-            blocks.setType("atomic:radi_leave");
-            yield;
-          }
-        };
-        //Unload chunk
-        new chunkTicker({ x: x, y: 64, z: z }, dimension)
-        .unload("atomic:nucleararea");
+    
       }
       //Run jobs the get function
-      system.runJob(get(blocky));
+     await get(blocky)
     }
   }
 }

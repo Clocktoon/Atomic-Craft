@@ -82,6 +82,9 @@
 		},
 		"atomic_glove": {
 			"textures": "textures/items/gloveitem"
+		},
+		"atomic_command": {
+			"textures": "textures/items/dev_item"
 		}
 	}
 }

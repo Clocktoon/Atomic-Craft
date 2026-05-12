@@ -1,6 +1,7 @@
 import { world } from "@minecraft/server"
 
 import("./nukeCode.js")
+
 import("./onStep.js")
 import("./spawnOrbs.js")
 import("./missileSummon.js")
@@ -12,6 +13,7 @@ import("./consoleCode.js")
 import("./nonComp.js")
 import("./EatEffects.js")
 import("./rottenEat.js")
+import("./devItem.js")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")
     import("./projectileScript.js")
@@ -29,6 +31,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./itempickups.js")
     import("./smokePart.js")
     //import("./gasMaskCode.js")
+    import("./devLore.js")
 
 }
 )

@@ -28,7 +28,7 @@
             "minecraft:destructible_by_explosion": true,
             "minecraft:light_dampening": 8,
             "minecraft:light_emission": 0,
-            "atomic:blow": {},
+            "atomic:nuclear": {},
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 30,
                 "item_specific_speeds": [

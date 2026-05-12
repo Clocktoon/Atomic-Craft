@@ -34,10 +34,7 @@
 					"deals_damage": false
 				}
 			},
-			"minecraft:pushable": {
-				"is_pushable": false,
-				"is_pushable_by_piston": false
-			},
+			
 			"minecraft:collision_box": {
 				"width": 0.0001,
 				"height": 0.0001

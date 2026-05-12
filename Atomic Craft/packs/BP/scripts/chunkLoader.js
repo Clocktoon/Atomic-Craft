@@ -55,29 +55,26 @@ class chunkTicker {
     this.ticklocation = ticklocation
     /**@type {Dimension} */
     this.dimensioni = dimensioni
-    /**@type {string} */
-    this.name = name
   }
   /**
    * Loads a ticking area at the set location
    * @param {Vector3} location - The location of the ticking area
    * @param {string} name - The name of the ticking area
    * @returns {Promise<void>}
-   * @throws Error if the ticking area manager is full or if the ticking area already exist.
+   * @throws Error if the ticking area manager is full
    */
   async load(location, name) {
     if (!this.tickingarea.hasCapacity)
       throw new Error("Ticking area manager is full");
-    if(this.tickingarea.hasTickingArea(name))
-      throw new Error("Ticking area already exist")
-    else {
+    if(this.tickingarea.hasTickingArea(name)) {
+        this.tickingarea.removeTickingArea(name)
+    }
       await this.tickingarea.createTickingArea(name, {
         dimension: this.dimensioni,
-        from: this.location,
-        to: this.location
+        from: this.ticklocation,
+        to: this.ticklocation
 
       });
-    }
   }
   /**
    * Unloads the ticking area
@@ -105,3 +102,7 @@ class chunkTicker {
 }
 
 export {chunkTicker}
+
+
+
+

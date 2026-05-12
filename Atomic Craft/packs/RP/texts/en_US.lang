@@ -42,6 +42,7 @@ tile.atomic:uranium_block.name=Uranium Block
 tile.atomic:ballistic_missile_console.name=Ballistic missile console
 item.atomic:rotten_soup.name=Rotten soup
 tile.atomic:hydrogen_bomb.name=Hydrogen bomb
+item.atomic:dev_item=Dev tool
 item.atomic:gloves.name=Gloves
 entity.atomic:icbm.name=icbm mob
 tile.atomic:icbm_item.name=icbm Item

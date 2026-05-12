@@ -1,4 +1,4 @@
-import { system, world, BlockVolume, GameMode } from "@minecraft/server";
+import { system, world, BlockVolume } from "@minecraft/server";
 import { createCrater } from "./crater.js";
 import { shockwaveBlast } from "./shockwave.js";
 import { aftermath } from "./aftermath.js";
@@ -16,12 +16,11 @@ const OnClick = {
     const pz = block.location.z;
     const py = block.y;
 
-    /* block.dimension.runCommand(`tickingarea add 
-                ${px - 70} 0 ${pz - 70} ${px + 60} 0 ${pz + 60} nukearea`) */
+    //Ticking area for the stuff close to the explosion
     world.tickingAreaManager
       .createTickingArea("nukearea", {
-        from: { x: px - 80, y: 0, z: pz - 80 },
-        to: { x: px + 80, y: 0, z: pz + 80 },
+        from: { x: px - 60, y: 0, z: pz - 60 },
+        to: { x: px + 60, y: 0, z: pz + 60 },
         dimension: block.dimension,
       })
       .then(() => {
@@ -126,9 +125,10 @@ const OnClick = {
             }
             const playdi = player.dimension;
 
+            //Shockwave and explosion sound
             playExplosionAudio(playdi, block.location, 19);
             shockwaveBlast(
-              block.dimension.id,
+              dimension,
               block.location,
               3,
               50,
@@ -137,13 +137,19 @@ const OnClick = {
             );
 
             yield;
-            nuclearArea(
-              block.dimension.id, 
-              block.location, 
-              block, 
-              100, 
-              30);
+            //Gets rid of ticking area and starts the real nuclear explosion code
+            world.tickingAreaManager.removeTickingArea("nukearea")
+            
+            //Nuke Code!!!
+           nuclearArea(
+             block.dimension.id, 
+             block.location, 
+            block, 
+             100, 
+             30);
+               
           }
+            
           system.runJob(blockGen());
         }, 400);
       });
@@ -151,5 +157,5 @@ const OnClick = {
 };
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-  blockComponentRegistry.registerCustomComponent("atomic:blow", OnClick);
+  blockComponentRegistry.registerCustomComponent("atomic:nuclear", OnClick);
 });

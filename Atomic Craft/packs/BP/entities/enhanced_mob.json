@@ -39,10 +39,6 @@
             "minecraft:movement.basic": {
                 "max_turn": 30
             },
-            "minecraft:pushable": {
-                "is_pushable": false,
-                "is_pushable_by_piston": true
-            },
             "minecraft:explode": {
                 "breaks_blocks": true,
                 "causes_fire": false,

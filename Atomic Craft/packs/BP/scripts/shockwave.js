@@ -4,7 +4,7 @@ import { world, system, Dimension, GameMode } from "@minecraft/server";
  * Causes a shockwave to hit players
  * @function shockwaveBlast 
  * @param {Dimension} dimensionid Dimension.id to use
- * @param {Location} center The center location to start from
+ * @param {import("@minecraft/server").Vector3} center The center location to start from
  * @param {Number} strength Strength of the shockwave for players
  * @param {Number} maxDist Max distance of the shockwave
  * @param {Number} upVec Force backwards of the shockwave
@@ -20,7 +20,7 @@ export async function shockwaveBlast(
 ) {
   const dimension = world.getDimension(dimensionid);
   let currentRadiusmax = 1;
-  let currentRadiusmin = 1;
+  let currentRadiusmin = -1;
   let m = maxDist;
 
   for (let max = currentRadiusmax; max < maxDist; currentRadiusmax++) {
@@ -30,13 +30,13 @@ export async function shockwaveBlast(
           location: center,
           maxDistance: currentRadiusmax,
           minDistance: currentRadiusmin,
-          excludeTypes: "minecraft:item",
+          excludeTypes: ["minecraft:item"]
         });
 
         const players = dimension.getPlayers({
           location: center,
           maxDistance: currentRadiusmax,
-          minDistance: currentRadiusmin,
+          minDistance: currentRadiusmin
         });
         for (const entity of entities) {
           entity.applyImpulse(upVec);

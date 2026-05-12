@@ -18,10 +18,7 @@
             "minecraft:movement.basic": {
                 "max_turn": 30
             },
-            "minecraft:pushable": {
-                "is_pushable": false,
-                "is_pushable_by_piston": true
-            },
+     
             "minecraft:navigation.generic": {
                 "can_walk": false
             },
