@@ -7,4 +7,5 @@ I have worked hard to make this a very high quality addon, though I warn you, th
 --------------------------------------------------------------------------------------------------
 How this works:
 YOU ARE ALLOWED TO TAKE ANY AMOUNT OF CODE YOU WANT AND ALSO FORK IT
-I will not be allowing people to add files to the addon itself
+
+I will not be allowing people to add files/code to the addon itself
