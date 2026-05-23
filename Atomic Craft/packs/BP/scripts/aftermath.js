@@ -5,17 +5,17 @@ import {world, system, Dimension} from "@minecraft/server"
 /* Things to add: 
 Local toxic rain via getting mobs around ground zero
 Toxic area
-Other cool nuclear shit I can't think of, just stuff you'd see after a real nuclear explsion all in a
+Other cool nuclear stuff I can't think of, just stuff you'd see after a real nuclear explsion all in a
 function file */
 
 /**
  * Function to the nuclear aftermath
  * @param {dimension.id} dimensionid dimension.id to use
  * @param {Number} radius radius to use, should be under 80 blocks or will error
- * @param {import("@minecraft/server").Vector3} location center location to use
+ * @param {import("@minecraft/server").BlockVolume} volume center location to use
  * @param {Number} chance chance of rain
  */
-    export function aftermath(dimensionid, radius, location, chance) {
+    export function aftermath(dimensionid, radius, volume, chance) {
         let time = 24000
         const dimension = world.getDimension(dimensionid);
         const ran = Math.floor(Math.random() * chance);

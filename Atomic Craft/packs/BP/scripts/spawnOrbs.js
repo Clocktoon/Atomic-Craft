@@ -13,7 +13,7 @@ const BlockExperienceRewardComponent = {
         // Check the tool in the player's hand
         const equippable = player?.getComponent("minecraft:equippable");
         if (!equippable) return; // Exit if the player or its equipment are undefined
-
+        
         const itemStack = equippable.getEquipment(EquipmentSlot.Mainhand);
         if (
             !itemStack ||

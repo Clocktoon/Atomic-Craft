@@ -1,6 +1,6 @@
 import { world } from "@minecraft/server"
 
-import("./nukeCode.js")
+import("./nuclearTransforms/nukeCode.js")
 
 import("./onStep.js")
 import("./spawnOrbs.js")
@@ -25,11 +25,11 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./ballisticCode.js")
     import("./himarCode.js")
     import("./radEffect.js")
-    import("./crater.js")
+    import("./nuclearTransforms/crater.js")
     import("./aftermath.js")
-    import("./shockwave.js")
+    import("./nuclearTransforms/shockwave.js")
     import("./itempickups.js")
-    import("./smokePart.js")
+    //import("./smokePart.js")
     //import("./gasMaskCode.js")
     import("./devLore.js")
 

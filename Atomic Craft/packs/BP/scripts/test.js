@@ -1,4 +1,4 @@
-import { world, system, Dimension } from "@minecraft/server"
+import { world, system, Dimension, TickingAreaOption, TickingArea } from "@minecraft/server"
 
 
 // Sound code by MapleStar // TC (discord)
@@ -149,7 +149,54 @@ function spawnSmokeTrajectory(center, dimension, angle, verticalAngle, maxDistan
   }
 };
 
+const testVector = {x: 100, y: 10, z: 100}
+
+testVector / 16
+
+// Testing system from https://bedrock-snippets.vercel.app/ (script by Coolbep)
+
+function generateUUIDv4(){
+  //Make your own UUIDv4 generator or just use this
+  return `${Date.now()}+${Math.random()}`
+}
+
+let inQueueTickingAreas = [];
+/**
+ * @param {TickingAreaOption} options
+ * @param {(tickingArea: TickingArea | undefined) => (Promise<{ action: "keep", newName: string } | void> | void)} tickingAreaCode
+ * @returns {Promise<void>}
+ `*/
+async function ensureChunkIsLoaded(options, tickingAreaCode) {
+		if (world.tickingAreaManager.hasCapacity(options)) return await executeTickingArea(options, tickingAreaCode);
+  return new Promise(resolve => {
+    inQueueTickingAreas.push([options, tickingAreaCode, resolve]);
+  });
+}
 
 
+async function executeTickingArea(options, tickingAreaCode) {
+  const tickingAreaUUID = generateUUIDv4();
+  const tickingAreaId = `${tickingAreaUUID}`;
+  await world.tickingAreaManager.createTickingArea(
+    tickingAreaId,
+    options
+  );
+  const tickingArea = world.tickingAreaManager.getTickingArea(tickingAreaId);
+  const result = await tickingAreaCode(tickingArea);
+  if (result?.action !== "keep") {
+    world.tickingAreaManager.removeTickingArea(tickingArea);
+  }
+}
+
+system.runInterval(() => {
+  inQueueTickingAreas = inQueueTickingAreas.filter(entry => {
+    const [options, tickingAreaCode, resolve] = entry;
+    if (world.tickingAreaManager.hasCapacity(options)) {
+      executeTickingArea(options, tickingAreaCode, resolve).then(() => {resolve()});
+      return false;
+    }
+    return true;
+  });
+}, 20);
 
 

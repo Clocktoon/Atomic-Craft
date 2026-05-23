@@ -1,5 +1,5 @@
 import {world, system, ItemComponentRegistry} from "@minecraft/server"
-import {chunkTicker} from "./chunkLoader"
+import {chunkTicker} from "./chunkLoaders/chunkTickerClass"
 
 /**@type {import("@minecraft/server").ItemCustomComponent} */
 const Dev = {

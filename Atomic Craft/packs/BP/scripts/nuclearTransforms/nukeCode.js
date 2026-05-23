@@ -1,7 +1,7 @@
 import { system, world, BlockVolume } from "@minecraft/server";
 import { createCrater } from "./crater.js";
 import { shockwaveBlast } from "./shockwave.js";
-import { aftermath } from "./aftermath.js";
+import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "./volumeCode.js";
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
@@ -40,6 +40,8 @@ const OnClick = {
 
         system.runTimeout(() => {
           function* blockGen() {
+            let radius = 100
+
             for (const eny of block.dimension.getEntities({
               location: block.location,
               minDistance: 1,
@@ -74,7 +76,7 @@ const OnClick = {
               block.dimension.id,
               "minecraft:air",
               30,
-              20,
+              30,
             );
 
             // Sound code by MapleStar // TC (discord)
@@ -126,15 +128,15 @@ const OnClick = {
             const playdi = player.dimension;
 
             //Shockwave and explosion sound
-            playExplosionAudio(playdi, block.location, 19);
-            shockwaveBlast(
-              dimension,
-              block.location,
-              3,
-              50,
-              { x: 6, z: 4 },
-              1,
-            );
+            playExplosionAudio(playdi, block.location, 160);
+            // shockwaveBlast(
+            //   dimension,
+            //   block.location,
+            //   3,
+            //   50,
+            //   { x: 6, z: 4 },
+            //   1,
+            // );
 
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
@@ -147,6 +149,26 @@ const OnClick = {
             block, 
              100, 
              30);
+            
+             const volume = new BlockVolume(
+              {
+                x: block.location.x - radius,
+                y: block.location.y - 20,
+                z: block.location.z - radius
+              },
+              {
+                x: block.location.x + radius,
+                y: block.location.y + radius,
+                z: block.location.z + radius
+              }
+             )
+
+             aftermath(
+              dimension.id,
+              radius,
+              volume,
+              Math.floor(Math.random() * 4)
+             )
                
           }
             

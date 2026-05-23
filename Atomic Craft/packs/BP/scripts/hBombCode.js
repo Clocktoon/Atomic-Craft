@@ -1,5 +1,5 @@
 import { system, BlockVolume, world } from "@minecraft/server"
-import { createCrater } from "./crater"
+import { createCrater } from "./nuclearTransforms/crater"
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 const Clicky = {

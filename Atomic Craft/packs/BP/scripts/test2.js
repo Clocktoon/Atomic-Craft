@@ -1,5 +1,5 @@
 import {system, world} from "@minecraft/server"
-import { chunkTicker } from "./chunkLoader";
+import { chunkTicker } from "./chunkLoaders/chunkTickerClass";
 
 //Missile system, needs changing
 
