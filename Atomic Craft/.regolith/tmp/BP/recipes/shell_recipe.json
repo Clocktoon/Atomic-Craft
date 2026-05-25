@@ -1,0 +1,33 @@
+{
+	"format_version": "1.21.100",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "atomic:shell_recipe"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"key": {
+			"O": {
+				"item": "clay"
+			},
+			"H": {
+				"item": "iron_ingot"
+			}
+		},
+		"pattern": [
+			"OOO",
+			"H",
+			"OO"
+		],
+		"unlock": [
+			{
+				"item": "clay"
+			}
+		],
+		"result": {
+			"item": "atomic:shell",
+			"count": 1
+		}
+	}
+}

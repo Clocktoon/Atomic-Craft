@@ -1,0 +1,16 @@
+{
+    "format_version": "1.10.0",
+    "render_controllers": {
+        "controller.render.enhanced_mob": {
+            "geometry": "geometry.default",
+            "textures": [
+                "Texture.default"
+            ],
+            "materials": [
+                {
+                    "*": "material.default"
+                }
+            ]
+        }
+    }
+}

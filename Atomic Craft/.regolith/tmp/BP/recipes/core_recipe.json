@@ -1,0 +1,11 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:recipe_shaped": {
+        "description": {"identifier": "atomic:core_recipe"},
+        "tags": ["crafting_table"],
+        "pattern": ["###", "#P#", "###"],
+        "key": {"P": {"item": "atomic:uranium_cooked"}, "#": {"item": "minecraft:iron_ingot"}},
+        "unlock": [{"item": "atomic:uranium_cooked"}, {"item": "minecraft:iron_ingot"}],
+        "result": {"item": "atomic:core"}
+    }
+}

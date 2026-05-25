@@ -1,0 +1,24 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "atomic:grenade_entity",
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"default": "textures/entity/grenade_tex"
+			},
+			"geometry": {
+				"default": "geometry.grenade_entity"
+			},
+			"render_controllers": [
+				"controller.render.grenade_entity"
+			],
+			"spawn_egg": {
+				"base_color": "#000000",
+				"overlay_color": "#FFFFFF"
+			}
+		}
+	}
+}

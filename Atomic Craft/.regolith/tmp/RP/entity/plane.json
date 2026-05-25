@@ -1,0 +1,34 @@
+{
+	"format_version": "1.20.80",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "atomic:plane",
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"default": "textures/entity/plane_tex"
+			},
+			"geometry": {
+				"default": "geometry.plane"
+			},
+			"render_controllers": [
+				"controller.render.plane"
+			],
+			"spawn_egg": {
+				"base_color": "#000000",
+				"overlay_color": "#FFFFFF"
+			},
+			"animations": {
+				"fly": "animation.plane.fly",
+				"idley": "animation.plane.idle",
+				"plane": "controller.animation.plane"
+			},
+			"scripts": {
+				"animate": [
+					"plane"
+				]
+			}
+		}
+	}
+}

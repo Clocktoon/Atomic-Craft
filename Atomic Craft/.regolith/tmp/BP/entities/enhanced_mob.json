@@ -1,0 +1,58 @@
+{
+    "format_version": "1.26.10",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "atomic:enhanced_mob",
+            "is_spawnable": false,
+            "is_summonable": true
+        },
+        "component_groups": {},
+        "components": {
+            "minecraft:health": {
+                "value": 100
+            },
+            "minecraft:fire_immune": {},
+            "minecraft:hurt_on_condition": {
+                "damage_conditions": [
+                    {"cause": "self_destruct"}
+                ]
+            },
+            "minecraft:movement": {
+                "value": 1
+            },
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": true
+            },
+            "minecraft:navigation.generic": {
+                "can_walk": true,
+                "can_jump": false,
+                "can_sink": true
+            },
+            "minecraft:collision_box": {
+                "height": 0.5,
+                "width": 0.5
+            },
+            "minecraft:type_family": {
+                "family": ["bomb"]
+            },
+            "minecraft:movement.basic": {
+                "max_turn": 30
+            },
+            "minecraft:explode": {
+                "breaks_blocks": true,
+                "causes_fire": false,
+                "destroy_affected_by_griefing": false,
+                "fire_affected_by_griefing": false,
+                "fuse_lit": true,
+                "max_resistance": 0,
+                "power": 16,
+                "fuse_length": [
+                    1,
+                    4
+                ]
+            }
+        },
+        "events": {}
+    }
+}

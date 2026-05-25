@@ -1,0 +1,38 @@
+{
+    "format_version": "1.21.100",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:tablet_recipe"
+        },
+        "tags": [
+            "crafting_table"
+        ],
+        "pattern": [
+            "VVV",
+            " A ",
+            "VVV"
+        ],
+        "key": {
+            "V": {
+                "item": "iron_ingot"
+            },
+            "A": {
+                "item": "atomic:enhanced_tnt",
+                "data": 6
+            }
+        },
+        "unlock": [
+            {
+                "item": "atomic:enhanced_tnt"
+            },
+            {
+                "item": "iron_ingot"
+            }
+        ],
+        "result": {
+            "count": 1,
+            "data": 6,
+            "item": "atomic:tablet"
+        }
+    }
+}

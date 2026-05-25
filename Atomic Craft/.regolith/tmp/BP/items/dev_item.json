@@ -1,0 +1,22 @@
+{
+    "format_version": "1.26.10",
+    "minecraft:item": {
+        "description": {
+            "identifier": "atomic:dev_item",
+            "menu_category": {
+                "category": "none"
+            }
+        },
+        "components": {
+            "minecraft:allow_off_hand": false,
+            "minecraft:max_stack_size": 1,
+            "minecraft:icon": "atomic_command",
+            "minecraft:should_despawn": true,
+            "minecraft:use_modifiers": {
+                "use_duration": 2
+            },
+            "minecraft:use_animation":"drink",
+            "atomic:dev_component": {}
+        }
+    }
+}

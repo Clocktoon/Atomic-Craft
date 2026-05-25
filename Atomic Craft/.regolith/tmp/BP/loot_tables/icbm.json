@@ -1,0 +1,15 @@
+{
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "atomic:icbm_item",
+                    "weight": 1
+
+                }
+            ]
+        }
+    ]
+}

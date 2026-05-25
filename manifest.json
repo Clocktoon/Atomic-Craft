@@ -1,0 +1,45 @@
+{
+	"format_version": 3,
+	"header": {
+		"name": "Atomic-Craft-beh",
+		"description": "Atomic-Craft-beh",
+		"uuid": "88256ae8-6f21-4684-9d7e-0200d778d05d",
+		"version": "0.1.0",
+		"min_engine_version": "1.26.21"
+	},
+	"metadata": {
+		"authors": [
+			"Clocktoon"
+		],
+		"url": "https://github.com/Clocktoon/Atomic-Craft",
+		"generated_with": {
+			"nano191225-scriptup": [
+				"1.6.0"
+			]
+		}
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "39bc551c-0fed-4514-9a6b-ce97ffc17895",
+			"version": "0.1.0"
+		},
+		{
+			"type": "script",
+			"uuid": "86b33460-97cf-48ad-857b-c84929f962fd",
+			"version": "0.1.0",
+			"language": "javascript",
+			"entry": "scripts/main.js"
+		}
+	],
+	"dependencies": [
+		{
+			"module_name": "@minecraft/server",
+			"version": "2.7.0"
+		},
+		{
+			"module_name": "@minecraft/server-ui",
+			"version": "2.0.0"
+		}
+	]
+}

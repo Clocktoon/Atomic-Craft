@@ -9,6 +9,10 @@
 	"regolith": {
 		"dataPath": "./packs/data",
 		"filterDefinitions": {
+			"gametests": {
+				"url": "github.com/Bedrock-OSS/regolith-filters",
+				"version": "1.7.4"
+			},
 			"texture_list": {
 				"url": "github.com/Bedrock-OSS/regolith-filters",
 				"version": "1.1.3"

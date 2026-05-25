@@ -1,0 +1,32 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.missile.idle": {
+			"loop": true
+		},
+		"animation.missile.moving": {
+			"loop": true,
+			"animation_length": 15.0417,
+			"bones": {
+				"bone": {
+					"rotation": [
+						180,
+						0,
+						0
+					],
+					"position": [
+						0,
+						65,
+						0
+					]
+				}
+			},
+			"particle_effects": {
+				"0.0": {
+					"effect": "missile_smoke",
+					"locator": "locator"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,15 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:item": {
+    "description": {
+      "identifier": "atomic:gloves",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:icon": "atomic_glove",
+      "minecraft:wearable": { "slot": "slot.armor.chest", "protection": 2 }
+    }
+  }
+}

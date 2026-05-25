@@ -1,0 +1,42 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"Abbadon"
+		],
+		"generated_with": {
+			"bridge": [
+				"2.7.51"
+			],
+			"dash": [
+				"0.11.7"
+			]
+		}
+	},
+	"header": {
+		"name": "Bombs of Glory",
+		"description": "pack.description",
+		"min_engine_version": [
+			1,
+			21,
+			90
+		],
+		"uuid": "1fb0a806-aaf1-458a-8694-d397e28cbb4e",
+		"version": [
+			1,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "4d2ea756-caa8-4613-98ec-7c5b7ceb5d2a",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	]
+}
