@@ -21,9 +21,6 @@
     "script-api"
   ],
   "files": [
-    "manifest.json",
-    "scripts",
-    "LICENSE",
-    "README.md"
+    "manifest.json"
   ]
 }
