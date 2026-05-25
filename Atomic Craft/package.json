@@ -1,0 +1,29 @@
+{
+  "name": "atomic-craft",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "scriptup build --release",
+    "watch": "scriptup build --watch"
+  },
+  "devDependencies": {
+    "@bedrock-apis/env-types": "^1.0.0-rc.1",
+    "@minecraft/server": "^2.7.0",
+    "@minecraft/server-ui": "^2.0.0",
+    "@nano191225/scriptup": "^1.6.0",
+    "tsdown": "^0.21.10",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "minecraft",
+    "minecraft-bedrock",
+    "minecraft-script-api",
+    "script-api"
+  ],
+  "files": [
+    "manifest.json",
+    "scripts",
+    "LICENSE",
+    "README.md"
+  ]
+}

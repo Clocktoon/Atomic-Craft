@@ -1,0 +1,1 @@
+{"version":3,"file":"main.js","names":[],"sources":["../src/main.ts"],"sourcesContent":["import { world } from \"@minecraft/server\";\n\nworld.afterEvents.worldLoad.subscribe(() => {\n    console.log(\"Hello world!\");\n});\n"],"mappings":";;;AAEA,MAAM,YAAY,UAAU,gBAAgB;AACxC,SAAQ,IAAI,eAAe;EAC7B"}
