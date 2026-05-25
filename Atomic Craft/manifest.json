@@ -5,7 +5,7 @@
 		"description": "Atomic Craft-beh",
 		"uuid": "63d63de6-a696-4494-abb9-c770972327a9",
 		"version": "0.1.0",
-		"min_engine_version": "1.26.21"
+		"min_engine_version": "1.26.10"
 	},
 	"metadata": {
 		"authors": [
@@ -29,7 +29,7 @@
 			"uuid": "4fdd2216-f3f7-4b13-8d99-d39368953a7a",
 			"version": "0.1.0",
 			"language": "javascript",
-			"entry": "scripts/main.js"
+			"entry": "packs/BP/scripts"
 		}
 	],
 	"dependencies": [
