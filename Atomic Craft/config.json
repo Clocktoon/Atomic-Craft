@@ -1,37 +1,53 @@
 {
-	"$schema": "https://raw.githubusercontent.com/Bedrock-OSS/regolith-schemas/main/config/v1.4.json",
-	"author": "Abbadon",
-	"name": "Bombs of Glory",
-	"packs": {
-		"behaviorPack": "./packs/BP",
-		"resourcePack": "./packs/RP"
-	},
-	"regolith": {
-		"dataPath": "./packs/data",
-		"filterDefinitions": {
-			"gametests": {
-				"url": "github.com/Bedrock-OSS/regolith-filters",
-				"version": "1.7.4"
-			},
-			"texture_list": {
-				"url": "github.com/Bedrock-OSS/regolith-filters",
-				"version": "1.1.3"
-			}
-		},
-		"formatVersion": "1.7.0",
-		"profiles": {
-			"default": {
-				"export": {
-					"build": "standard",
-					"readOnly": false,
-					"target": "development"
-				},
-				"filters": [
-					{
-						"filter": "texture_list"
-					}
-				]
-			}
-		}
-	}
+  "$schema": "https://raw.githubusercontent.com/Bedrock-OSS/regolith-schemas/main/config/v1.4.json",
+  "author": "Abbadon",
+  "name": "Bombs of Glory",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP"
+  },
+  "regolith": {
+    "dataPath": "./packs/data",
+    "filterDefinitions": {
+      "gametests": {
+        "url": "github.com/Bedrock-OSS/regolith-filters",
+        "version": "1.7.4"
+      },
+      "texture_list": {
+        "url": "github.com/Bedrock-OSS/regolith-filters",
+        "version": "1.1.3"
+      }
+    },
+    "formatVersion": "1.7.0",
+    "profiles": {
+      "default": {
+        "export": {
+          "build": "standard",
+          "readOnly": false,
+          "target": "development"
+        },
+        "filters": [
+          {
+            "filter": "texture_list"
+          },
+          {
+            "filter": "gametests",
+            "settings": {
+              "moduleUUID": "e9678316-b458-4c62-8180-91d57860fd8a",
+              "modules": ["@minecraft/server@2.7.0", "@minecraft/server-ui@2.0.0"],
+              "outfile": "BP/scripts/main.js",
+              "manifest": "BP/manifest.json",
+              "buildOptions": {
+                "entryPoints": ["data/gametests/src/main.ts"],
+                "target": "es2020",
+                "format": "esm",
+                "bundle": true,
+                "minify": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
 }
