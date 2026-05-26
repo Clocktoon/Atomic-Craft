@@ -1,5 +1,5 @@
 import { world } from "@minecraft/server";
-import("./nuclearTransforms/nukeCode.js");
+import("./nuclearBombs/atomBomb");
 import("./onStep.js");
 import("./spawnOrbs.js");
 import("./missileSummon.js");
@@ -29,5 +29,5 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./itempickups.js");
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
-    import("./devLore.js");
+    import("./setLore.js");
 });

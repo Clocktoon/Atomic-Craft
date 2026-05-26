@@ -15,7 +15,7 @@ import { loadChunk } from "../chunkLoaders/chunky";
  * @deprecated This function is being scrapped, leaving around incase of needed use, use the chunkTicker class instead
  * @description A Function to fill the nuclear area.
  * Can be used for most if not all nuclear explosions
- * @param {import("@minecraft/server").DimensionType} dimensionid The dimension.id to use
+ * @param {string} dimensionid The dimension.id to use
  * @param {import("@minecraft/server").Vector3} location The location to use
  * @param {Block} blocky The block to use (useless)
  * @param {number} size Size of the nuclear area

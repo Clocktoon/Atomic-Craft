@@ -1,18 +1,22 @@
-import { system, world, BlockVolume } from "@minecraft/server";
+import { system, world, BlockVolume, BlockCustomComponent, BlockComponentPlayerInteractEvent, Dimension, Vector3 } from "@minecraft/server";
 import { createCrater } from "./crater.js";
 import { shockwaveBlast } from "./shockwave.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "./volumeCode.js";
 
 
-function nuclearComp() {
-  /** @type {import("@minecraft/server").BlockCustomComponent} */
-const OnClick = {
-  onPlayerInteract(event) {
+
+class OnClick implements BlockCustomComponent {
+  constructor() {
+    this.onPlayerInteract = this.onPlayerInteract.bind(this)
+  }
+  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
     const block = event.block;
-    const player = event.player;
+    const playerEntity = event.player;
+    const player = playerEntity;
     const dimension = event.dimension;
-    
+    // guard: player may be undefined in some event contexts
+    if (!player) return;
 
     const px = block.location.x;
     const pz = block.location.z;
@@ -26,7 +30,7 @@ const OnClick = {
         dimension: block.dimension,
       })
       .then(() => {
-        let seconds = 20;
+        let seconds: number = 20;
         player.sendMessage(`You have ${seconds} seconds to run`);
 
         const sys = system.runInterval(() => {
@@ -82,7 +86,7 @@ const OnClick = {
             );
 
             // Sound code by MapleStar // TC (discord)
-            function playExplosionAudio(dimension, center, magnitude) {
+            function playExplosionAudio(dimension: Dimension, center: Vector3, magnitude: number) {
               if (!center) return;
 
               const players = dimension.getPlayers();
@@ -127,6 +131,7 @@ const OnClick = {
                 }, delayMs);
               });
             }
+            if (!player) return;
             const playdi = player.dimension;
 
             //Shockwave and explosion sound
@@ -177,11 +182,7 @@ const OnClick = {
           system.runJob(blockGen());
         }, 400);
       });
-  },
+  }
 };
 
-};
-
-system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-  blockComponentRegistry.registerCustomComponent("atomic:nuclear", nuclearComp());
-});
+export {OnClick}
