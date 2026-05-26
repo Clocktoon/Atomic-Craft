@@ -8,10 +8,11 @@
     "ignoreDeprecations": "6.0",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "rootDir": "./src",
     "outDir": "../../BP/scripts",
+    "rootDir": "./src",
     "strict": true,
     "noLib": true,
+    "allowJs": true,
     "types": [
       "@bedrock-apis/env-types"
     ],

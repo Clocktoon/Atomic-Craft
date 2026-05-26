@@ -85,12 +85,12 @@ class chunkTicker {
         this.#tickingarea.removeTickingArea(nameID)
     }
       await this.#tickingarea.createTickingArea(this.#name, {
-        dimension: this.dimension,
+        dimension: this.#dimension,
         from: location,
         to: location
 
       });
-      if(nuclear == true) {
+      if(nuclear === true) {
         const area = this.#tickingarea.getTickingArea().boundingBox;
         world.setDynamicProperty(this.#name, {x: area.max, z: area.max});
       }

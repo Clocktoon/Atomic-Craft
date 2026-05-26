@@ -4,9 +4,44 @@ import { shockwaveBlast } from "./shockwave.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "./volumeCode.js";
 
+world.beforeEvents.worldInitialize.subscribe((event) => {
 
-function nuclearComp() {
-  /** @type {import("@minecraft/server").BlockCustomComponent} */
+    event.blockComponentRegistry.registerCustomComponent('example:spreads', new Spread())
+  
+  })
+
+  class Spread {
+    onTick (data) {
+        const {block} = data
+        //I'm assuming this is custom component registry.
+        const accessibleDirections = ["north","south","east","west","above","below"]
+        const blockTags = block.getTags().map((tag)=> tag.replace(`spreads`,`minecraft`))
+        let modifiedBlocks = 0
+        for (const direction of accessibleDirections){
+          //Iterate through the list since you reference each direction.
+          const nearbyBlock = block[direction](1)
+          //This call may not work, if it doesn't make an array and iterate through each entry
+          if (blockTags.some((tag)=> tag == nearbyBlock.typeId)){
+            nearbyBlock.setType(`myname:rot`)
+            modifiedBlocks++
+            //Gotta respect the default namespace.
+          }
+        }
+       if (modifiedBlocks == 0){
+          //if none of the typeIds match the tags
+          block.setPermutation(block.permutation.withState(`example:kill`,true))
+       }
+    }
+}
+
+/** @type {import("@minecraft/server").BlockCustomComponent} */
+class Clicked {
+  onPlayerInteract() {
+
+  }
+}
+
+/** @type {import("@minecraft/server").BlockCustomComponent} */
 const OnClick = {
   onPlayerInteract(event) {
     const block = event.block;
@@ -180,8 +215,6 @@ const OnClick = {
   },
 };
 
-};
-
-system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-  blockComponentRegistry.registerCustomComponent("atomic:nuclear", nuclearComp());
-});
+// system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
+//   blockComponentRegistry.registerCustomComponent("atomic:nuclear", OnClick);
+// });
