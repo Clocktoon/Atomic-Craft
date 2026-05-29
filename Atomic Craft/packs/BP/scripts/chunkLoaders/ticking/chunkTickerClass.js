@@ -81,21 +81,18 @@ class ChunkTicker {
             world.sendMessage("ticking area " + this.#name + " is loaded");
         }
         await this.#tickingarea.createTickingArea(this.#name, options);
+        world.sendMessage("ticking area " + this.#name + " has been created");
         if (nuclear === true) {
             //WIP, will probably need changing, please look over
             //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
             const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
-            const savedVec = {
-                x: options.from.x,
-                x2: options.to.x,
-                z: options.from.z,
-                z2: options.to.z,
-            };
             //Current idea, rather nested area or keep it like this and see if could use this instead
             const tickingArea = this.#tickingarea.getTickingArea(this.#name);
             if (tickingArea) {
                 requests.push(tickingArea);
+                return tickingArea;
             }
+            return undefined;
         }
     }
     /**

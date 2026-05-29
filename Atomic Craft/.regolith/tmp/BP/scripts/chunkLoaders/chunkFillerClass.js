@@ -1,5 +1,4 @@
-import { BlockVolume } from "@minecraft/server";
-import { requests } from "./ticking/chunkTickerClass";
+import { BlockVolume, world } from "@minecraft/server";
 /**
  * Parts taken from https://bedrock-snippets.vercel.app/ (script by Coolbep),
  * And
@@ -12,15 +11,14 @@ class ChunkFiller {
     Chunksrequests = []; // Queue of requests
     #blockID;
     #name;
-    constructor(block, tickingName) {
+    constructor(block, tickingArea) {
         this.Chunksrequests = [];
-        // Only add the ticking area that matches this ChunkFiller's name
-        const matchingArea = requests.find(area => area === requests[requests.length - 1]);
-        if (matchingArea) {
-            this.Chunksrequests.push(matchingArea);
+        //specific ticking area is provided, only use that one
+        if (tickingArea) {
+            this.Chunksrequests.push(tickingArea);
         }
         this.#blockID = block;
-        this.#name = tickingName;
+        this.#name = tickingArea ? tickingArea.identifier : "";
     }
     //TODO: HAVE LOADED CHUNKS GO INTO THE REQUEST PROPERTY
     *generator() {
@@ -69,8 +67,8 @@ class ChunkFiller {
                     }
                 }
             }
-            yield;
         }
+        world.sendMessage(`Filling for ${this.#name}`);
     } //generator to yield and fill all these global requests
 }
 export { ChunkFiller };

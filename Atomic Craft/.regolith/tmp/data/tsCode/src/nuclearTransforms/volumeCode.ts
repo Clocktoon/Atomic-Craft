@@ -17,6 +17,8 @@ link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src */
 //TODO: MAKE CODE RUN, ISN'T RUNNING ANYMORE FOR SOME REASON
 
+//TODO: AT THE MOMMENT IT ONLY DOES THE FIRST CHUNK AND THEN STOPS, MAKE IT DO ALL OF THEM
+
 
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
@@ -64,20 +66,31 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
       
       const nameId = `NK_${x},${z},${dimension.id}`;
 
-      
-      await new ChunkTicker(dimension, nameId).load({ x: x, y: 64, z: z }, true, {
+      const tickingArea = await new ChunkTicker(dimension, nameId)
+      .load({ x: x, y: 64, z: z }, true, {
         dimension: dimension,
-        from: location,
-        to: location,
+        from: {x: x, y: 64, z: z},
+        to: {x: x, y: 64, z: z},
       });
 
-      // iteration (DO NOT GET RID OF)
-      const filler = new ChunkFiller(blocky, nameId);
-      
-      // Wait for this generator to complete before moving to next chunk
-      await fillGeneratorSequential(filler.generator());
+      // If we received a ticking area, wait until it's fully loaded, then fill
+      if (tickingArea) {
+        while (!tickingArea.isFullyLoaded) {
+          await new Promise<void>((resolve) => {
+            system.runTimeout(() => resolve(), 1);
+          });
+        }
 
-      world.sendMessage(`Ticking area filled: ${nameId}`);
+        // iteration (DO NOT GET RID OF)
+        const filler = new ChunkFiller(blocky, tickingArea);
+
+        // Wait for this generator to complete before moving to next chunk
+        await fillGeneratorSequential(filler.generator());
+
+        world.sendMessage(`Ticking area filled: ${nameId}`);
+      } else {
+        world.sendMessage(`Ticking area not returned: ${nameId}`);
+      }
     }
   }
 }

@@ -17,21 +17,31 @@ link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src */
 //TODO: MAKE CODE RUN, ISN'T RUNNING ANYMORE FOR SOME REASON
 
+//TODO: AT THE MOMMENT IT ONLY DOES THE FIRST CHUNK AND THEN STOPS, MAKE IT DO ALL OF THEM
+
 
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
  */
-async function fillGeneratorSequential(generator: Generator<void, void, unknown>): Promise<void> {
-  return new Promise((resolve) => {
+async function fillGeneratorSequential(generator: Generator<void, void, unknown>, ticks: number): Promise<void> {
+  return new Promise((resolve, reject) => {
     /**
      * processes a set number of yields per tick
      */
-    const maxTicksPerFrame = 50; 
-    
+    const maxTicksPerFrame = ticks;
+
     const interval = system.runInterval(() => {
       let yielded = 0;
       while (yielded < maxTicksPerFrame) {
-        const result = generator.next();
+        let result;
+        try {
+          result = generator.next();
+        } catch (err) {
+          system.clearRun(interval);
+          reject(err);
+          return;
+        }
+
         if (result.done) {
           system.clearRun(interval);
           resolve();
@@ -64,20 +74,31 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
       
       const nameId = `NK_${x},${z},${dimension.id}`;
 
-      
-      await new ChunkTicker(dimension, nameId).load({ x: x, y: 64, z: z }, true, {
+      const tickingArea = await new ChunkTicker(dimension, nameId)
+      .load({ x: x, y: 64, z: z }, true, {
         dimension: dimension,
-        from: location,
-        to: location,
+        from: {x: x, y: 64, z: z},
+        to: {x: x, y: 64, z: z},
       });
 
-      // iteration (DO NOT GET RID OF)
-      const filler = new ChunkFiller(blocky, nameId);
-      
-      // Wait for this generator to complete before moving to next chunk
-      await fillGeneratorSequential(filler.generator());
+      // waits until it's fully loaded, then fill
+      if (tickingArea) {
+        while (!tickingArea.isFullyLoaded) {
+          await new Promise<void>((resolve) => {
+            system.runTimeout(() => resolve(), 1);
+          });
+        }
 
-      world.sendMessage(`Ticking area filled: ${nameId}`);
+        // iteration (DO NOT GET RID OF)
+        const filler = new ChunkFiller(blocky, tickingArea);
+
+        // Wait for this generator to complete before moving to next chunk
+        await fillGeneratorSequential(filler.generator(), 50);
+
+        world.sendMessage(`Ticking area filled: ${nameId}`);
+      } else {
+        world.sendMessage(`Ticking area not returned: ${nameId}`);
+      }
     }
   }
 }
