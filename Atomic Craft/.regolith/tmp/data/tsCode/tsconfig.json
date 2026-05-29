@@ -1,0 +1,21 @@
+{
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "module": "es2022",
+    "target": "es2024",
+    "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "outDir": "../../BP/scripts",
+    "rootDir": "./src",
+    "strict": true,
+    "noLib": true,
+    "allowJs": true,
+    "types": [
+      "@bedrock-apis/env-types"
+    ],
+    "noEmit": false
+  }
+}

@@ -1,5 +1,4 @@
 import { system, world } from "@minecraft/server";
-import { chunkTicker } from "./chunkLoaders/ticking/chunkTickerClass";
 //Missile system, needs changing
 function createLaunchingSmokeTrails(center, dimension, count = 15, launchPower = 0.5) {
     const actualCount = Math.min(Math.max(1, count), 20);

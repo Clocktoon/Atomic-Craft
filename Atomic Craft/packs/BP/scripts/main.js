@@ -1,11 +1,17 @@
 import { world } from "@minecraft/server";
-import("./nuclearBombs/atomBomb");
+/**
+ * Main file for BOG (bombs of glory)
+ * @author Abaddon
+ * @license MIT
+ * @version 2.0.0
+ */
+import("./nuclearBombs/nukeCode");
 import("./onStep.js");
 import("./spawnOrbs.js");
 import("./missileSummon.js");
 import("./remoteMissile.js");
 import("./landMineCode.js");
-import("./hBombCode.js");
+import("./nuclearBombs/hBombCode.js");
 import("./icbmComp.js");
 import("./consoleCode.js");
 import("./nonComp.js");

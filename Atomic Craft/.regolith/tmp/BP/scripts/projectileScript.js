@@ -1,22 +1,17 @@
-import { world, system } from "@minecraft/server"
-
+import { world, system } from "@minecraft/server";
 world.afterEvents.projectileHitBlock.subscribe((Event) => {
-    const projectile = Event.projectile
-
+    const projectile = Event.projectile;
     if (projectile.typeId === "atomic:grenade_entity") {
-
         system.runTimeout(() => {
-            projectile.dimension.createExplosion(projectile.location, 5)
-        }, 30)
+            projectile.dimension.createExplosion(projectile.location, 5);
+        }, 30);
     }
-})
-
+});
 world.afterEvents.projectileHitEntity.subscribe((Event) => {
-    const projectile = Event.projectile
-
+    const projectile = Event.projectile;
     if (projectile.typeId === "atomic:grenade_entity") {
         system.runTimeout(() => {
-            projectile.dimension.createExplosion(projectile.location, 6)
-        }, 20)
+            projectile.dimension.createExplosion(projectile.location, 6);
+        }, 20);
     }
-})
+});

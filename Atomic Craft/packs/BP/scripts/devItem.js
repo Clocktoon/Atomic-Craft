@@ -1,17 +1,18 @@
-import { world, system, ItemComponentRegistry } from "@minecraft/server";
-import { chunkTicker } from "./chunkLoaders/ticking/chunkTickerClass";
+import { world, system } from "@minecraft/server";
+import { ChunkTicker } from "./chunkLoaders/ticking/chunkTickerClass";
 /**@type {import("@minecraft/server").ItemCustomComponent} */
 const Dev = {
     onUse(event) {
         const item = event.itemStack;
         const entity = event.source;
         if (!entity.isSneaking) {
-            new chunkTicker(entity.location, entity.dimension).unloadall;
+            new ChunkTicker(entity.dimension, "null").unloadall;
             entity.onScreenDisplay.setActionBar("All pack chunks unloaded");
         }
         if (entity.isSneaking) {
-            const allTickingAreas = world.tickingAreaManager.getAllTickingAreas().
-                entity.onScreenDisplay.setActionBar(`ticking areas: ${allTickingAreas}`);
+            const allTickingAreas = world.tickingAreaManager.getAllTickingAreas();
+            const tickingList = allTickingAreas.forEach(s => s.identifier);
+            entity.onScreenDisplay.setActionBar(`ticking areas: ${tickingList}`);
         }
     }
 };

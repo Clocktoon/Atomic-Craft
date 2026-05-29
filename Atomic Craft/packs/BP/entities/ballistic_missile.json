@@ -60,7 +60,7 @@
       "minecraft:behavior.nearest_attackable_target": {
         "priority": 0,
         "reselect_targets": true,
-        "target_search_height": 1000,
+        "target_search_height": 1000.0,
         "must_see": false,
         "scan_interval": 10,
         "entity_types": [
@@ -89,8 +89,7 @@
         "track_target": true
       },
       "minecraft:follow_range": {
-        "value": 1000,
-        "max": 1000
+        "value": 1000
       },
       "minecraft:movement": {
         "value": 5
