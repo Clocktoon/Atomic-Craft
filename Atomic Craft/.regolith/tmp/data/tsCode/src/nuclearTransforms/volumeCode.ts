@@ -35,7 +35,7 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
     for (let z = startz; z < size; z += 16) {
       const nameId = `NK_${x},${z},${dimension.id}`;
         // Uses the chunkTicker class
-       await new ChunkTicker(dimension, nameId).load({x: x, y: 64, z: z},
+       new ChunkTicker(dimension, nameId).load({x: x, y: 64, z: z},
            true, {
               dimension: dimension,
               from: location,
