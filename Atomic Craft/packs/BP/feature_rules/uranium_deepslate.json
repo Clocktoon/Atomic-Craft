@@ -1,7 +1,7 @@
 {
     "format_version": "1.21.100",
     "minecraft:feature_rules": {
-        "description": { "identifier": "atomic:overworld_underground_uranium_deepslate", "places_feature": "atomic:uranium_deepslate_feature" },
+        "description": { "identifier": "atomic:uranium_deepslate", "places_feature": "atomic:uranium_deepslate_feature" },
         "conditions": {
             "placement_pass": "underground_pass",
             "minecraft:biome_filter": [{ "any_of": [{ "test": "has_biome_tag", "operator": "==", "value": "overworld" }, { "test": "has_biome_tag", "operator": "==", "value": "overworld_generation" }]}]

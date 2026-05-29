@@ -78,6 +78,7 @@ class ChunkTicker {
         const location = locationVec;
         if (this.#tickingarea.hasTickingArea(this.#name)) {
             this.#tickingarea.removeTickingArea(this.#name);
+            world.sendMessage("ticking area " + this.#name + " is loaded");
         }
         await this.#tickingarea.createTickingArea(this.#name, options);
         if (nuclear === true) {
@@ -95,11 +96,6 @@ class ChunkTicker {
             if (tickingArea) {
                 requests.push(tickingArea);
             }
-            world.setDynamicProperty(key, {
-                x: options.from.x,
-                y: locationVec.y,
-                z: options.from.z,
-            });
         }
     }
     /**

@@ -14,7 +14,11 @@ class ChunkFiller {
     #name;
     constructor(block, tickingName) {
         this.Chunksrequests = [];
-        this.Chunksrequests.push(...requests);
+        // Only add the ticking area that matches this ChunkFiller's name
+        const matchingArea = requests.find(area => area === requests[requests.length - 1]);
+        if (matchingArea) {
+            this.Chunksrequests.push(matchingArea);
+        }
         this.#blockID = block;
         this.#name = tickingName;
     }
@@ -65,6 +69,7 @@ class ChunkFiller {
                     }
                 }
             }
+            yield;
         }
     } //generator to yield and fill all these global requests
 }

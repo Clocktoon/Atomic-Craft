@@ -1,4 +1,4 @@
-import { world, system, Dimension } from "@minecraft/server";
+import { world, system, Dimension, WeatherType } from "@minecraft/server";
 //Nuclear Aftermath Script
 /* Things to add:
 Local toxic rain via getting mobs around ground zero
@@ -17,7 +17,7 @@ export function aftermath(dimensionid, radius, volume, chance) {
     const dimension = world.getDimension(dimensionid);
     const ran = Math.floor(Math.random() * chance);
     if (ran === 1) {
-        dimension.setWeather('rain', 24000);
+        dimension.setWeather(WeatherType.Rain, 24000);
         const entities = dimension.getEntities({
             location: { x: location.x, y: location.y, z: location.z },
             maxDistance: radius
