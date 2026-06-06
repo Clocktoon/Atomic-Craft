@@ -75,19 +75,29 @@ class ChunkTicker {
             throw new Error("Ticking area manager is full");
         //TODO: MAKE THE LOCATION STUFF AND JUST ALL THE CODE WORK
         //Figure out how to have the location work, does it need to be moved to a different class? Look at chunkLoader.js for help please
-        const location = locationVec;
         if (this.#tickingarea.hasTickingArea(this.#name)) {
             this.#tickingarea.removeTickingArea(this.#name);
             world.sendMessage("ticking area " + this.#name + " is loaded");
         }
-        await this.#tickingarea.createTickingArea(this.#name, options);
-        world.sendMessage("ticking area " + this.#name + " has been created");
+        try {
+            await this.#tickingarea.createTickingArea(this.#name, options);
+            world.sendMessage("the §3ticking area " + this.#name + " has been created");
+        }
+        catch (err) {
+            world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`);
+            throw err;
+        }
         if (nuclear === true) {
             //WIP, will probably need changing, please look over
             //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
             const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
-            //Current idea, rather nested area or keep it like this and see if could use this instead
             const tickingArea = this.#tickingarea.getTickingArea(this.#name);
+            if (!tickingArea) {
+                throw new Error(`TickingArea ${this.#name} not found after creation`);
+            }
+            else {
+                world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
+            }
             if (tickingArea) {
                 requests.push(tickingArea);
                 return tickingArea;
@@ -104,7 +114,7 @@ class ChunkTicker {
             this.#tickingarea.removeTickingArea(this.#name);
         }
         else
-            throw new Error("Ticking area in already doesn't exist or has more then one of it");
+            throw new Error("§4Ticking area in already doesn't exist or has more then one of it");
     }
     /**
      * Unloads all ticking areas created by the pack tickingmanager (same thing)
@@ -113,7 +123,7 @@ class ChunkTicker {
     unloadall() {
         const tickArray = this.#tickingarea.getAllTickingAreas();
         if (tickArray === undefined || tickArray.length == 0)
-            throw new Error("There are no ticking areas to get rid of from this TickingManager!");
+            throw new Error("§4There are no ticking areas to get rid of from this TickingManager!");
         this.#tickingarea.removeAllTickingAreas();
     }
 }

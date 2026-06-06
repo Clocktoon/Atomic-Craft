@@ -19,6 +19,9 @@ function applyRadiationEffect() {
     const entities = dimension.getEntities({ tags: ["atomic:rad_effect"] })
 
     for (const entity of entities) {
+        if(entity.getDynamicProperty("radiation") == undefined) {
+            
+        } 
         
         if(entity.typeId == "minecraft:player") {
             entity.runCommand("title @s actionbar §cYou feel off...")
@@ -49,11 +52,5 @@ function applyRadiationEffect() {
         
     }
 };
-for (const entity of entities) {
-    
-    if(entity.isValid && entity.hasTag("atomic:rad_effect")) {
-    applyRadiationEffect();
-    }
-}
 }
 }, 600)

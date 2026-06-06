@@ -52,6 +52,15 @@ async function fillGeneratorSequential(generator: Generator<void, void, unknown>
     }, 1);
   });
 }
+
+function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
+  const chunkX = Math.floor(x / 16) * 16;
+  const chunkZ = Math.floor(z / 16) * 16;
+  return {
+    from: { x: chunkX, y: minY, z: chunkZ },
+    to:   { x: chunkX + 15, y: maxY, z: chunkZ + 15 },
+  };
+}
 /**
  * @description A Function to fill the nuclear area.
  * Can be used for most if not all nuclear explosions
@@ -73,25 +82,30 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
     for (let z = startz; z <= endz; z += 16) {
       
       const nameId = `NK_${x},${z},${dimension.id}`;
+      
 
+      const bounds = chunkBoundsFromBlock(x, z, 0, 255);
       const tickingArea = await new ChunkTicker(dimension, nameId)
-      .load({ x: x, y: 64, z: z }, true, {
-        dimension: dimension,
-        from: {x: x, y: 64, z: z},
-        to: {x: x, y: 64, z: z},
-      });
+      .load({ x: x + 8, y: 64, z: z + 8 }, true, {
+      dimension: dimension,
+      from: bounds.from,
+      to: bounds.to,
+     });
 
       // waits until it's fully loaded, then fill
       if (tickingArea) {
         while (!tickingArea.isFullyLoaded) {
           await new Promise<void>((resolve) => {
             system.runTimeout(() => resolve(), 1);
+            const chunkChecker = dimension.getBlock({ x: bounds.from.x + 8, y: 64, z: bounds.from.z + 8 })
+            //I should probably stringify all world.sendmessages that output a location right TwT
+            world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`)
           });
         }
 
         // iteration (DO NOT GET RID OF)
-        const filler = new ChunkFiller(blocky, tickingArea);
-
+        const filler = new ChunkFiller(blocky, `${nameId}_loader`);
+        
         // Wait for this generator to complete before moving to next chunk
         await fillGeneratorSequential(filler.generator(), 50);
 

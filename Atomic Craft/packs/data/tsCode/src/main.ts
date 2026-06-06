@@ -31,7 +31,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./icbmCode.js")
     import("./ballisticCode.js")
     import("./himarCode.js")
-    import("./radEffect.js")
+    import("./radiationSystem/radEffect.js")
     import("./nuclearTransforms/crater.js")
     import("./aftermath.js")
     import("./nuclearTransforms/shockwave.js")

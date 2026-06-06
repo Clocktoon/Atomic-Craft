@@ -22,5 +22,8 @@
   ],
   "files": [
     "manifest.json"
-  ]
+  ],
+  "dependencies": {
+    "@minecraft/vanilla-data": "^1.26.21"
+  }
 }

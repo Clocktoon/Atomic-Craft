@@ -10,7 +10,7 @@
                     ],
                     "transitions": [
                         {
-                            "flying": "!query.is_on_ground"
+                            "flying": "!query.is_on_ground && query.has_target"
                         }
                     ]
                 },
