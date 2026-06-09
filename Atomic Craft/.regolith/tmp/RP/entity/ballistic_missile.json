@@ -26,6 +26,10 @@
             "scripts": {
                 "animate": [
                     "con"
+                ],
+                "pre_animation": [
+                    "v.target_rotation=query.target_x_rotation;",
+                    "v.current_rotation=math.lerprotate(v.current_rotation,v.target_rotation,q.delta_time*10);"
                 ]
             }
         }

@@ -17,11 +17,7 @@
 	"header": {
 		"name": "Bombs of Glory",
 		"description": "pack.description",
-		"min_engine_version": [
-			1,
-			21,
-			90
-		],
+		"min_engine_version": [1,26,10],
 		"uuid": "1fb0a806-aaf1-458a-8694-d397e28cbb4e",
 		"version": [
 			1,
@@ -34,10 +30,10 @@
 			"type": "resources",
 			"uuid": "4d2ea756-caa8-4613-98ec-7c5b7ceb5d2a",
 			"version": [
-				1,
-				0,
-				0
-			]
+			1,
+			0,
+			0
+		]
 		}
 	]
 }

@@ -11,7 +11,6 @@ link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src
 website that Coolbep's code is on: https://bedrock-resources.vercel.app/ (can't link the exact thing)
  */
-export let requests = [];
 /**
  * @class chunkTicker
  * @description Manages ticking areas for the bombs of glory addon
@@ -98,11 +97,7 @@ class ChunkTicker {
             else {
                 world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
             }
-            if (tickingArea) {
-                requests.push(tickingArea);
-                return tickingArea;
-            }
-            return undefined;
+            return tickingArea;
         }
     }
     /**

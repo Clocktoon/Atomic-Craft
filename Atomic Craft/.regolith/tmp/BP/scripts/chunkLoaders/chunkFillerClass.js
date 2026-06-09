@@ -1,43 +1,47 @@
 import { BlockVolume, world } from "@minecraft/server";
-/**
- * Parts taken from https://bedrock-snippets.vercel.app/ (script by Coolbep),
- * And
- */
-// Define the request shape for chunks to fill
-/*TODO: MAKE A REQUEST TO THE CHUNK FILLER CLASS SYSTEM,
- THIS MAY REPLACE THE CHUNK TICKER CLASS FOR NUCLEAR BOMB USEAGE
-*/
 class ChunkFiller {
-    Chunksrequests = []; // Queue of requests
-    #blockID;
-    #name;
-    constructor(block, tickingArea) {
-        this.Chunksrequests = [];
-        if (tickingArea) {
-            this.Chunksrequests.push(tickingArea);
-        }
-        this.#blockID = block;
-        this.#name = tickingArea ? tickingArea.identifier : "";
+    requests = [];
+    #currentGenerator;
+    enqueue(request) {
+        this.requests.push(request);
     }
-    //TODO: HAVE LOADED CHUNKS GO INTO THE REQUEST PROPERTY
+    request(area, block, name, minY, maxY) {
+        this.enqueue({ area, block, name, minY, maxY });
+        if (!this.#currentGenerator) {
+            this.#currentGenerator = this.generator();
+        }
+        return this.#currentGenerator;
+    }
     *generator() {
-        for (const request of this.Chunksrequests) {
-            if (request.isFullyLoaded) {
+        while (this.requests.length > 0) {
+            const request = this.requests[0];
+            if (!request.area.isFullyLoaded) {
+                yield;
                 continue;
             }
-            const bbox = request.boundingBox;
+            const bbox = request.area.boundingBox;
             if (!bbox || !bbox.min || !bbox.max) {
-                world.sendMessage(`§4TickingArea ${request.identifier || "unknown"} missing boundingBox`);
+                world.sendMessage(`§4TickingArea ${request.area.identifier || "unknown"} missing boundingBox`);
+                this.requests.shift();
                 continue;
             }
-            // me when I check to make sure it be a chunk large
             const spanX = bbox.max.x - bbox.min.x;
             const spanZ = bbox.max.z - bbox.min.z;
             if (spanX < 15 || spanZ < 15) {
-                world.sendMessage(`§4Warning: small boundingBox for ${request.identifier}: ${JSON.stringify({ min: bbox.min, max: bbox.max })}`);
+                world.sendMessage(`§4Warning: small boundingBox for ${request.area.identifier}: ${JSON.stringify({ min: bbox.min, max: bbox.max })}`);
             }
-            const volume = new BlockVolume(bbox.min, bbox.max);
-            const blockList = request.dimension.getBlocks(volume, {
+            const min = {
+                x: bbox.min.x,
+                y: request.minY ?? request.block.location.y - 30,
+                z: bbox.min.z,
+            };
+            const max = {
+                x: bbox.max.x,
+                y: request.maxY ?? request.block.location.y + 30,
+                z: bbox.max.z,
+            };
+            const volume = new BlockVolume(min, max);
+            const blockList = request.area.dimension.getBlocks(volume, {
                 excludeTypes: [
                     "minecraft:air",
                     "minecraft:water",
@@ -72,16 +76,21 @@ class ChunkFiller {
             let any = false;
             for (const loc of blockList.getBlockLocationIterator()) {
                 any = true;
-                const block1 = request.dimension.getBlock(loc);
+                const block1 = request.area.dimension.getBlock(loc);
                 if (block1) {
                     block1.setType("atomic:radiation_block");
+                    console.warn(`spammy`);
                     yield;
                 }
             }
-            if (!any)
-                world.sendMessage(`No blocks found in volume for ${this.#name}`);
+            if (!any) {
+                world.sendMessage(`No blocks found in volume for ${request.name}`);
+            }
+            this.requests.shift();
         }
-        world.sendMessage(`Filling for ${this.#name}`);
-    } //generator to yield and fill all these global requests
+        world.sendMessage("ChunkFiller queue drained");
+        this.#currentGenerator = undefined;
+    }
 }
+export const globalChunkFiller = new ChunkFiller();
 export { ChunkFiller };

@@ -1,6 +1,6 @@
 // https://tenor.com/view/far-cry-3-vass-montenegro-did-i-ever-tell-you-the-definition-of-insanity-insanity-gif-9162815073500878983
 import { system, world, } from "@minecraft/server";
-import { ChunkFiller } from "../chunkLoaders/chunkFillerClass";
+import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
@@ -83,10 +83,8 @@ export async function nuclearArea(dimensionid, location, blocky, size, change) {
                         world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`);
                     });
                 }
-                // iteration (DO NOT GET RID OF)
-                const filler = new ChunkFiller(blocky, tickingArea);
-                // Wait for this generator to complete before moving to next chunk
-                await fillGeneratorSequential(filler.generator(), 50);
+                const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`);
+                await fillGeneratorSequential(generator, 50);
                 world.sendMessage(`Ticking area filled: ${nameId}`);
             }
             else {

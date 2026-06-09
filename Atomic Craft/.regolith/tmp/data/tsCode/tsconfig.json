@@ -1,7 +1,6 @@
 {
   "include": [
-    "src"
-  ],
+    "src"  ],
   "compilerOptions": {
     "module": "es2022",
     "target": "es2024",

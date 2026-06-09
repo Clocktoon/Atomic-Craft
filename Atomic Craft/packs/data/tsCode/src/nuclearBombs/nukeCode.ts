@@ -1,9 +1,17 @@
-import { system, world, BlockVolume, BlockCustomComponent, BlockComponentPlayerInteractEvent, Dimension, Vector3, CustomComponentParameters } from "@minecraft/server";
+import {
+  system,
+  world,
+  BlockVolume,
+  BlockCustomComponent,
+  BlockComponentPlayerInteractEvent,
+  Dimension,
+  Vector3,
+  CustomComponentParameters,
+} from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
-
 
 class OnClick implements BlockCustomComponent {
   constructor() {
@@ -13,11 +21,11 @@ class OnClick implements BlockCustomComponent {
   onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
     const block = event.block;
     const playerEntity = event.player;
-    const player = playerEntity;
+    const playerMain = playerEntity;
     const dimension = event.dimension;
-    
+
     // guard: player may be undefined in some event contexts
-    if (!player) return;
+    if (!playerMain) return;
 
     const px = block.location.x;
     const pz = block.location.z;
@@ -32,11 +40,11 @@ class OnClick implements BlockCustomComponent {
       })
       .then(() => {
         let seconds: number = 20;
-        player.sendMessage(`You have ${seconds} seconds to run`);
+        playerMain.sendMessage(`You have ${seconds} seconds to run`);
 
         const sys = system.runInterval(() => {
           if (seconds >= 1) {
-            player.onScreenDisplay.setActionBar(`${seconds} seconds left`);
+            playerMain.onScreenDisplay.setActionBar(`${seconds} seconds left`);
             seconds--;
           }
           if (seconds <= 0) {
@@ -49,24 +57,39 @@ class OnClick implements BlockCustomComponent {
           function* blockGen() {
             let radius = 100;
 
+            
+            //Radiation and burning of mobs
+
+            const players = block.dimension.getPlayers({
+              location: block.location,
+              minDistance: 1,
+              maxDistance: 100,
+            })
+
             for (const eny of block.dimension.getEntities({
               location: block.location,
               minDistance: 1,
               maxDistance: 100,
             })) {
-              if (eny.typeId == "minecraft:player") {
-                eny.runCommand("camera @s fade time 1 3 1 color 255 255 255");
-              }
+             
               eny.setOnFire(20);
               if (
                 eny.runCommand(
-                  `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,
-                ).successCount <= 0 &&
-                eny.typeId !== "atomic:gen_entity"
-              ) {
-                eny.addTag("atomic:rad_effect");
-              }
+                  `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,).successCount <= 0 &&
+                eny.typeId !== "atomic:gen_entity" && eny.typeId != "minecraft:player") 
+                {
+                  eny.addTag("atomic:rad_effect");
+                }
             }
+
+             for (const playerRadi of players) {
+                  playerRadi.setDynamicProperty("radiation", 100)
+                  //TODO: Make gas mask worth with players
+                
+                  playerRadi.camera.fade({fadeColor: {red: 1, blue: 1, green: 1}, 
+                    fadeTime: {fadeInTime: 1, holdTime: 3, fadeOutTime: 1}});
+                  
+                }
 
             block.dimension.spawnParticle("atomic:nukepart", {
               x: block.location.x,
@@ -87,7 +110,11 @@ class OnClick implements BlockCustomComponent {
             );
 
             // Sound code by MapleStar // TC (discord)
-            function playExplosionAudio(dimension: Dimension, center: Vector3, magnitude: number) {
+            function playExplosionAudio(
+              dimension: Dimension,
+              center: Vector3,
+              magnitude: number,
+            ) {
               if (!center) return;
 
               const players = dimension.getPlayers();
@@ -126,14 +153,17 @@ class OnClick implements BlockCustomComponent {
                 system.runTimeout(() => {
                   try {
                     dimension.runCommand(
-                      `playsound "atomic.nukesound" ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
+                      `playsound atomic.nukesound ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
+                    );
+                    dimension.runCommand(
+                      `camerashake ${player.name} 0.24 5 rotational`
                     );
                   } catch (err) {}
                 }, delayMs);
               });
             }
-            if (!player) return;
-            const playdi = player.dimension;
+            if (!playerMain) return;
+            const playdi = playerMain.dimension;
 
             //Shockwave and explosion sound
             playExplosionAudio(playdi, block.location, 160);
@@ -148,46 +178,43 @@ class OnClick implements BlockCustomComponent {
 
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
-            world.tickingAreaManager.removeTickingArea("nukearea")
-            
+            world.tickingAreaManager.removeTickingArea("nukearea");
+
             //Nuke Code!!!
-           nuclearArea(
-             block.dimension.id, 
-             block.location, 
-            block, 
-             100, 
-             30);
-            
-             const volume = new BlockVolume(
+            nuclearArea(block.dimension.id, block.location, block, 100, 30);
+
+            const volume = new BlockVolume(
               {
                 x: block.location.x - 20,
                 y: block.location.y - 20,
-                z: block.location.z - 20
+                z: block.location.z - 20,
               },
               {
                 x: block.location.x + 20,
                 y: block.location.y + 20,
-                z: block.location.z + 20
-              }
-             )
+                z: block.location.z + 20,
+              },
+            );
 
-             aftermath(
+            aftermath(
               dimension.id,
               radius,
               volume,
-              Math.floor(Math.random() * 4)
-             )
-               
+              Math.floor(Math.random() * 4),
+            );
           }
-            
+
           system.runJob(blockGen());
         }, 400);
       });
   }
-};
+}
 
-export {OnClick}
+export { OnClick };
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-  blockComponentRegistry.registerCustomComponent("atomic:atom_bomb", new OnClick());
+  blockComponentRegistry.registerCustomComponent(
+    "atomic:atom_bomb",
+    new OnClick(),
+  );
 });

@@ -19,7 +19,7 @@ import("./icbmComp.js")
 import("./consoleCode.js")
 import("./nonComp.js")
 import("./EatEffects.js")
-import("./rottenEat.js")
+import("./radiationSystem/cureSystem")
 import("./devItem.js")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")

@@ -10,18 +10,29 @@ const runny = system.runInterval( () => {
 
 
     /**
-     * Function to apply the radiation effect to mobs and players
+     * Function to apply the radiation effect to players
      */
-function applyRadiationEffect() {
+    function radiationPlayer() {
+       const players = world.getAllPlayers()
+       for(const player of players) {
+        if(player.getDynamicProperty("radiation") == undefined) {
+            console.warn(player.name + " has no radiation")
+        }
+        else {
+            
+        }
+
+       }
+       
+    }
+
     const dimensionIds = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];
     for (const dimId of dimensionIds) {
     const dimension = world.getDimension(dimId)
     const entities = dimension.getEntities({ tags: ["atomic:rad_effect"] })
 
     for (const entity of entities) {
-        if(entity.getDynamicProperty("radiation") == undefined) {
-            
-        } 
+        
         
         if(entity.typeId == "minecraft:player") {
             entity.runCommand("title @s actionbar §cYou feel off...")
@@ -52,5 +63,5 @@ function applyRadiationEffect() {
         
     }
 };
-}
+
 }, 600)

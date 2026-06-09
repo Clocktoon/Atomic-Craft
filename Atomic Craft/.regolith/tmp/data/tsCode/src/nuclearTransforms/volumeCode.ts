@@ -8,9 +8,9 @@ import {
   Block,
 } from "@minecraft/server";
 import { loadChunk } from "../chunkLoaders/chunky";
-import { ChunkFiller } from "../chunkLoaders/chunkFillerClass";
+import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
-
+import { enqueueChunkFillAndRun } from "../chunkLoaders/requestFunction";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
@@ -103,11 +103,11 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
           });
         }
 
-        // iteration (DO NOT GET RID OF)
-        const filler = new ChunkFiller(blocky, tickingArea);
-
-        // Wait for this generator to complete before moving to next chunk
-        await fillGeneratorSequential(filler.generator(), 50);
+        const generator = globalChunkFiller.request(
+          tickingArea, 
+          blocky, 
+          `${nameId}_loader`);
+        await fillGeneratorSequential(generator, 50);
 
         world.sendMessage(`Ticking area filled: ${nameId}`);
       } else {

@@ -8,7 +8,7 @@
 			"animation_length": 15.4583,
 			"bones": {
 				"missile": {
-					"rotation": ["-0-v.current_rotation=math.lerprotate(v.current_rotation,v.target_rotation,q.delta_time*10)", 0, 0]
+					"rotation": ["-0-v.current_rotation=math.lerprotate(v.current_rotation,v.target_rotation,q.delta_time*10);", 0, 0]
 				}
 			}
 		}
