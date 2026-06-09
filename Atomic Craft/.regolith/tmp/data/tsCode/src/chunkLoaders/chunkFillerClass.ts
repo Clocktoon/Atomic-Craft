@@ -1,4 +1,4 @@
-import { Block, BlockVolume, TickingArea, Vector3, world } from "@minecraft/server";
+import { Block, BlockType, BlockTypes, BlockVolume, TickingArea, Vector3, world } from "@minecraft/server";
 
 export interface ChunkFillRequest {
   area: TickingArea;
@@ -110,8 +110,8 @@ class ChunkFiller {
         any = true;
         const block1 = request.area.dimension.getBlock(loc);
         if (block1) {
-          block1.setType("atomic:radiation_block");
-          console.warn(`spammy`)
+          block1.setType("minecraft:bedrock");
+          console.warn(`spammy at ${JSON.stringify(block1.location)}`)
           yield;
         }
       }

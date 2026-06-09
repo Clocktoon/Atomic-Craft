@@ -1,11 +1,11 @@
 {
-	"format_version": 3,
+	"format_version": 2,
 	"header": {
 		"name": "Atomic Craft-beh",
 		"description": "Atomic Craft-beh",
 		"uuid": "63d63de6-a696-4494-abb9-c770972327a9",
 		"version": "0.1.0",
-		"min_engine_version": "1.26.10"
+		"min_engine_version": [1,26,10]
 	},
 	"metadata": {
 		"authors": [
