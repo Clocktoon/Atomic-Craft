@@ -81,9 +81,12 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
   //loops go silly
   for (let x = startx; x <= endx; x += 16) {
     for (let z = startz; z <= endz; z += 16) {
-      player.onScreenDisplay.setActionBar(`Current chunks loaded ${chunkCount}`)
+      player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`)
       let currentPhase = 2
       const nameId = `NK_${x},${z},${dimension.id}`;
+
+      const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
+      currentPhase = distanceFromCenter > change ? 1 : 2;
       
 
       const bounds = chunkBoundsFromBlock(x, z, 0, 255);
@@ -109,7 +112,7 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
           tickingArea, 
           blocky, 
           `${nameId}_loader`,
-          1
+          currentPhase
         );
         await fillGeneratorSequential(generator, 50);
 

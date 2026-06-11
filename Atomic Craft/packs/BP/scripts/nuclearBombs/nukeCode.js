@@ -122,7 +122,7 @@ class OnClick {
                     //Gets rid of ticking area and starts the real nuclear explosion code
                     world.tickingAreaManager.removeTickingArea("nukearea");
                     //Nuke Code!!!
-                    nuclearArea(block.dimension.id, block.location, block, 100, 30);
+                    nuclearArea(block.dimension.id, block.location, block, 100, 30, playerEntity);
                     const volume = new BlockVolume({
                         x: block.location.x - 20,
                         y: block.location.y - 20,

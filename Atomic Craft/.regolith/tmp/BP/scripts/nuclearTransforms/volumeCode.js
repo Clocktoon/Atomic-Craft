@@ -6,8 +6,7 @@ import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src */
-//TODO: MAKE CODE RUN, ISN'T RUNNING ANYMORE FOR SOME REASON
-//TODO: AT THE MOMMENT IT ONLY DOES THE FIRST CHUNK AND THEN STOPS, MAKE IT DO ALL OF THEM
+//TODO: Figure out how to make filler know when to switch to far out block effects
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
  */
@@ -56,16 +55,21 @@ function chunkBoundsFromBlock(x, z, minY = 0, maxY = 255) {
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid, location, blocky, size, change) {
+export async function nuclearArea(dimensionid, location, blocky, size, change, player) {
     const dimension = world.getDimension(dimensionid);
     const startx = location.x - size;
     const endx = location.x + size;
     const startz = location.z - size;
     const endz = location.z + size;
+    let chunkCount = 0;
     //loops go silly
     for (let x = startx; x <= endx; x += 16) {
         for (let z = startz; z <= endz; z += 16) {
+            player.onScreenDisplay.setActionBar(`Current chunks loaded ${chunkCount}`);
+            let currentPhase = 2;
             const nameId = `NK_${x},${z},${dimension.id}`;
+            const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
+            currentPhase = distanceFromCenter > change ? 1 : 2;
             const bounds = chunkBoundsFromBlock(x, z, 0, 255);
             const tickingArea = await new ChunkTicker(dimension, nameId)
                 .load({ x: x + 8, y: 64, z: z + 8 }, true, {
@@ -83,13 +87,14 @@ export async function nuclearArea(dimensionid, location, blocky, size, change) {
                         world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`);
                     });
                 }
-                const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`);
+                const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase);
                 await fillGeneratorSequential(generator, 50);
                 world.sendMessage(`Ticking area filled: ${nameId}`);
             }
             else {
                 world.sendMessage(`Ticking area not returned: ${nameId}`);
             }
+            chunkCount++;
         }
     }
 }
