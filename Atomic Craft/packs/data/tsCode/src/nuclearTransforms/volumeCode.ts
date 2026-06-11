@@ -6,19 +6,18 @@ import {
   Dimension,
   Vector3,
   Block,
+  Player,
 } from "@minecraft/server";
 import { loadChunk } from "../chunkLoaders/chunky";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
-import { enqueueChunkFillAndRun } from "../chunkLoaders/requestFunction";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src */
-//TODO: MAKE CODE RUN, ISN'T RUNNING ANYMORE FOR SOME REASON
 
-//TODO: AT THE MOMMENT IT ONLY DOES THE FIRST CHUNK AND THEN STOPS, MAKE IT DO ALL OF THEM
 
+//TODO: Figure out how to make filler know when to switch to far out block effects
 
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
@@ -70,17 +69,20 @@ function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block, size: number, change: number) {
+export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block, size: number, change: number, player: Player) {
   const dimension = world.getDimension(dimensionid);
   const startx = location.x - size;
   const endx = location.x + size;
   const startz = location.z - size;
   const endz = location.z + size;
 
+  let chunkCount = 0;
+
   //loops go silly
   for (let x = startx; x <= endx; x += 16) {
     for (let z = startz; z <= endz; z += 16) {
-      
+      player.onScreenDisplay.setActionBar(`Current chunks loaded ${chunkCount}`)
+      let currentPhase = 2
       const nameId = `NK_${x},${z},${dimension.id}`;
       
 
@@ -106,13 +108,16 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
         const generator = globalChunkFiller.request(
           tickingArea, 
           blocky, 
-          `${nameId}_loader`);
+          `${nameId}_loader`,
+          1
+        );
         await fillGeneratorSequential(generator, 50);
 
         world.sendMessage(`Ticking area filled: ${nameId}`);
       } else {
         world.sendMessage(`Ticking area not returned: ${nameId}`);
       }
+      chunkCount++;
     }
   }
 }

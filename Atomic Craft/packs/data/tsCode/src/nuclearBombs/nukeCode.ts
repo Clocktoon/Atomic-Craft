@@ -181,7 +181,7 @@ class OnClick implements BlockCustomComponent {
             world.tickingAreaManager.removeTickingArea("nukearea");
 
             //Nuke Code!!!
-            nuclearArea(block.dimension.id, block.location, block, 100, 30);
+            nuclearArea(block.dimension.id, block.location, block, 100, 30, playerEntity);
 
             const volume = new BlockVolume(
               {
