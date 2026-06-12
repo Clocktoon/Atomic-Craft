@@ -21,6 +21,7 @@ import("./nonComp.js")
 import("./EatEffects.js")
 import("./radiationSystem/cureSystem")
 import("./devItem.js")
+import("./nuclearBombs/redstoneHelpers")
 world.afterEvents.worldLoad.subscribe(() => {
     import("./explodeTnt.js")
     import("./projectileScript.js")

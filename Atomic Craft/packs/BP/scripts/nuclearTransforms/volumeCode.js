@@ -65,7 +65,11 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
     //loops go silly
     for (let x = startx; x <= endx; x += 16) {
         for (let z = startz; z <= endz; z += 16) {
-            player.onScreenDisplay.setActionBar(`Current chunks loaded ${chunkCount}`);
+            if (player) {
+                if (player.isValid) {
+                    player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`);
+                }
+            }
             let currentPhase = 2;
             const nameId = `NK_${x},${z},${dimension.id}`;
             const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));

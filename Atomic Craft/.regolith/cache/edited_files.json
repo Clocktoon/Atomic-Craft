@@ -851,6 +851,7 @@
 			"scripts/nonComp.js",
 			"scripts/nuclearBombs/hBombCode.js",
 			"scripts/nuclearBombs/nukeCode.js",
+			"scripts/nuclearBombs/redstoneHelpers.js",
 			"scripts/nuclearTransforms/crater.js",
 			"scripts/nuclearTransforms/shockwave.js",
 			"scripts/nuclearTransforms/smokePart.js",

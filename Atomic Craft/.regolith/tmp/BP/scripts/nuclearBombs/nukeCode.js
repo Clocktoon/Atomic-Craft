@@ -39,7 +39,7 @@ class OnClick {
             block.dimension.playSound("atomic.beep", block.location);
             system.runTimeout(() => {
                 function* blockGen() {
-                    let radius = 100;
+                    let radius = 30;
                     //Radiation and burning of mobs
                     const players = block.dimension.getPlayers({
                         location: block.location,
@@ -53,15 +53,18 @@ class OnClick {
                     })) {
                         eny.setOnFire(20);
                         if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
-                            eny.typeId !== "atomic:gen_entity" && eny.typeId != "minecraft:player") {
+                            eny.typeId !== "atomic:gen_entity" &&
+                            eny.typeId != "minecraft:player") {
                             eny.addTag("atomic:rad_effect");
                         }
                     }
                     for (const playerRadi of players) {
                         playerRadi.setDynamicProperty("radiation", 100);
                         //TODO: Make gas mask worth with players
-                        playerRadi.camera.fade({ fadeColor: { red: 1, blue: 1, green: 1 },
-                            fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 } });
+                        playerRadi.camera.fade({
+                            fadeColor: { red: 1, blue: 1, green: 1 },
+                            fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+                        });
                     }
                     block.dimension.spawnParticle("atomic:nukepart", {
                         x: block.location.x,
@@ -81,6 +84,7 @@ class OnClick {
                         const players = dimension.getPlayers();
                         const explosionRadius = Math.min(Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)), 60);
                         const maxHearingDistance = explosionRadius * 24;
+                        const shakeDistance = explosionRadius * 8;
                         players.forEach((player) => {
                             const playerLocation = player.location;
                             const dx = playerLocation.x - center.x;
@@ -89,8 +93,8 @@ class OnClick {
                             const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
                             if (distance > maxHearingDistance)
                                 return;
+                            player.sendMessage("test test 123");
                             const maxEffectRadius = explosionRadius * 2;
-                            const intensity = Math.max(0, 1.0 - distance / maxEffectRadius);
                             const distanceRatio = Math.min(1, distance / maxHearingDistance);
                             const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));
                             const boomPitch = 0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
@@ -98,10 +102,15 @@ class OnClick {
                             const delayMs = delayTicks * 50;
                             system.runTimeout(() => {
                                 try {
-                                    dimension.runCommand(`playsound atomic.nukesound ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`);
-                                    dimension.runCommand(`camerashake ${player.name} 0.24 5 rotational`);
+                                    dimension.runCommand(`playsound atomic.nukesound "${player.name}" ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`);
+                                    if (distance <= shakeDistance) {
+                                        const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
+                                        dimension.runCommand(`execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`);
+                                    }
                                 }
-                                catch (err) { }
+                                catch (err) {
+                                    player.sendMessage("error with sound and shake code");
+                                }
                             }, delayMs);
                         });
                     }
@@ -122,7 +131,7 @@ class OnClick {
                     //Gets rid of ticking area and starts the real nuclear explosion code
                     world.tickingAreaManager.removeTickingArea("nukearea");
                     //Nuke Code!!!
-                    nuclearArea(block.dimension.id, block.location, block, 100, 30, playerEntity);
+                    nuclearArea(block.dimension.id, block.location, block, 120, 70, playerEntity);
                     const volume = new BlockVolume({
                         x: block.location.x - 20,
                         y: block.location.y - 20,

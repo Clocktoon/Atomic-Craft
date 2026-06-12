@@ -85,12 +85,12 @@ class ChunkFiller {
 
       const min: Vector3 = {
         x: bbox.min.x,
-        y: request.minY ?? request.block.location.y - 30,
+        y: request.minY ?? request.block.location.y - 60,
         z: bbox.min.z,
       };
       const max: Vector3 = {
         x: bbox.max.x,
-        y: request.maxY ?? request.block.location.y + 30,
+        y: request.maxY ?? request.block.location.y + 60,
         z: bbox.max.z,
       };
 
@@ -103,6 +103,7 @@ class ChunkFiller {
           {
             excludeTypes: [
               "minecraft:air",
+              "minecraft:bedrock",
               "minecraft:water",
               "minecraft:lava",
               "minecraft:flowing_lava",

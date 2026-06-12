@@ -69,7 +69,7 @@ function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block, size: number, change: number, player: Player) {
+export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block, size: number, change: number, player?: Player) {
   const dimension = world.getDimension(dimensionid);
   const startx = location.x - size;
   const endx = location.x + size;
@@ -81,7 +81,12 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
   //loops go silly
   for (let x = startx; x <= endx; x += 16) {
     for (let z = startz; z <= endz; z += 16) {
-      player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`)
+      if(player) {
+      if(player.isValid) {
+        player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`)
+      }
+    }
+
       let currentPhase = 2
       const nameId = `NK_${x},${z},${dimension.id}`;
 

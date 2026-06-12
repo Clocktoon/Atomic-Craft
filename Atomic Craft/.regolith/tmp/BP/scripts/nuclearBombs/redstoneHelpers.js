@@ -2,42 +2,26 @@ import { system, world, BlockVolume, } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
-class OnClick {
+class RedNuclear {
     constructor() {
-        this.onPlayerInteract = this.onPlayerInteract.bind(this);
+        this.onRedstoneUpdate = this.onRedstoneUpdate.bind(this);
     }
-    onPlayerInteract(event) {
+    onRedstoneUpdate(event, p) {
         const block = event.block;
-        const playerEntity = event.player;
-        const playerMain = playerEntity;
         const dimension = event.dimension;
-        // guard: player may be undefined in some event contexts
-        if (!playerMain)
-            return;
-        const px = block.location.x;
-        const pz = block.location.z;
-        const py = block.y;
-        //Ticking area for the stuff close to the explosion
-        world.tickingAreaManager
-            .createTickingArea("nukearea", {
-            from: { x: px - 60, y: 0, z: pz - 60 },
-            to: { x: px + 60, y: 0, z: pz + 60 },
-            dimension: block.dimension,
-        })
-            .then(() => {
-            let seconds = 20;
-            playerMain.sendMessage(`You have ${seconds} seconds to run`);
-            const sys = system.runInterval(() => {
-                if (seconds >= 1) {
-                    playerMain.onScreenDisplay.setActionBar(`${seconds} seconds left`);
-                    seconds--;
-                }
-                if (seconds <= 0) {
-                    system.clearRun(sys);
-                }
-            }, 20);
-            block.dimension.playSound("atomic.beep", block.location);
-            system.runTimeout(() => {
+        const params = p.params;
+        if (event.powerLevel >= 3 && params.atom == true) {
+            const px = block.location.x;
+            const pz = block.location.z;
+            const py = block.y;
+            world.tickingAreaManager
+                .createTickingArea("nukearea", {
+                from: { x: px - 60, y: 0, z: pz - 60 },
+                to: { x: px + 60, y: 0, z: pz + 60 },
+                dimension: block.dimension,
+            })
+                .then(() => {
+                block.dimension.playSound("atomic.beep", block.location);
                 function* blockGen() {
                     let radius = 30;
                     //Radiation and burning of mobs
@@ -84,7 +68,6 @@ class OnClick {
                         const players = dimension.getPlayers();
                         const explosionRadius = Math.min(Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)), 60);
                         const maxHearingDistance = explosionRadius * 24;
-                        const shakeDistance = explosionRadius * 8;
                         players.forEach((player) => {
                             const playerLocation = player.location;
                             const dx = playerLocation.x - center.x;
@@ -93,8 +76,8 @@ class OnClick {
                             const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
                             if (distance > maxHearingDistance)
                                 return;
-                            player.sendMessage("test test 123");
                             const maxEffectRadius = explosionRadius * 2;
+                            const intensity = Math.max(0, 1.0 - distance / maxEffectRadius);
                             const distanceRatio = Math.min(1, distance / maxHearingDistance);
                             const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));
                             const boomPitch = 0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
@@ -102,23 +85,15 @@ class OnClick {
                             const delayMs = delayTicks * 50;
                             system.runTimeout(() => {
                                 try {
-                                    dimension.runCommand(`playsound atomic.nukesound "${player.name}" ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`);
-                                    if (distance <= shakeDistance) {
-                                        const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
-                                        dimension.runCommand(`execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`);
-                                    }
+                                    dimension.runCommand(`playsound atomic.nukesound ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`);
+                                    dimension.runCommand(`camerashake ${player.name} 0.24 5 rotational`);
                                 }
-                                catch (err) {
-                                    player.sendMessage("error with sound and shake code");
-                                }
+                                catch (err) { }
                             }, delayMs);
                         });
                     }
-                    if (!playerMain)
-                        return;
-                    const playdi = playerMain.dimension;
                     //Shockwave and explosion sound
-                    playExplosionAudio(playdi, block.location, 160);
+                    playExplosionAudio(block.dimension, block.location, 160);
                     // shockwaveBlast(
                     //   dimension,
                     //   block.location,
@@ -131,7 +106,7 @@ class OnClick {
                     //Gets rid of ticking area and starts the real nuclear explosion code
                     world.tickingAreaManager.removeTickingArea("nukearea");
                     //Nuke Code!!!
-                    nuclearArea(block.dimension.id, block.location, block, 120, 70, playerEntity);
+                    nuclearArea(block.dimension.id, block.location, block, 160, 80);
                     const volume = new BlockVolume({
                         x: block.location.x - 20,
                         y: block.location.y - 20,
@@ -144,11 +119,10 @@ class OnClick {
                     aftermath(dimension.id, radius, volume, Math.floor(Math.random() * 4));
                 }
                 system.runJob(blockGen());
-            }, 400);
-        });
+            });
+        }
     }
 }
-export { OnClick };
-system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-    blockComponentRegistry.registerCustomComponent("atomic:atom_bomb", new OnClick());
+system.beforeEvents.startup.subscribe((blockComponentRegistry) => {
+    blockComponentRegistry.blockComponentRegistry.registerCustomComponent("atomic:redstone_nuke", new RedNuclear);
 });

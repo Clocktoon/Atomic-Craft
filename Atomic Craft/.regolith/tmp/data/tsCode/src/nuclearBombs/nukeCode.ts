@@ -6,7 +6,6 @@ import {
   BlockComponentPlayerInteractEvent,
   Dimension,
   Vector3,
-  CustomComponentParameters,
 } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
@@ -55,41 +54,42 @@ class OnClick implements BlockCustomComponent {
 
         system.runTimeout(() => {
           function* blockGen() {
-            let radius = 100;
+            let radius = 30;
 
-            
             //Radiation and burning of mobs
 
             const players = block.dimension.getPlayers({
               location: block.location,
               minDistance: 1,
               maxDistance: 100,
-            })
+            });
 
             for (const eny of block.dimension.getEntities({
               location: block.location,
               minDistance: 1,
               maxDistance: 100,
             })) {
-             
               eny.setOnFire(20);
               if (
                 eny.runCommand(
-                  `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,).successCount <= 0 &&
-                eny.typeId !== "atomic:gen_entity" && eny.typeId != "minecraft:player") 
-                {
-                  eny.addTag("atomic:rad_effect");
-                }
+                  `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,
+                ).successCount <= 0 &&
+                eny.typeId !== "atomic:gen_entity" &&
+                eny.typeId != "minecraft:player"
+              ) {
+                eny.addTag("atomic:rad_effect");
+              }
             }
 
-             for (const playerRadi of players) {
-                  playerRadi.setDynamicProperty("radiation", 100)
-                  //TODO: Make gas mask worth with players
-                
-                  playerRadi.camera.fade({fadeColor: {red: 1, blue: 1, green: 1}, 
-                    fadeTime: {fadeInTime: 1, holdTime: 3, fadeOutTime: 1}});
-                  
-                }
+            for (const playerRadi of players) {
+              playerRadi.setDynamicProperty("radiation", 100);
+              //TODO: Make gas mask worth with players
+
+              playerRadi.camera.fade({
+                fadeColor: { red: 1, blue: 1, green: 1 },
+                fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+              });
+            }
 
             block.dimension.spawnParticle("atomic:nukepart", {
               x: block.location.x,
@@ -123,6 +123,7 @@ class OnClick implements BlockCustomComponent {
                 60,
               );
               const maxHearingDistance = explosionRadius * 24;
+              const shakeDistance = explosionRadius * 8;
 
               players.forEach((player) => {
                 const playerLocation = player.location;
@@ -133,8 +134,9 @@ class OnClick implements BlockCustomComponent {
 
                 if (distance > maxHearingDistance) return;
 
+                player.sendMessage("test test 123");
+
                 const maxEffectRadius = explosionRadius * 2;
-                const intensity = Math.max(0, 1.0 - distance / maxEffectRadius);
 
                 const distanceRatio = Math.min(
                   1,
@@ -153,12 +155,21 @@ class OnClick implements BlockCustomComponent {
                 system.runTimeout(() => {
                   try {
                     dimension.runCommand(
-                      `playsound atomic.nukesound ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
+                      `playsound atomic.nukesound "${player.name}" ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
                     );
-                    dimension.runCommand(
-                      `camerashake ${player.name} 0.24 5 rotational`
-                    );
-                  } catch (err) {}
+
+                    if (distance <= shakeDistance) {
+                      const shakeIntensity = Math.max(
+                        0.1,
+                        1 - distance / shakeDistance,
+                      );
+                      dimension.runCommand(
+                        `execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`,
+                      );
+                    }
+                  } catch (err) {
+                    player.sendMessage("error with sound and shake code");
+                  }
                 }, delayMs);
               });
             }
@@ -181,7 +192,14 @@ class OnClick implements BlockCustomComponent {
             world.tickingAreaManager.removeTickingArea("nukearea");
 
             //Nuke Code!!!
-            nuclearArea(block.dimension.id, block.location, block, 100, 30, playerEntity);
+            nuclearArea(
+              block.dimension.id,
+              block.location,
+              block,
+              120,
+              70,
+              playerEntity,
+            );
 
             const volume = new BlockVolume(
               {
