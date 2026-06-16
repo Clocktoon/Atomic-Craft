@@ -72,6 +72,7 @@
             "minecraft:light_dampening": 15,
             "minecraft:light_emission": 0,
             "minecraft:map_color": "#594C4C",
+            "minecraft:flammable":true,
             "atomic:step": {}
         },
         "permutations": [

@@ -6,11 +6,14 @@ import {
   BlockComponentPlayerInteractEvent,
   Dimension,
   Vector3,
+  EquipmentSlot,
 } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
+import { MessageBox } from "@minecraft/server-ui";
+import { BlockStateSuperset } from "@minecraft/vanilla-data";
 
 class OnClick implements BlockCustomComponent {
   constructor() {
@@ -22,8 +25,26 @@ class OnClick implements BlockCustomComponent {
     const playerEntity = event.player;
     const playerMain = playerEntity;
     const dimension = event.dimension;
+  
+    
+     
+      if(playerEntity)
+    MessageBox.create(playerEntity, "Confirm")
+    .body("Are you sure you want to activate the nuclear bomb?")
+    .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
+    .button2("No", "this will close the menu")
+    .show()
+    .then((rep) => {
 
-    // guard: player may be undefined in some event contexts
+      if(rep.selection === 1) {
+      nuclearBomb()
+      }
+
+    }).catch(e => {
+      playerEntity?.sendMessage(`${e}`)
+    });
+
+    function nuclearBomb(): void {
     if (!playerMain) return;
 
     const px = block.location.x;
@@ -54,6 +75,7 @@ class OnClick implements BlockCustomComponent {
 
         system.runTimeout(() => {
           function* blockGen() {
+
             let radius = 30;
 
             //Radiation and burning of mobs
@@ -82,7 +104,10 @@ class OnClick implements BlockCustomComponent {
             }
 
             for (const playerRadi of players) {
-              playerRadi.setDynamicProperty("radiation", 100);
+             if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
+                playerRadi.setDynamicProperty("radiation", 100);
+             }
+              
               //TODO: Make gas mask worth with players
 
               playerRadi.camera.fade({
@@ -105,8 +130,8 @@ class OnClick implements BlockCustomComponent {
               block.location,
               block.dimension.id,
               "minecraft:air",
-              30,
-              30,
+              50,
+              40,
             );
 
             // Sound code by MapleStar // TC (discord)
@@ -154,10 +179,10 @@ class OnClick implements BlockCustomComponent {
 
                 system.runTimeout(() => {
                   try {
-                    dimension.runCommand(
-                      `playsound atomic.nukesound "${player.name}" ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`,
-                    );
-
+                    player.playSound("atomic.nukesound", {
+                      volume: boomVolume,
+                      pitch: boomPitch
+                    });
                     if (distance <= shakeDistance) {
                       const shakeIntensity = Math.max(
                         0.1,
@@ -177,7 +202,7 @@ class OnClick implements BlockCustomComponent {
             const playdi = playerMain.dimension;
 
             //Shockwave and explosion sound
-            playExplosionAudio(playdi, block.location, 160);
+            playExplosionAudio(playdi, block.location, 260);
             // shockwaveBlast(
             //   dimension,
             //   block.location,
@@ -196,7 +221,7 @@ class OnClick implements BlockCustomComponent {
               block.dimension.id,
               block.location,
               block,
-              120,
+              272,
               70,
               playerEntity,
             );
@@ -225,6 +250,7 @@ class OnClick implements BlockCustomComponent {
           system.runJob(blockGen());
         }, 400);
       });
+    }
   }
 }
 

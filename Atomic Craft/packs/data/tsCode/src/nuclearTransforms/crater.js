@@ -1,7 +1,7 @@
 import { world } from "@minecraft/server";
 
 
-export function createCrater(location, dimensionId, block, radius, maxDepth) {
+export function *createCrater(location, dimensionId, block, radius, maxDepth, yiel) {
     const dim = world.getDimension(dimensionId);
 
     const cx = Math.floor(location.x);
@@ -27,7 +27,23 @@ export function createCrater(location, dimensionId, block, radius, maxDepth) {
 
             for (let dy = 0; dy <= depth; dy++) {
                 const y = cy - dy;
-                dim.setBlockType({ x: x, y: y, z: z }, block);
+                
+                    if(!dim.isChunkLoaded({ x: x, y: y, z: z })) {
+                        world.tickingAreaManager.createTickingArea(
+                            "craterloader",
+                            {
+                                dimension: dim,
+                                from: {x: x, y: y, z: z},
+                                to: {x: x, y: y, z: z}
+                            }
+                        ).then()
+                    }
+                    dim.setBlockType({ x: x, y: y, z: z }, block);
+                    if(yiel === true) {
+                        yield
+                    }
+                
+                
                 
             }
         }

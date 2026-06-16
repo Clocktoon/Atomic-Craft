@@ -28,7 +28,7 @@
 				"max_particles": 140
 			},
 			"minecraft:emitter_lifetime_looping": {
-				"active_time": 160
+				"active_time": 200
 			},
 			"minecraft:emitter_lifetime_events": {
 				"creation_event": ["event", "event1"]

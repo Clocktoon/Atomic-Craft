@@ -1,5 +1,5 @@
 {
-	"format_version": "1.26.10",
+	"format_version": "1.26.20",
 	"minecraft:block": {
 		"description": {
 			"identifier": "atomic:radiation_plank",
@@ -13,6 +13,7 @@
 			"minecraft:selection_box": true,
 			"minecraft:destructible_by_explosion": true,
 			"minecraft:flammable": true,
+			"minecraft:map_color": "#2b2b2b",
 			"minecraft:geometry": "minecraft:geometry.full_block",
 			"minecraft:material_instances": {
 				"*": {
@@ -21,7 +22,10 @@
 			},
 			"minecraft:light_dampening": 15,
 			"minecraft:light_emission": 0,
-			"minecraft:display_name": "Burned plank"
+			"minecraft:display_name": "Burned plank",
+			"minecraft:tags": [
+                "minecraft:is_axe_item_destructible"
+            ]
 		}
 	}
 }

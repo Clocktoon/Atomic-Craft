@@ -42,6 +42,7 @@ tile.atomic:uranium_block.name=Uranium Block
 tile.atomic:ballistic_missile_console.name=Ballistic missile console
 item.atomic:rotten_soup.name=Rotten soup
 tile.atomic:hydrogen_bomb.name=Hydrogen bomb
+tile.atomic:gadget_bomb.name=Gadget bomb
 item.atomic:dev_item.name=Dev tool
 item.atomic:gloves.name=Gloves
 entity.atomic:icbm.name=icbm mob
@@ -63,7 +64,9 @@ tile.atomic:radi_leave.name=Radiation leaf
 entity.atomic:himar.name=Hiamr
 entity.atomic:himar_missile.name=Himar missile
 item.atomic:blass.name=Ballistic missile
-item.atomic:himar_item.name=Himar item
+item.atomic:himar_item.name=Himar item,
+
+tile.atomic:atomic_slab_item.name= Radiation plank slab
 
 action.interact.plane.leave=Leave plane by pressing :_input_key.sneak: and press :_input_key.use: to use weapons
 action.interact.himar.enter=Press :_input_key.sneak: to exit Himar and press :_input_key.use: to use weapons

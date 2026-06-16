@@ -1,7 +1,7 @@
 import { world } from "@minecraft/server";
 
 
-export function createCrater(location, dimensionId, block, radius, maxDepth) {
+export function *createCrater(location, dimensionId, block, radius, maxDepth) {
     const dim = world.getDimension(dimensionId);
 
     const cx = Math.floor(location.x);
@@ -28,6 +28,7 @@ export function createCrater(location, dimensionId, block, radius, maxDepth) {
             for (let dy = 0; dy <= depth; dy++) {
                 const y = cy - dy;
                 dim.setBlockType({ x: x, y: y, z: z }, block);
+                yield
                 
             }
         }

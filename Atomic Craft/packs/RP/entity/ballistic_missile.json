@@ -28,8 +28,10 @@
                     "con"
                 ],
                 "pre_animation": [
-                    "v.target_rotation=query.target_x_rotation;",
-                    "v.current_rotation=math.lerprotate(v.current_rotation,v.target_rotation,q.delta_time*10);"
+                    "v.target_rotation_x=query.target_x_rotation;",
+                    "v.current_rotation_x=math.lerprotate(v.current_rotation_x,v.target_rotation_x,q.delta_time*10);",
+                    "v.target_rotation_y=query.target_y_rotation;",
+                    "v.current_rotation_y=math.lerprotate(v.current_rotation_y, v.target_rotation_y, q.delta_time*10);"
                 ]
             }
         }

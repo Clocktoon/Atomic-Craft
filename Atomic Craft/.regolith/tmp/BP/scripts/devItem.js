@@ -14,6 +14,14 @@ const Dev = {
             const tickingList = allTickingAreas.forEach(s => s.identifier);
             entity.onScreenDisplay.setActionBar(`ticking areas: ${tickingList}`);
         }
+        if (!entity.isOnGround) {
+            const players = world.getAllPlayers();
+            for (const player of players) {
+                if (player.getTags().includes("atomic:rad_effect")) {
+                    player.removeTag("atomic:rad_effect");
+                }
+            }
+        }
     }
 };
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {

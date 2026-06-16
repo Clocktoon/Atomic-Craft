@@ -1,0 +1,75 @@
+{
+  "format_version": "1.26.20",
+  "minecraft:block": {
+    "description": {
+      "identifier": "atomic:radiation_slab",
+      "menu_category": {
+        "category": "construction"
+      },
+      "states": {
+        "atomic:blocked": [ true, false ]
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:vertical_half"
+          ]
+        }
+      }
+    },
+    "components": {
+      "namespace:slab": {},
+      "minecraft:flammable": true,
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2
+      },
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 3.0
+      },
+      "minecraft:light_dampening": 0,
+      "minecraft:geometry": {
+        "identifier": "geometry.radi_slab",
+        "bone_visibility": {
+          "top": "q.block_state('minecraft:vertical_half') == 'top'",
+          "bottom": "q.block_state('minecraft:vertical_half') == 'bottom'"
+        }
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "atomic_radiation_plank",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:collision_box": {
+        "origin": [ 8, 0, 8 ],
+        "size": [ -16, 8, -16 ]
+      },
+      "minecraft:selection_box": {
+        "origin": [ 8, 0, 8 ],
+        "size": [ -16, 8, -16 ]
+      },
+      "minecraft:support": {
+        "shape": "stair"
+      },
+      "minecraft:tags": [
+        "minecraft:is_axe_item_destructible",
+        "minecraft:wood"
+      ]
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('minecraft:vertical_half') == 'top'",
+        "components": {
+          "minecraft:collision_box": {
+            "origin": [ 8, 8, 8 ],
+            "size": [ -16, 8, -16 ]
+          },
+          "minecraft:selection_box": {
+            "origin": [ 8, 8, 8 ],
+            "size": [ -16, 8, -16 ]
+          }
+        }
+      }
+    ]
+  }
+}

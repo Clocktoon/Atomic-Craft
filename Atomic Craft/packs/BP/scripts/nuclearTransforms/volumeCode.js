@@ -55,7 +55,7 @@ function chunkBoundsFromBlock(x, z, minY = 0, maxY = 255) {
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid, location, blocky, size, change, player) {
+export async function nuclearArea(dimensionid, location, blocky, size, change, player, miny, maxy) {
     const dimension = world.getDimension(dimensionid);
     const startx = location.x - size;
     const endx = location.x + size;
@@ -91,9 +91,10 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
                         world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`);
                     });
                 }
-                const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase);
+                const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase, miny ?? undefined, maxy ?? undefined);
                 await fillGeneratorSequential(generator, 50);
                 world.sendMessage(`Ticking area filled: ${nameId}`);
+                world.tickingAreaManager.removeTickingArea(tickingArea);
             }
             else {
                 world.sendMessage(`Ticking area not returned: ${nameId}`);

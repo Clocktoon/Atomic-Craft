@@ -10,6 +10,8 @@
 	"textures/blocks/dead_grass_top",
 	"textures/blocks/enchanced_tnt",
 	"textures/blocks/enchanced_tnt_height",
+	"textures/blocks/gadget_tex_bog",
+	"textures/blocks/gadget_tex_bog_mer",
 	"textures/blocks/hbomb_tex",
 	"textures/blocks/landminetex",
 	"textures/blocks/Nuke_block_texture",
@@ -67,6 +69,7 @@
 	"textures/items/siren_spawn",
 	"textures/items/steel_ingot_tex",
 	"textures/items/tablet",
+	"textures/items/tabletatomic",
 	"textures/items/uraniumver2",
 	"textures/items/uranium_cooked",
 	"textures/items/vita_spawn",
@@ -80,5 +83,7 @@
 	"textures/particle/missilepart",
 	"textures/particle/ring_smoke",
 	"textures/particle/smokeeey",
-	"textures/particle/smoking"
+	"textures/particle/smoking",
+	"textures/particle/somkeagain",
+	"textures/particle/somkelight"
 ]

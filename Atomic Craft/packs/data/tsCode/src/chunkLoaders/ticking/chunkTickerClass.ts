@@ -88,8 +88,10 @@ class ChunkTicker {
     nuclear = false,
     options: TickingAreaOptions,
   ) {
-    if (!this.#tickingarea.hasCapacity(options))
-      throw new Error("Ticking area manager is full");
+    if (!this.#tickingarea.hasCapacity(options)) {
+      this.#tickingarea.removeAllTickingAreas()
+      throw new Error("Ticking area manager became full");
+    }
 
     //TODO: MAKE THE LOCATION STUFF AND JUST ALL THE CODE WORK
     //Figure out how to have the location work, does it need to be moved to a different class? Look at chunkLoader.js for help please

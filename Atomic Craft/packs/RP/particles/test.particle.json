@@ -2,45 +2,44 @@
 	"format_version": "1.10.0",
 	"particle_effect": {
 		"description": {
-			"identifier": "minecraft:example_spiral",
+			"identifier": "atomic:test",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particle/particles"
+				"texture": "textures/blocks/wool_colored_white"
+			}
+		},
+		"curves": {
+			"variable.silly": {
+				"type": "bezier",
+				"input": "v.particle_age",
+				"horizontal_range": "v.particle_lifetime",
+				"nodes": [0, 5.86, 8.56, 8.07]
 			}
 		},
 		"components": {
 			"minecraft:emitter_rate_steady": {
-				"spawn_rate": "Math.random(10, 30)",
+				"spawn_rate": 4,
 				"max_particles": 100
 			},
-			"minecraft:emitter_lifetime_once": {
-				"active_time": 10
+			"minecraft:emitter_lifetime_looping": {
+				"active_time": 1
 			},
 			"minecraft:emitter_shape_point": {},
 			"minecraft:particle_lifetime_expression": {
-				"max_lifetime": "Math.random(1.0, 4.0)"
+				"max_lifetime": 10
 			},
 			"minecraft:particle_motion_parametric": {
-				"relative_position": ["Math.cos((variable.particle_age * 360) + (variable.particle_random_1 * 360))", "variable.particle_age*3", "Math.sin((variable.particle_age * 360) + (variable.particle_random_1 * 360))"]
+				"relative_position": ["math.cos(22) * 1.5", "0", "math.sin(99) * 1.5"]
 			},
 			"minecraft:particle_appearance_billboard": {
-				"size": [0.1, 0.1],
-				"facing_camera_mode": "lookat_xyz",
+				"size": [0.2, 0.2],
+				"facing_camera_mode": "rotate_xyz",
 				"uv": {
-					"texture_width": 128,
-					"texture_height": 128,
-					"flipbook": {
-						"base_UV": [0, 80],
-						"size_UV": [8, 8],
-						"step_UV": [8, 0],
-						"frames_per_second": 1,
-						"max_frame": 16,
-						"stretch_to_lifetime": true
-					}
+					"texture_width": 16,
+					"texture_height": 16,
+					"uv": [0, 0],
+					"uv_size": [16, 16]
 				}
-			},
-			"minecraft:particle_appearance_tinting": {
-				"color": ["variable.particle_random_1", 0, "variable.particle_random_2", 1]
 			}
 		}
 	}

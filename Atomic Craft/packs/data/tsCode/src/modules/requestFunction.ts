@@ -72,7 +72,9 @@ export async function enqueueChunkFillAndRun(
   ticksPerFrame = 50,
 ) {
   const generator = enqueueChunkFill(area, block, name, phase, minY, maxY);
-  await fillGeneratorSequential(generator, ticksPerFrame);
+ 
+    await fillGeneratorSequential(generator, ticksPerFrame);
+
 }
 
 export function enqueueChunkFillWithGenerator(

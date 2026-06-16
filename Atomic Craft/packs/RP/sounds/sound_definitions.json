@@ -22,8 +22,7 @@
 			"category": "block",
 			"sounds": [
 				{
-					"name": "sounds/explosions3",
-					"load_on_low_memory": true
+					"name": "sounds/explosions3"
 				},
 				"sounds/explosions1",
 				"sounds/explosions2",

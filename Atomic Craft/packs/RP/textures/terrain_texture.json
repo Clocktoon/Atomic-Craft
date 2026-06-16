@@ -7,6 +7,9 @@
 		"atomic_uranium_ore": {
 			"textures": "textures/blocks/uranium ore texture"
 		},
+		"atomic_gadget_bomb": {
+			"textures": "textures/blocks/gadget_tex_bog"
+		},
 		"atomic_atom_bomb": {
 			"textures": "textures/blocks/Nuke_block_texture"
 		},

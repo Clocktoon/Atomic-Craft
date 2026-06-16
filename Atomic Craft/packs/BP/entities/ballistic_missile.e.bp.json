@@ -1,0 +1,136 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "atomic:ballistic_missile",
+      "is_spawnable": false,
+      "is_summonable": true
+    },
+    "component_groups": {
+      "atomic:explode": {
+        "minecraft:explode": {
+          "breaks_blocks": true,
+          "causes_fire": false,
+          "destroy_affected_by_griefing": false,
+          "fire_affected_by_griefing": false,
+          "fuse_lit": true,
+          "max_resistance": 0,
+          "power": 16
+        }
+      },
+      "atomic:offf": {
+        "minecraft:health": {
+          "value": 100
+        }
+      },
+      "atomic:on": {
+        "minecraft:behavior.nearest_attackable_target": {
+        "priority": 0,
+        "reselect_targets": true,
+        "target_search_height": 1000.0,
+        "must_see": false,
+        "scan_interval": 10,
+        "entity_types": [
+          {
+            "filters": [
+              {
+                "test": "is_family",
+                "subject": "other",
+                "value": "target"
+              }
+            ],
+            "max_dist": 1000
+          }
+        ]
+      },
+      "minecraft:attack": {
+        "damage": 0
+      },
+      "minecraft:behavior.melee_attack": {
+        "priority": 0,
+        "require_complete_path": true,
+        "track_target": true
+      },
+      "minecraft:follow_range": {
+        "value": 1000
+      }
+      }
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": ["bmissile"]
+      },
+      "minecraft:health": {
+        "value": 100
+      },
+      "minecraft:interact": {
+        "interactions": [
+          {
+            "interact_text": "Open Missile GUI"
+          }
+        ]
+      },
+      "minecraft:collision_box": {
+        "height": 6,
+        "width": 1
+      },
+      "minecraft:target_nearby_sensor": {
+        "must_see": false,
+        "inside_range": 3,
+        "outside_range": 7,
+        "on_inside_range": {
+          "event": "atomic:exposi",
+          "target": "self"
+        },
+        "on_outside_range": {
+          "event": "atomic:off",
+          "target": "self"
+        }
+      },
+      "minecraft:ignore_cannot_be_attacked": {},
+      "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": true
+      },
+      "minecraft:movement": {
+        "value": 5
+      },
+      "minecraft:movement.fly": {
+        "max_turn": 30
+      },
+      "minecraft:can_fly": {},
+      "minecraft:jump.dynamic": {},
+      "minecraft:tick_world": {
+        "never_despawn": true,
+        "radius": 2
+      },
+      "minecraft:navigation.fly": {
+        "avoid_damage_blocks": false,
+        "can_walk": false,
+        "can_path_from_air": true,
+        "can_jump": true,
+        "can_path_over_lava": true,
+        "can_path_over_water": true
+      }
+    },
+    "events": {
+      "atomic:exposi": {
+        "add": {
+          "component_groups": ["atomic:explode"]
+        }
+      },
+      "atomic:off": {
+        "add": {
+          "component_groups": ["atomic:offf"]
+        }
+      },
+      "atomic:onn": {
+        "add": {
+          "component_groups": [
+            "atomic:on"
+          ]
+        }
+      }
+    }
+  }
+}

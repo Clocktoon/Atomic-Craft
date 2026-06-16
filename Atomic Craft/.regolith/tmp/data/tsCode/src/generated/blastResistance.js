@@ -1,4 +1,7 @@
 
+/**
+ * A list of blocks blast resistance
+ */
 export const BlastResistance =
 {
     "minecraft:oak_planks": 3,
