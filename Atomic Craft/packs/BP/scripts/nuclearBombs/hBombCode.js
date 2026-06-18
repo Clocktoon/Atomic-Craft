@@ -1,5 +1,4 @@
 import { system, world, BlockVolume, } from "@minecraft/server";
-import { createCrater } from "../nuclearTransforms/crater.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
@@ -20,7 +19,7 @@ class Fus {
         const dimension = event.dimension;
         if (!playerMain)
             return;
-        MessageBox.create(playerEntity, "Confirm")
+        new MessageBox(playerEntity, "Confirm")
             .body("Are you sure you want to activate the nuclear bomb?")
             .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
             .button2("No", "this will close the menu")
@@ -29,7 +28,8 @@ class Fus {
             if (rep.selection === 1) {
                 nuclearBomb();
             }
-        }).catch(e => {
+        })
+            .catch((e) => {
             playerEntity?.sendMessage(`${e}`);
         });
         const px = block.location.x;
@@ -39,8 +39,8 @@ class Fus {
             //Ticking area for the stuff close to the explosion
             world.tickingAreaManager
                 .createTickingArea(`nukearea${random}`, {
-                from: { x: px - 71, y: 0, z: pz - 71 },
-                to: { x: px + 71, y: 0, z: pz + 71 },
+                from: { x: px - 71, y: py - 70, z: pz - 71 },
+                to: { x: px + 71, y: py + 10, z: pz + 71 },
                 dimension: block.dimension,
             })
                 .then(() => {
@@ -96,41 +96,47 @@ class Fus {
                                 fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
                             });
                         }
-                        block.dimension.spawnParticle("atomic:nukepart2", { x: block.location.x, y: block.location.y - 26, z: block.location.z });
-                        block.dimension.createExplosion(block.location, 20, { causesFire: true, allowUnderwater: false });
+                        block.dimension.spawnParticle("atomic:nukepart2", {
+                            x: block.location.x,
+                            y: block.location.y - 26,
+                            z: block.location.z,
+                        });
+                        block.dimension.createExplosion(block.location, 20, {
+                            causesFire: true,
+                            allowUnderwater: false,
+                        });
                         // Crater code
-                        async function crater() {
-                            async function fillGeneratorSequential(generator, ticks) {
-                                return new Promise((resolve, reject) => {
-                                    /**
-                                     * processes a set number of yields per tick
-                                     */
-                                    const maxTicksPerFrame = ticks;
-                                    const interval = system.runInterval(() => {
-                                        let yielded = 0;
-                                        while (yielded < maxTicksPerFrame) {
-                                            let result;
-                                            try {
-                                                result = generator.next();
-                                            }
-                                            catch (err) {
-                                                system.clearRun(interval);
-                                                reject(err);
-                                                return;
-                                            }
-                                            if (result.done) {
-                                                system.clearRun(interval);
-                                                resolve();
-                                                return;
-                                            }
-                                            yielded++;
-                                        }
-                                    }, 1);
-                                });
+                        function* createCrater(location, dimensionId, block, radius, maxDepth) {
+                            const dim = world.getDimension(dimensionId);
+                            const cx = Math.floor(location.x);
+                            const cy = Math.floor(location.y + 10);
+                            const cz = Math.floor(location.z);
+                            const r = Math.max(1, Math.ceil(radius));
+                            const r2 = r * r;
+                            for (let dx = -r; dx <= r; dx++) {
+                                for (let dz = -r; dz <= r; dz++) {
+                                    const dist2 = dx * dx + dz * dz;
+                                    if (dist2 > r2)
+                                        continue;
+                                    const d = Math.sqrt(dist2);
+                                    const t = d / radius;
+                                    const depth = Math.floor(maxDepth * (1 - t * t));
+                                    if (depth <= 0)
+                                        continue;
+                                    const x = cx + dx;
+                                    const z = cz + dz;
+                                    for (let dy = 0; dy <= depth; dy++) {
+                                        const y = cy - dy;
+                                        dim.setBlockType({ x: x, y: y, z: z }, block);
+                                        yield;
+                                    }
+                                }
                             }
-                            await fillGeneratorSequential(createCrater(block.location, block.dimension.id, "minecraft:air", 70, 70), 50);
                         }
-                        crater();
+                        system.runJob((function* () {
+                            yield* createCrater(block.location, block.dimension.id, "minecraft:air", 70, 70);
+                            world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+                        })());
                         // Sound code by MapleStar // TC (discord)
                         function playExplosionAudio(dimension, center, magnitude) {
                             if (!center)
@@ -157,7 +163,7 @@ class Fus {
                                     try {
                                         player.playSound("atomic.nukesound", {
                                             volume: boomVolume,
-                                            pitch: boomPitch
+                                            pitch: boomPitch,
                                         });
                                         if (distance <= shakeDistance) {
                                             const shakeIntensity = Math.max(0.2, 1 - distance / shakeDistance);
@@ -183,11 +189,8 @@ class Fus {
                         //   { x: 6, z: 4 },
                         //   1,
                         // );
-                        yield;
-                        //Gets rid of ticking area and starts the real nuclear explosion code
-                        world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
                         //Nuke Code!!!
-                        nuclearArea(block.dimension.id, block.location, block, 512, 300, playerEntity);
+                        nuclearArea(block.dimension.id, block.location, block, 352, 208, playerEntity);
                         const volume = new BlockVolume({
                             x: block.location.x - 20,
                             y: block.location.y - 20,
@@ -206,5 +209,5 @@ class Fus {
     }
 }
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-    blockComponentRegistry.registerCustomComponent("atomic:hb_explode", new Fus);
+    blockComponentRegistry.registerCustomComponent("atomic:hb_explode", new Fus());
 });

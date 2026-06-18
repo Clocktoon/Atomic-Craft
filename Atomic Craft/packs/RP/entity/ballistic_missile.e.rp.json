@@ -1,0 +1,40 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "atomic:ballistic_missile",
+      "geometry": {
+        "default": "geometry.tatical_ballistic_missile"
+      },
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/tactical_ballistic_texture"
+      },
+      "render_controllers": ["controller.render.balllis"],
+      "particle_effects": {
+        "icbm_trail_partcc": "atomic:icbm_trail_partcc"
+      },
+      "animations": {
+        "rotate": "animation.tatical_ballistic_missile.flying"
+      },
+      "scripts": {
+        "animate": ["rotate"],
+
+        "initialize": [
+          "variable.current_yaw=0;",
+          "variable.current_pitch=0;"
+        ],
+
+        "pre_animation": [
+          "v.current_yaw = v.current_yaw ? v.current_yaw : q.property('atomic:yaw');",
+          "v.current_pitch = v.current_pitch ? v.current_pitch : q.property('atomic:pitch');",
+
+          "v.current_yaw = math.lerprotate(v.current_yaw, q.property('atomic:yaw'), q.delta_time * 10);",
+          "v.current_pitch = math.lerprotate(v.current_pitch, q.property('atomic:pitch'), q.delta_time * 10);"
+        ]
+      }
+    }
+  }
+}

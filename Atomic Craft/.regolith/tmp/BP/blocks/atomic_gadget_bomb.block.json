@@ -29,7 +29,7 @@
         ]
       },
       "minecraft:geometry": {
-        "identifier": "geometry.gadget"
+        "identifier": "geometry.bomb_g"
       },
       "minecraft:destructible_by_explosion": true,
       "minecraft:material_instances": {

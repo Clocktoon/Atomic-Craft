@@ -13,7 +13,7 @@ class OnClick {
         const playerMain = playerEntity;
         const dimension = event.dimension;
         if (playerEntity)
-            MessageBox.create(playerEntity, "Confirm")
+            new MessageBox(playerEntity, "Confirm")
                 .body("Are you sure you want to activate the nuclear bomb?")
                 .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
                 .button2("No", "this will close the menu")
@@ -92,7 +92,8 @@ class OnClick {
                             allowUnderwater: false,
                         });
                         // Crater code
-                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 40);
+                        const randomMath = Math.floor(Math.random() * 20);
+                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 30, `crater${JSON.stringify(randomMath)}`);
                         // Sound code by MapleStar // TC (discord)
                         function playExplosionAudio(dimension, center, magnitude) {
                             if (!center)
@@ -150,7 +151,7 @@ class OnClick {
                         //Gets rid of ticking area and starts the real nuclear explosion code
                         world.tickingAreaManager.removeTickingArea("nukearea");
                         //Nuke Code!!!
-                        nuclearArea(block.dimension.id, block.location, block, 272, 70, playerEntity);
+                        nuclearArea(block.dimension.id, block.location, block, 224, 70, playerEntity);
                         const volume = new BlockVolume({
                             x: block.location.x - 20,
                             y: block.location.y - 20,

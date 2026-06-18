@@ -13,7 +13,7 @@ class OnClickGadget {
         const playerMain = playerEntity;
         const dimension = event.dimension;
         if (playerEntity)
-            MessageBox.create(playerEntity, "Confirm")
+            new MessageBox(playerEntity, "Confirm")
                 .body("Are you sure you want to activate the nuclear bomb?")
                 .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
                 .button2("No", "this will close the menu")
@@ -91,7 +91,8 @@ class OnClickGadget {
                             z: block.location.z,
                         });
                         // Crater code
-                        createCrater(block.location, block.dimension.id, "minecraft:air", 30, 20);
+                        const randomMath = Math.floor(Math.random() * 20);
+                        createCrater(block.location, block.dimension.id, "minecraft:air", 30, 20, `crater${JSON.stringify(randomMath)}`);
                         block.dimension.createExplosion({
                             x: block.location.x,
                             y: block.location.y - 21,
@@ -157,7 +158,7 @@ class OnClickGadget {
                         //Gets rid of ticking area and starts the real nuclear explosion code
                         world.tickingAreaManager.removeTickingArea("nukearea");
                         //Nuke Code!!!
-                        nuclearArea(block.dimension.id, block.location, block, 128, 40, playerEntity
+                        nuclearArea(block.dimension.id, block.location, block, 80, 30, playerEntity
                         //   40,
                         //   40
                         );

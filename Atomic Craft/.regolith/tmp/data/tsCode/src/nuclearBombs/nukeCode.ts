@@ -13,7 +13,6 @@ import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
-import { BlockStateSuperset } from "@minecraft/vanilla-data";
 
 class OnClick implements BlockCustomComponent {
   constructor() {
@@ -29,7 +28,7 @@ class OnClick implements BlockCustomComponent {
     
      
       if(playerEntity)
-    MessageBox.create(playerEntity, "Confirm")
+    new MessageBox(playerEntity, "Confirm")
     .body("Are you sure you want to activate the nuclear bomb?")
     .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
     .button2("No", "this will close the menu")
@@ -126,12 +125,14 @@ class OnClick implements BlockCustomComponent {
               allowUnderwater: false,
             });
             // Crater code
+            const randomMath = Math.floor(Math.random() * 20)
             createCrater(
               block.location,
               block.dimension.id,
               "minecraft:air",
               50,
-              40,
+              30,
+              `crater${JSON.stringify(randomMath)}`
             );
 
             // Sound code by MapleStar // TC (discord)
@@ -221,7 +222,7 @@ class OnClick implements BlockCustomComponent {
               block.dimension.id,
               block.location,
               block,
-              272,
+              224,
               70,
               playerEntity,
             );

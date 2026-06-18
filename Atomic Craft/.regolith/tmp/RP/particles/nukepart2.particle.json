@@ -40,7 +40,7 @@
 				"max_particles": "300 + variable.emitter_lifetime"
 			},
 			"minecraft:emitter_lifetime_looping": {
-				"active_time": 130
+				"active_time": 200
 			},
 			"minecraft:emitter_lifetime_events": {
 				"creation_event": ["mushroom", "ring", "smoke_ring", "second ring"]

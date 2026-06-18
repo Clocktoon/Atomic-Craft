@@ -38,11 +38,12 @@ const runny = system.runInterval( () => {
             return;
 
 
-        if(entity.typeId == "minecraft:player") {
-            entity.runCommand("title @s actionbar §cYou feel off...")
-        }
+        // if(entity.typeId == "minecraft:player") {
+        //     entity.runCommand("title @s actionbar §cYou feel off...")
+        // }
+
        const sys1 = system.runTimeout(() => {
-            if(!entity.hasTag("atomic:rad_effect")) {
+            if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                 for(const effect of entity.getEffects()) {
                 entity.removeEffect(effect.typeId)
             }
@@ -54,7 +55,7 @@ const runny = system.runInterval( () => {
 
        const sys2 = system.runTimeout(() => {
             system.runInterval( () => {
-                if(!entity.hasTag("atomic:rad_effect")) {
+                if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                 for(const effect of entity.getEffects()) {
                 entity.removeEffect(effect.typeId)
             }
@@ -66,7 +67,7 @@ const runny = system.runInterval( () => {
 
         const sys3 = system.runTimeout(() => {
             system.runInterval( () => {
-                if(!entity.hasTag("atomic:rad_effect")) {
+                if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                 for(const effect of entity.getEffects()) {
                 entity.removeEffect(effect.typeId)
             }
@@ -79,7 +80,7 @@ const runny = system.runInterval( () => {
 
 
        const sys4 = system.runTimeout(() => {
-            if(!entity.hasTag("atomic:rad_effect")) {
+            if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                 for(const effect of entity.getEffects()) {
                 entity.removeEffect(effect.typeId)
             }
@@ -91,7 +92,7 @@ const runny = system.runInterval( () => {
 
 
         //Backup for getting rid of the effect (hopefully q-q)
-        if(!entity.hasTag("atomic:rad_effect"))
+        if(entity.isValid && !entity.hasTag("atomic:rad_effect"))
         {
             for(const effect of entity.getEffects()) {
                 entity.removeEffect(effect.typeId)

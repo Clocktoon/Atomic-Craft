@@ -46,7 +46,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./nuclearTransforms/crater.js");
     import("./aftermath.js");
     import("./nuclearTransforms/shockwave.js");
-    import("./itempickups.js");
+    //import("./itempickups.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
     //import("./setLore.js")

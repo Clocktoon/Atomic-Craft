@@ -23,11 +23,11 @@ const runny = system.runInterval(() => {
         for (const entity of entities) {
             if (!entity.isValid)
                 return;
-            if (entity.typeId == "minecraft:player") {
-                entity.runCommand("title @s actionbar §cYou feel off...");
-            }
+            // if(entity.typeId == "minecraft:player") {
+            //     entity.runCommand("title @s actionbar §cYou feel off...")
+            // }
             const sys1 = system.runTimeout(() => {
-                if (!entity.hasTag("atomic:rad_effect")) {
+                if (entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                     for (const effect of entity.getEffects()) {
                         entity.removeEffect(effect.typeId);
                     }
@@ -38,7 +38,7 @@ const runny = system.runInterval(() => {
             }, 4800);
             const sys2 = system.runTimeout(() => {
                 system.runInterval(() => {
-                    if (!entity.hasTag("atomic:rad_effect")) {
+                    if (entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                         for (const effect of entity.getEffects()) {
                             entity.removeEffect(effect.typeId);
                         }
@@ -49,7 +49,7 @@ const runny = system.runInterval(() => {
             }, 8400);
             const sys3 = system.runTimeout(() => {
                 system.runInterval(() => {
-                    if (!entity.hasTag("atomic:rad_effect")) {
+                    if (entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                         for (const effect of entity.getEffects()) {
                             entity.removeEffect(effect.typeId);
                         }
@@ -60,7 +60,7 @@ const runny = system.runInterval(() => {
                 }, 20);
             }, 15600);
             const sys4 = system.runTimeout(() => {
-                if (!entity.hasTag("atomic:rad_effect")) {
+                if (entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                     for (const effect of entity.getEffects()) {
                         entity.removeEffect(effect.typeId);
                     }
@@ -70,7 +70,7 @@ const runny = system.runInterval(() => {
                 entity.addEffect("blindness", 20000000, { amplifier: 1, showParticles: false });
             }, 19200);
             //Backup for getting rid of the effect (hopefully q-q)
-            if (!entity.hasTag("atomic:rad_effect")) {
+            if (entity.isValid && !entity.hasTag("atomic:rad_effect")) {
                 for (const effect of entity.getEffects()) {
                     entity.removeEffect(effect.typeId);
                 }

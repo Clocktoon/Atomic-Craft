@@ -4,7 +4,21 @@
     "description": {
       "identifier": "atomic:ballistic_missile",
       "is_spawnable": false,
-      "is_summonable": true
+      "is_summonable": true,
+      "properties": {
+        "atomic:yaw": {
+          "type": "float",
+          "default": 0.0,
+          "range": [-360.0, 360.0],
+          "client_sync": true
+        },
+        "atomic:pitch": {
+          "type": "float",
+          "default": 0.0,
+          "range": [-90.0, 90.0],
+          "client_sync": true
+        }
+      }
     },
     "component_groups": {
       "atomic:explode": {
@@ -24,36 +38,16 @@
         }
       },
       "atomic:on": {
-        "minecraft:behavior.nearest_attackable_target": {
-        "priority": 0,
-        "reselect_targets": true,
-        "target_search_height": 1000.0,
-        "must_see": false,
-        "scan_interval": 10,
-        "entity_types": [
-          {
-            "filters": [
-              {
-                "test": "is_family",
-                "subject": "other",
-                "value": "target"
-              }
-            ],
-            "max_dist": 1000
-          }
-        ]
-      },
-      "minecraft:attack": {
-        "damage": 0
-      },
-      "minecraft:behavior.melee_attack": {
-        "priority": 0,
-        "require_complete_path": true,
-        "track_target": true
-      },
-      "minecraft:follow_range": {
-        "value": 1000
-      }
+        "minecraft:attack": {
+          "damage": 0
+        },
+        "minecraft:follow_range": {
+          "value": 10000
+        },
+        "minecraft:physics": {
+          "has_collision": true,
+          "has_gravity": false
+        }
       }
     },
     "components": {
@@ -76,8 +70,8 @@
       },
       "minecraft:target_nearby_sensor": {
         "must_see": false,
-        "inside_range": 3,
-        "outside_range": 7,
+        "inside_range": 2.0,
+        "outside_range": 4.0,
         "on_inside_range": {
           "event": "atomic:exposi",
           "target": "self"
@@ -92,25 +86,11 @@
         "has_collision": true,
         "has_gravity": true
       },
-      "minecraft:movement": {
-        "value": 5
-      },
-      "minecraft:movement.fly": {
-        "max_turn": 30
-      },
       "minecraft:can_fly": {},
       "minecraft:jump.dynamic": {},
       "minecraft:tick_world": {
         "never_despawn": true,
         "radius": 2
-      },
-      "minecraft:navigation.fly": {
-        "avoid_damage_blocks": false,
-        "can_walk": false,
-        "can_path_from_air": true,
-        "can_jump": true,
-        "can_path_over_lava": true,
-        "can_path_over_water": true
       }
     },
     "events": {
@@ -126,9 +106,7 @@
       },
       "atomic:onn": {
         "add": {
-          "component_groups": [
-            "atomic:on"
-          ]
+          "component_groups": ["atomic:on"]
         }
       }
     }

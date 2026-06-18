@@ -1,9 +1,9 @@
 import { world, system, } from "@minecraft/server";
-import { CustomForm, Observable } from "@minecraft/server-ui";
+import { CustomForm, ObservableBoolean } from "@minecraft/server-ui";
 class RadiSettings {
     onUse(e) {
-        const yielding = Observable.create(true, { clientWritable: true });
-        const explosionEffects = Observable.create(true, { clientWritable: true });
+        const yielding = new ObservableBoolean(true, { clientWritable: true });
+        const explosionEffects = new ObservableBoolean(true, { clientWritable: true });
         const currentPower = world.getDynamicProperty("powerful");
         const exEffect = world.getDynamicProperty("explosionEffect");
         if (typeof currentPower === "boolean") {
@@ -22,9 +22,9 @@ class RadiSettings {
         }
         yielding.subscribe((v) => world.setDynamicProperty("powerful", v));
         explosionEffects.subscribe((v) => world.setDynamicProperty("explosionEffect", v));
-        CustomForm.create(e.source, "Bombs of glory settings")
+        new CustomForm(e.source, "Bombs of glory settings")
             .label("Use this to change the settings of the world")
-            .toggle("Slower mode", yielding)
+            .toggle("Slower mode", yielding, { description: "Turning this off will probably crash your game with the bigger nukes" })
             .toggle("Explsion effects", explosionEffects)
             .closeButton()
             .show();

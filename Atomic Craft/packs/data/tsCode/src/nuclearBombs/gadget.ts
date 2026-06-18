@@ -28,7 +28,7 @@ class OnClickGadget implements BlockCustomComponent {
     
      
       if(playerEntity)
-    MessageBox.create(playerEntity, "Confirm")
+    new MessageBox(playerEntity, "Confirm")
     .body("Are you sure you want to activate the nuclear bomb?")
     .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
     .button2("No", "this will close the menu")
@@ -124,13 +124,14 @@ class OnClickGadget implements BlockCustomComponent {
               z: block.location.z,
             });
             // Crater code
+            const randomMath = Math.floor(Math.random() * 20)
             createCrater(
               block.location,
               block.dimension.id,
               "minecraft:air",
               30,
               20,
-              false
+              `crater${JSON.stringify(randomMath)}`
             );
              block.dimension.createExplosion({
                 x: block.location.x, 
@@ -229,8 +230,8 @@ class OnClickGadget implements BlockCustomComponent {
               block.dimension.id,
               block.location,
               block,
-              128,
-              40,
+              80,
+              30,
               playerEntity
             //   40,
             //   40

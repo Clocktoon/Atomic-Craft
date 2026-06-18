@@ -40,6 +40,11 @@
 			"sounds": [
 				"sounds/missile_plane_sound"
 			]
+		},
+		"atomic.mortar.shoot": {
+			"sounds": [
+				"sounds/mortarshotsound"
+			]
 		}
 	}
 }

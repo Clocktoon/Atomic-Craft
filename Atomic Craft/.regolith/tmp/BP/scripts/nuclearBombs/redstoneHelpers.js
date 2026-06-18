@@ -63,7 +63,8 @@ class RedNuclear {
                             allowUnderwater: false,
                         });
                         // Crater code
-                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 40);
+                        const randomMath = Math.floor(Math.random() * 20);
+                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 40, `crater${JSON.stringify(randomMath)}`);
                         // Sound code by MapleStar // TC (discord)
                         function playExplosionAudio(dimension, center, magnitude) {
                             if (!center)
@@ -186,7 +187,8 @@ class RedNuclear {
                                 z: block.location.z,
                             });
                             // Crater code
-                            createCrater(block.location, block.dimension.id, "minecraft:air", 30, 20);
+                            const randomMath = Math.floor(Math.random() * 20);
+                            createCrater(block.location, block.dimension.id, "minecraft:air", 30, 20, `crater${JSON.stringify(randomMath)}`);
                             block.dimension.createExplosion({
                                 x: block.location.x,
                                 y: block.location.y - 21,
