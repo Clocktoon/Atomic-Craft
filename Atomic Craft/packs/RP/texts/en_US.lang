@@ -46,9 +46,14 @@ tile.atomic:gadget_bomb.name=Gadget bomb
 item.atomic:dev_item.name=Dev tool
 item.atomic:gloves.name=Gloves
 entity.atomic:icbm.name=icbm mob
-tile.atomic:icbm_item.name=icbm Item
+item.atomic:icbm_item.name=icbm Item
 item.atomic:steel_ingot.name=Steel ingot
 entity.atomic:hate.name=Hate entity
+subtitles.ambient.nuclearbomb=Nuclear explosion boom
+subtitles.block.beeping=Nuclear bomb activates
+subtitles.ambient.explosionatomic=Explosion shockwave
+subtitles.plane.fly=Plane engine roars
+subtitles.plane.missile=Missile dropping
 item.atomic:blue_chip.name=Blue chip
 item.atomic:purple_chip.name=Purple chip
 item.atomic:green_chip.name=Green chip
@@ -64,7 +69,7 @@ tile.atomic:radi_leave.name=Radiation leaf
 entity.atomic:himar.name=Hiamr
 entity.atomic:himar_missile.name=Himar missile
 item.atomic:blass.name=Ballistic missile
-item.atomic:himar_item.name=Himar item,
+item.atomic:himar_item.name=Himar item
 
 tile.atomic:atomic_slab_item.name= Radiation plank slab
 

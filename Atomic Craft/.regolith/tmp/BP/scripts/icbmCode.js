@@ -1,47 +1,70 @@
-import { world, system, BlockVolume, InputInfo } from "@minecraft/server";
-world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
-    const player = ev.player;
-    const entity = ev.target;
-    const itemstack = ev.itemStack;
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:blue_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:blue", true);
-    }
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:green_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:green", true);
-    }
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:purple_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:purple", true);
-    }
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:white_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:white", true);
-    }
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:red_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:red", true);
-    }
-    if (entity.typeId === "atomic:icbm" && itemstack.typeId === "atomic:yellow_chip" || entity.typeId === "atomic:non_icbm" && itemstack.typeId === "atomic:blue_chip") {
-        entity.setProperty("atomic:yellow", true);
-    }
-});
-world.afterEvents.entityDie.subscribe((ev) => {
-    const entity = ev.deadEntity;
-    if (entity.typeId === "atomic:icbm" && entity.getProperty("atomic:ex") === true) {
-        function* exlposion() {
-            const x = entity.location.x;
-            const z = entity.location.z;
-            const px = entity.location.x;
-            const pz = entity.location.z;
-            const py = entity.location.y;
-            block.dimension.runCommand(`tickingarea add 
-                ${x - 70} 0 ${z - 70} ${x + 60} 0 ${z + 60} i1`);
-            for (const eny of entity.dimension.getEntities({ location: entity.location, maxDistance: 100 })) {
-                if (eny.typeId == "minecraft:player") {
-                    eny.runCommand("camera @s fade time 1 3 1 color 255 255 255");
-                    eny.runCommand("camerashake add @s 1 10");
+import { system, world, } from "@minecraft/server";
+import { EquipmentSlot, } from "@minecraft/server";
+import { createCrater } from "./nuclearTransforms/crater.js";
+import { nuclearArea } from "./nuclearTransforms/volumeCode.js";
+import { CustomForm, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
+const distanceUiNumber = new ObservableNumber(0);
+let fail = false;
+function makeRandomId() {
+    //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
+    return `${Date.now()}+${Math.random()}`;
+}
+function* nuclearExplosion(playerEntity, entity, target) {
+    if (!playerEntity)
+        return;
+    const randomMath = makeRandomId();
+    const random = `${randomMath}`;
+    const px = entity.location.x;
+    const pz = entity.location.z;
+    const py = entity.location.y;
+    //Ticking area for the stuff close to the explosion
+    world.tickingAreaManager
+        .createTickingArea(`nukearea${random}`, {
+        from: { x: px - 60, y: 0, z: pz - 60 },
+        to: { x: px + 60, y: 0, z: pz + 60 },
+        dimension: entity.dimension,
+    })
+        .then(() => {
+        function* blockGen() {
+            //Radiation and burning of mobs
+            const players = entity.dimension.getPlayers({
+                location: entity.location,
+                minDistance: 1,
+                maxDistance: 100,
+            });
+            for (const eny of entity.dimension.getEntities({
+                location: entity.location,
+                minDistance: 1,
+                maxDistance: 100,
+            })) {
+                eny.setOnFire(20);
+                if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
+                    eny.typeId !== "atomic:gen_entity" &&
+                    eny.typeId != "minecraft:player") {
+                    eny.addTag("atomic:rad_effect");
                 }
-                eny.setOnFire(10);
             }
-            entity.dimension.spawnParticle("atomic:nukepart2", entity.location);
-            entity.dimension.createExplosion(block.location, 20, { causesFire: true, allowUnderwater: false });
+            for (const playerRadi of players) {
+                if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
+                    playerRadi.setDynamicProperty("radiation", 100);
+                }
+                //TODO: Make gas mask worth with players
+                playerRadi.camera.fade({
+                    fadeColor: { red: 1, blue: 1, green: 1 },
+                    fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+                });
+            }
+            entity.dimension.spawnParticle("atomic:nukepart", {
+                x: entity.location.x,
+                y: entity.location.y - 20,
+                z: entity.location.z,
+            });
+            // Crater code
+            const randomMath = Math.floor(Math.random() * 20);
+            system.runJob((function* () {
+                yield* createCrater(entity.location, entity.dimension.id, "minecraft:air", 50, 30);
+                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+            })());
             // Sound code by MapleStar // TC (discord)
             function playExplosionAudio(dimension, center, magnitude) {
                 if (!center)
@@ -49,7 +72,8 @@ world.afterEvents.entityDie.subscribe((ev) => {
                 const players = dimension.getPlayers();
                 const explosionRadius = Math.min(Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)), 60);
                 const maxHearingDistance = explosionRadius * 24;
-                players.forEach(player => {
+                const shakeDistance = explosionRadius * 8;
+                players.forEach((player) => {
                     const playerLocation = player.location;
                     const dx = playerLocation.x - center.x;
                     const dy = playerLocation.y - center.y;
@@ -57,159 +81,285 @@ world.afterEvents.entityDie.subscribe((ev) => {
                     const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
                     if (distance > maxHearingDistance)
                         return;
+                    player.sendMessage("test test 123");
                     const maxEffectRadius = explosionRadius * 2;
-                    const intensity = Math.max(0, 1.0 - (distance / maxEffectRadius));
                     const distanceRatio = Math.min(1, distance / maxHearingDistance);
                     const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));
-                    const boomPitch = 0.8 + (Math.random() * 0.2) - (distanceRatio * 0.1);
+                    const boomPitch = 0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
                     const delayTicks = Math.min(100, Math.floor(distance / 17));
                     const delayMs = delayTicks * 50;
                     system.runTimeout(() => {
                         try {
-                            dimension.runCommand(`playsound "atomic.nukesound" ${player.name} ${playerLocation.x} ${playerLocation.y} ${playerLocation.z} ${boomVolume} ${boomPitch}`);
+                            player.playSound("atomic.nukesound", {
+                                volume: boomVolume,
+                                pitch: boomPitch
+                            });
+                            if (distance <= shakeDistance) {
+                                const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
+                                dimension.runCommand(`execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`);
+                            }
                         }
-                        catch (err) { }
+                        catch (err) {
+                            player.sendMessage("error with sound and shake code");
+                        }
                     }, delayMs);
                 });
             }
-            ;
-            const playdi = entity.dimension;
-            playExplosionAudio(playdi, block.location, 30);
+            if (!playerEntity)
+                return;
+            const playdi = playerEntity.dimension;
+            //Shockwave and explosion sound
+            playExplosionAudio(playdi, entity.location, 260);
+            // shockwaveBlast(
+            //   dimension,
+            //   block.location,
+            //   3,
+            //   50,
+            //   { x: 6, z: 4 },
+            //   1,
+            // );
             yield;
-            const math = Math.floor(Math.random() * 10);
-            const point1 = {
-                x: entity.location.x - 2 + math,
-                y: entity.location.y - 6,
-                z: entity.location.z - 2 + math
-            };
-            const point2 = {
-                x: entity.location.x + 2 + math,
-                y: entity.location.y,
-                z: entity.location.z + 2 + math
-            };
-            const vol = new BlockVolume(point1, point2);
-            entity.dimension.fillBlocks(vol, "minecraft:air", {
-                ignoreChunkBoundErrors: true,
-                blockFilter: { excludeTypes: ["minecraft:air"] }
-            });
-            yield;
-            const from = {
-                x: entity.location.x - 150,
-                y: entity.location.y - 20,
-                z: entity.location.z - 150
-            };
-            const to = {
-                x: entity.location.x + 150,
-                y: entity.location.y + 30,
-                z: entity.location.z + 150
-            };
-            yield;
-            const blockvol = new BlockVolume(from, to);
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 60, y: py, z: pz + 60 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 60, y: py, z: pz - 60 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 80, y: py, z: pz + 80 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 80, y: py, z: pz - 80 });
-            const blocklist = entity.dimension.getBlocks(blockvol, {
-                excludeTypes: ["minecraft:air", "minecraft:water",
-                    "minecraft:lava", "minecraft:flowing_lava", "minecraft:flowing_water", "minecraft:jungle_leaves",
-                    "minecraft:azalea_leaves", "minecraft:oak_leaves", "minecraft:birch_leaves", "minecraft:spruce_leaves",
-                    "minecraft:acacia_leaves", "minecraft:dark_oak_leaves", "minecraft:azalea_leaves_flowered",
-                    "minecraft:cherry_leaves", "minecraft:pale_oak_leaves", "minecraft:fire", "minecraft:glass",
-                    "minecraft:coal_ore", "minecraft:iron_block", "minecraft:piston", "minecraft:sticky_piston",
-                    "minecraft:iron_door", "minecraft:vine"], excludeTags: ["log"]
-            }, true);
-            for (const locy of blocklist.getBlockLocationIterator()) {
-                const blocc = entity.dimension.getBlock(locy);
-                blocc.setType("atomic:radiation_block");
-                yield;
-            }
-            const blockGet = entity.dimension.getBlocks(blockvol, {
-                includeTypes: ["minecraft:jungle_leaves",
-                    "minecraft:azalea_leaves", "minecraft:oak_leaves", "minecraft:birch_leaves", "minecraft:spruce_leaves",
-                    "minecraft:acacia_leaves", "minecraft:dark_oak_leaves", "minecraft:azalea_leaves_flowered",
-                    "minecraft:cherry_leaves", "minecraft:pale_oak_leaves", "minecraft:glass", "minecraft:vine"]
-            }, true);
-            for (const location of blockGet.getBlockLocationIterator()) {
-                const blocks = entity.dimension.getBlock(location);
-                blocks.setType("minecraft:air");
-                yield;
-            }
-            const blockLeaves = entity.dimension.getBlocks(blockvol, {
-                includeTags: ["log"]
-            }, true);
-            for (const loc of blockLeaves.getBlockLocationIterator()) {
-                const blocky = entity.dimension.getBlock(loc);
-                blocky.setType("atomic:burned_log");
-                yield;
-            }
-            yield;
-            const dim = entity.dimension.getBlocks(blockvol, {
-                includeTypes: ["minecraft:coal_ore"]
-            });
-            for (const di of dim.getBlockLocationIterator()) {
-                const dima = entity.dimension.getBlock(di);
-                dima.setType("atomic:radiation_diamond_block");
-                yield;
-            }
-            yield;
-            const from2 = {
-                x: entity.location.x - 400,
-                y: entity.location.y - 40,
-                z: entity.location.z - 400
-            };
-            const to2 = {
-                x: entity.location.x + 400,
-                y: entity.location.y + 60,
-                z: entity.location.z + 400
-            };
-            const blockvol2 = new BlockVolume(from2, to2);
-            // It is not a large enough size, some chunks are unloaded 
-            entity.dimension.runCommand(`tickingarea add 
-                        ${px + 80} 0 ${pz + 80} ${px + 210} 0 ${pz + 210} i2`);
-            entity.dimension.runCommand(`tickingarea add 
-                        ${px - 80} 0 ${pz - 80} ${px - 210} 0 ${pz - 210} i3`);
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 140, y: py, z: pz + 140 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 140, y: py, z: pz - 140 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 170, y: py, z: pz + 170 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 170, y: py, z: pz - 170 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 200, y: py, z: pz - 200 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 200, y: py, z: pz + 200 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 260, y: py, z: pz - 260 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 330, y: py, z: pz + 330 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px - 400, y: py, z: pz - 400 });
-            entity.dimension.spawnEntity("atomic:gen_entity", { x: px + 400, y: py, z: pz + 400 });
-            yield;
-            const getGrass = entity.dimension.getBlocks(blockvol2, { includeTypes: ["minecraft:grass"] });
-            for (const location of getGrass.getBlockLocationIterator()) {
-                const blocks = entity.dimension.getBlock(location);
-                blocks.setType("atomic:dead_grass");
-                yield;
-            }
-            const lostLeaves = entity.dimension.getBlocks(blockvol, {
-                includeTags: ["log"]
-            }, true);
-            for (const loc of lostLeaves.getBlockLocationIterator()) {
-                const blocky = entity.dimension.getBlock(loc);
-                blocky.setType("atomic:burned_log");
-                yield;
-            }
-            const getLeaves = entity.dimension.getBlocks(blockvol2, {
-                includeTypes: ["minecraft:jungle_leaves",
-                    "minecraft:azalea_leaves", "minecraft:oak_leaves", "minecraft:birch_leaves", "minecraft:spruce_leaves",
-                    "minecraft:acacia_leaves", "minecraft:dark_oak_leaves", "minecraft:azalea_leaves_flowered",
-                    "minecraft:cherry_leaves", "minecraft:pale_oak_leaves"]
-            });
-            for (const location of getLeaves.getBlockLocationIterator()) {
-                const blocks = entity.dimension.getBlock(location);
-                blocks.setType("atomic:radi_leave");
-                yield;
-            }
-            yield;
-            entity.dimension.runCommand("tickingarea remove i1");
-            entity.dimension.runCommand("tickingarea remove i2");
-            entity.dimension.runCommand("tickngarea remove i3");
-            entity.dimension.runCommand("kill @e[type=atomic:gen_entity]");
+            //Gets rid of ticking area and starts the real nuclear explosion code
+            world.tickingAreaManager.removeTickingArea("nukearea");
+            //Nuke Code!!!
+            nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity);
         }
-        system.runJob(exlposion());
+        system.runJob(blockGen());
+    });
+}
+function initializeMissile(missile, targetPos) {
+    const launch = missile.location;
+    const dx = targetPos.x - launch.x;
+    const dz = targetPos.z - launch.z;
+    const range = Math.sqrt(dx * dx + dz * dz);
+    const apexHeight = Math.max(200, Math.min(200, range * 0.6));
+    missile.setDynamicProperty("waypoint", 0);
+    const yaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
+    missile.setDynamicProperty("yaw", yaw);
+    missile.setDynamicProperty("pitch", -80);
+    const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
+    const heights = [0.25, 0.75, 1.0, 0.75, 0.55, 0.30];
+    for (let i = 0; i < 6; i++) {
+        missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
+        missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
+        missile.setDynamicProperty(`wp${i}z`, launch.z + dz * fractions[i]);
+    }
+}
+function moveTowardAngle(current, target, maxTurn) {
+    let diff = target - current;
+    while (diff > 180)
+        diff -= 360;
+    while (diff < -180)
+        diff += 360;
+    if (Math.abs(diff) <= maxTurn) {
+        return target;
+    }
+    return current + Math.sign(diff) * maxTurn;
+}
+function getGuidePoint(missile, target) {
+    const waypoint = missile.getDynamicProperty("waypoint");
+    if (waypoint <= 5) {
+        return {
+            x: missile.getDynamicProperty(`wp${waypoint}x`),
+            y: missile.getDynamicProperty(`wp${waypoint}y`),
+            z: missile.getDynamicProperty(`wp${waypoint}z`),
+        };
+    }
+    return target.location;
+}
+//THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
+function updateMissile(missile, target, warhead) {
+    if (!missile.isValid || !target.isValid) {
+        return warhead;
+    }
+    let waypoint = missile.getDynamicProperty("waypoint");
+    if (waypoint >= 6 && !warhead?.isValid) {
+        return null;
+    }
+    const active = waypoint >= 6 ? warhead : missile;
+    const guidePoint = waypoint >= 6 ? target.location : getGuidePoint(missile, target);
+    const pos = active.location;
+    const targetDx = target.location.x - pos.x;
+    const targetDy = target.location.y - pos.y;
+    const targetDz = target.location.z - pos.z;
+    const targetDistance = Math.sqrt(targetDx * targetDx + targetDy * targetDy + targetDz * targetDz);
+    const dx = guidePoint.x - pos.x;
+    const dy = guidePoint.y - pos.y;
+    const dz = guidePoint.z - pos.z;
+    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const back = missile.getViewDirection();
+    //Me when blast particles
+    if (waypoint <= 4) {
+        missile.dimension.spawnParticle("atomic:icbm_trail_partcc", {
+            x: missile.location.x + back.x * 1.5,
+            y: missile.location.y,
+            z: missile.location.z + back.z * 1.5,
+        });
+    }
+    // Advance waypoint
+    if (waypoint <= 4 && dist < 15) {
+        missile.setDynamicProperty("waypoint", waypoint + 1);
+        return warhead;
+    }
+    // Warhead stage
+    if (waypoint === 5 && dist < 15) {
+        missile.setDynamicProperty("waypoint", 6);
+        missile.setProperty("atomic:warphase", true);
+        const newWarhead = missile.dimension.spawnEntity("atomic:warhead", missile.location);
+        newWarhead.dimension.spawnParticle("atomic:icbmunleash", {
+            x: newWarhead.location.x,
+            y: newWarhead.location.y,
+            z: newWarhead.location.z - 1
+        });
+        const yaw = missile.getDynamicProperty("yaw");
+        const pitch = missile.getDynamicProperty("pitch");
+        newWarhead.setDynamicProperty("yaw", yaw);
+        newWarhead.setDynamicProperty("pitch", pitch);
+        newWarhead.setProperty("atomic:yaw", yaw);
+        newWarhead.setProperty("atomic:pitch", pitch);
+        system.runTimeout(() => {
+            missile.remove();
+        }, 40);
+        return newWarhead;
+    }
+    //Just marking it so it's easier to find
+    const horizontal = Math.sqrt(dx * dx + dz * dz);
+    const desiredYaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
+    const desiredPitch = -((Math.atan2(dy, horizontal) * 180) / Math.PI);
+    let yaw = active.getDynamicProperty("yaw");
+    let pitch = active.getDynamicProperty("pitch");
+    const yawRate = 8;
+    let pitchRate;
+    if (waypoint <= 1) {
+        pitchRate = 3;
+    }
+    else if (waypoint <= 5) {
+        pitchRate = 6;
+    }
+    else {
+        pitchRate = 20;
+    }
+    yaw = moveTowardAngle(yaw, desiredYaw, yawRate);
+    pitch = moveTowardAngle(pitch, desiredPitch, pitchRate);
+    active.setDynamicProperty("yaw", yaw);
+    active.setDynamicProperty("pitch", pitch);
+    active.setProperty("atomic:yaw", yaw);
+    active.setProperty("atomic:pitch", pitch);
+    const yawRad = (yaw * Math.PI) / 180;
+    const pitchRad = (pitch * Math.PI) / 180;
+    const vx = -Math.sin(yawRad) * Math.cos(pitchRad);
+    const vy = -Math.sin(pitchRad);
+    const vz = Math.cos(yawRad) * Math.cos(pitchRad);
+    let speed;
+    if (waypoint <= 1) {
+        speed = 0.4;
+    }
+    else if (waypoint <= 5) {
+        speed = 0.9;
+    }
+    else {
+        speed = 1.6;
+    }
+    const loc = active.location;
+    active.teleport({
+        x: loc.x + vx * speed,
+        y: loc.y + vy * speed,
+        z: loc.z + vz * speed,
+    }, {
+        dimension: active.dimension,
+        keepVelocity: false,
+    });
+    try {
+        active.setRotation({
+            x: pitch,
+            y: yaw,
+        });
+        const rot = active.getRotation();
+        active.nameTag = `Wanted:
+${Math.round(yaw)}
+${Math.round(pitch)}
+
+Actual:
+${Math.round(rot.y)}
+${Math.round(rot.x)}`;
+    }
+    catch (e) {
+        console.warn(`Missile error: ${e}`);
+    }
+    if (targetDistance < 20) {
+        active.triggerEvent("atomic:exposi");
+        target.remove();
+    }
+    return warhead;
+}
+function travelSystem(x, y, z, name, entity, player) {
+    const launchPos = entity.location;
+    const dx = x - launchPos.x;
+    const dy = y - launchPos.y;
+    const dz = z - launchPos.z;
+    const maxDistance = 3000;
+    const launchDistance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    if (launchDistance > maxDistance) {
+        new CustomForm(player, "Missile Fail")
+            .label(`Missile is out of range as it is ${Math.round(launchDistance)} blocks away, max distance is ${maxDistance} blocks`)
+            .closeButton()
+            .show();
+        return;
+    }
+    fail = false;
+    const minY = Math.max(0, y - 30);
+    const maxY = y + 30;
+    let warhead = null;
+    world.tickingAreaManager
+        .createTickingArea(name, {
+        from: {
+            x: x - 30,
+            y: minY,
+            z: z - 30,
+        },
+        to: {
+            x: x + 30,
+            y: maxY,
+            z: z + 30,
+        },
+        dimension: entity.dimension,
+    })
+        .then(() => {
+        const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+        initializeMissile(entity, target.location);
+        entity.setProperty("atomic:blastoff", true);
+        entity.triggerEvent("atomic:onn");
+        const missileLoop = system.runInterval(() => {
+            if (!entity.isValid || !target.isValid) {
+                system.clearRun(missileLoop);
+                return;
+            }
+            warhead = updateMissile(entity, target, warhead);
+        }, 1);
+    });
+}
+world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
+    const entity = ev.target;
+    const player = ev.player;
+    if (entity.typeId === "atomic:icbm") {
+        const xOb = new ObservableString("", { clientWritable: true });
+        const yOb = new ObservableString("", { clientWritable: true });
+        const zOb = new ObservableString("", { clientWritable: true });
+        const form = new CustomForm(player, "Missile Control Panel");
+        form
+            .textField("X", xOb)
+            .textField("Y", yOb)
+            .textField("Z", zOb)
+            .closeButton()
+            .divider()
+            .button("Launch", () => {
+            let x = Number(xOb.getData());
+            let y = Number(yOb.getData());
+            let z = Number(zOb.getData());
+            const nameId = `hate${x}${y}${z}`;
+            travelSystem(x, y, z, nameId, entity, player);
+            form.close();
+        })
+            .show();
     }
 });

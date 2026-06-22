@@ -27,5 +27,22 @@ world.afterEvents.entityDie.subscribe((ev) => {
     const entity = ev.deadEntity;
     if (entity.typeId === "atomic:plane_bomb") {
         entity.dimension.createExplosion(entity.location, 6, { causesFire: true });
+        entity.dimension.spawnParticle("atomic:explosioncloud", entity.location);
+    }
+});
+world.afterEvents.entitySpawn.subscribe((event) => {
+    const entity = event.entity;
+    if (entity.typeId === "atomic:plane_bomb") {
+        system.run(() => {
+            const sy = system.runInterval(() => {
+                if (!entity.isValid)
+                    system.clearRun(sy);
+                if (entity.isOnGround) {
+                    entity.dimension.createExplosion(entity.location, 6, { causesFire: true });
+                    entity.dimension.spawnParticle("atomic:explosioncloud", entity.location);
+                    system.clearRun(sy);
+                }
+            });
+        });
     }
 });

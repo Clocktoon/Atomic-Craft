@@ -2,6 +2,10 @@ import { system, world, BlockVolume, EquipmentSlot } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
+function makeRandomId() {
+    //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
+    return `${Date.now()}+${Math.random()}`;
+}
 class RedNuclear {
     constructor() {
         this.onRedstoneUpdate = this.onRedstoneUpdate.bind(this);
@@ -12,6 +16,8 @@ class RedNuclear {
         const params = p.params;
         if (event.powerLevel >= 3) {
             if (params.atom == true) {
+                const randomMath = makeRandomId();
+                const random = `${randomMath}`;
                 const px = block.location.x;
                 const pz = block.location.z;
                 const py = block.y;
@@ -64,7 +70,10 @@ class RedNuclear {
                         });
                         // Crater code
                         const randomMath = Math.floor(Math.random() * 20);
-                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 40, `crater${JSON.stringify(randomMath)}`);
+                        system.runJob((function* () {
+                            yield* createCrater(block.location, block.dimension.id, "minecraft:air", 50, 30);
+                            world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+                        })());
                         // Sound code by MapleStar // TC (discord)
                         function playExplosionAudio(dimension, center, magnitude) {
                             if (!center)
@@ -135,6 +144,8 @@ class RedNuclear {
                 });
             }
             if (params.gadget == true) {
+                const randomMath = makeRandomId();
+                const random = `${randomMath}`;
                 const px = block.location.x;
                 const pz = block.location.z;
                 const py = block.y;
@@ -188,7 +199,10 @@ class RedNuclear {
                             });
                             // Crater code
                             const randomMath = Math.floor(Math.random() * 20);
-                            createCrater(block.location, block.dimension.id, "minecraft:air", 30, 20, `crater${JSON.stringify(randomMath)}`);
+                            system.runJob((function* () {
+                                yield* createCrater(block.location, block.dimension.id, "minecraft:air", 30, 30);
+                                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+                            })());
                             block.dimension.createExplosion({
                                 x: block.location.x,
                                 y: block.location.y - 21,

@@ -3,12 +3,14 @@ import {
   BlockType,
   BlockTypes,
   BlockVolume,
+  Entity,
   system,
   TickingArea,
   Vector3,
   world,
 } from "@minecraft/server";
 import { BlastResistance } from "../generated/blastResistance";
+import { MinecraftBlockTypes } from "@minecraft/vanilla-data";
 
 
 system.run(() => {
@@ -20,7 +22,7 @@ system.run(() => {
   
 export interface ChunkFillRequest {
   area: TickingArea;
-  block: Block;
+  block: Block | Entity;
   name: string;
   minY?: number;
   maxY?: number;
@@ -54,7 +56,7 @@ class ChunkFiller {
    */
   request(
     area: TickingArea,
-    block: Block,
+    block: Block | Entity,
     name: string,
     phase: number,
     minY?: number,
@@ -273,7 +275,7 @@ class ChunkFiller {
           const woodBlock = request.area.dimension.getBlock(loc);
           if(woodBlock) {
             if(world.getDynamicProperty("powerful") === true) {
-              if(woodBlock.typeId === "minecraft:planks") {
+              if(woodBlock.typeId.includes("planks")) {
               woodBlock.setType("atomic:radiation_plank")
               yield
             }
@@ -309,22 +311,6 @@ class ChunkFiller {
             "minecraft:moss_block"
           ]
         });
-
-        const blockLogs = request.area.dimension.getBlocks(
-          volume,
-          {
-            includeTypes: [
-              "minecraft:mangrove_log",
-              "minecraft:cherry_log",
-              "minecraft:pale_oak_log",
-              "minecraft:crimson_stem",
-              "minecraft:warped_stem"
-            ],
-            includeTags: ["log"],
-          },
-          true,
-        );
-
         const blockLeaves = request.area.dimension.getBlocks(
           volume,
           {
@@ -390,24 +376,6 @@ class ChunkFiller {
             block.setType("minecraft:fire")
           }
          }
-        }
-
-        for(const loc of blockLogs.getBlockLocationIterator()) {
-          const log = request.area.dimension.getBlock(loc);
-          any = true;
-          if(log) {
-            const randomMathe = Math.floor(Math.random() * 60)
-            if(randomMathe >= 57) {
-              if(world.getDynamicProperty("powerful") === true) {
-              log.setType("minecraft:fire")
-              yield
-            }
-          }
-          else
-          {
-            log.setType("minecraft:fire")
-          }
-          }
         }
 
         for(const loc of getGrass.getBlockLocationIterator()) {

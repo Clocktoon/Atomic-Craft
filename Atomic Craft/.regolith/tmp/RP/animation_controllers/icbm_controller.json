@@ -10,7 +10,7 @@
                     ],
                     "transitions": [
                         {
-                            "flying": "!query.is_on_ground && query.has_target"
+                            "flying": "query.property('atomic:blastoff')"
                         }
                     ]
                 },
@@ -20,7 +20,20 @@
                     ],
                     "transitions": [
                         {
-                            "idle": "query.is_on_ground"
+                            "idle": "!query.property('atomic:blastoff')"
+                        },
+                        {
+                            "un": "query.property('atomic:warphase')"
+                        }
+                    ]
+                },
+                "un": {
+                    "animations": [
+                        "unleash"
+                    ],
+                    "transitions": [
+                        {
+                            "flying": "query.all_animations_finished == 1.0;"
                         }
                     ]
                 }

@@ -14,12 +14,19 @@ import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
 
+function makeRandomId() {
+  //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
+  return `${Date.now()}+${Math.random()}`;
+}
 class OnClickGadget implements BlockCustomComponent {
   constructor() {
     this.onPlayerInteract = this.onPlayerInteract.bind(this);
   }
 
   onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+    const randomMath = makeRandomId();
+    const random = `${randomMath}`;
+    
     const block = event.block;
     const playerEntity = event.player;
     const playerMain = playerEntity;
@@ -125,14 +132,16 @@ class OnClickGadget implements BlockCustomComponent {
             });
             // Crater code
             const randomMath = Math.floor(Math.random() * 20)
-            createCrater(
-              block.location,
-              block.dimension.id,
-              "minecraft:air",
-              30,
-              20,
-              `crater${JSON.stringify(randomMath)}`
-            );
+            system.runJob((function* () {
+                yield* createCrater(
+                  block.location,
+                  block.dimension.id,
+                  "minecraft:air",
+                  30,
+                  30,
+                );
+                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+              })());
              block.dimension.createExplosion({
                 x: block.location.x, 
                 y: block.location.y - 21, 
@@ -230,8 +239,8 @@ class OnClickGadget implements BlockCustomComponent {
               block.dimension.id,
               block.location,
               block,
-              80,
-              30,
+              112,
+              40,
               playerEntity
             //   40,
             //   40

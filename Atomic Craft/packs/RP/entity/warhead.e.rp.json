@@ -1,0 +1,38 @@
+{
+    "format_version": "1.26.20",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:warhead",
+            "geometry": {
+                "default": "geometry.warhead"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "default": "textures/entity/warhead_texture"
+            },
+            "render_controllers": [
+                "controller.render.warhead"
+            ],
+            "animations": {
+                "fly": "animation.warhead.flying",
+                "con": "controller.animation.warhead"
+            },
+            "scripts": {
+                "initialize": ["variable.current_yaw=0;", "variable.current_pitch=0;"],
+
+        "pre_animation": [
+          "v.current_yaw = v.current_yaw ? v.current_yaw : q.property('atomic:yaw');",
+          "v.current_pitch = v.current_pitch ? v.current_pitch : q.property('atomic:pitch');",
+
+          "v.current_yaw = math.lerprotate(v.current_yaw, q.property('atomic:yaw'), q.delta_time * 10);",
+          "v.current_pitch = math.lerprotate(v.current_pitch, q.property('atomic:pitch'), q.delta_time * 10);"
+        ],
+                "animate": [
+                    "con"
+                ]
+            }
+        }
+    }
+}

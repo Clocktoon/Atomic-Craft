@@ -1,0 +1,13 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.warhead.flying": {
+			"loop": true,
+			"bones": {
+				"bone": {
+					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+				}
+			}
+		}
+	}
+}

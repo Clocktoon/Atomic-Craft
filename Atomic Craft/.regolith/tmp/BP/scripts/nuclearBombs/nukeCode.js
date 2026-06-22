@@ -3,11 +3,17 @@ import { createCrater } from "../nuclearTransforms/crater.js";
 import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
+function makeRandomId() {
+    //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
+    return `${Date.now()}+${Math.random()}`;
+}
 class OnClick {
     constructor() {
         this.onPlayerInteract = this.onPlayerInteract.bind(this);
     }
     onPlayerInteract(event) {
+        const randomMath = makeRandomId();
+        const random = `${randomMath}`;
         const block = event.block;
         const playerEntity = event.player;
         const playerMain = playerEntity;
@@ -33,7 +39,7 @@ class OnClick {
             const py = block.y;
             //Ticking area for the stuff close to the explosion
             world.tickingAreaManager
-                .createTickingArea("nukearea", {
+                .createTickingArea(`nukearea${random}`, {
                 from: { x: px - 60, y: 0, z: pz - 60 },
                 to: { x: px + 60, y: 0, z: pz + 60 },
                 dimension: block.dimension,
@@ -93,7 +99,10 @@ class OnClick {
                         });
                         // Crater code
                         const randomMath = Math.floor(Math.random() * 20);
-                        createCrater(block.location, block.dimension.id, "minecraft:air", 50, 30, `crater${JSON.stringify(randomMath)}`);
+                        system.runJob((function* () {
+                            yield* createCrater(block.location, block.dimension.id, "minecraft:air", 50, 30);
+                            world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+                        })());
                         // Sound code by MapleStar // TC (discord)
                         function playExplosionAudio(dimension, center, magnitude) {
                             if (!center)

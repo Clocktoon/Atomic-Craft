@@ -5,12 +5,12 @@
 			"identifier": "atomic:default_smoke",
 			"basic_render_parameters": {
 				"material": "particles_blend",
-				"texture": "textures/particle/somkeagain"
+				"texture": "textures/particle/exparticle"
 			}
 		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
-				"num_particles": 130
+				"num_particles": 200
 			},
 			"minecraft:emitter_lifetime_once": {
 				"active_time": 1
@@ -19,7 +19,7 @@
 			"minecraft:particle_lifetime_expression": {
 				"max_lifetime": "math.random(3, 20)"
 			},
-			"minecraft:particle_initial_speed": 3,
+			"minecraft:particle_initial_speed": 2,
 			"minecraft:particle_motion_dynamic": {
 				"linear_drag_coefficient": "variable.emitter_lifetime"
 			},
@@ -37,8 +37,8 @@
 				"color": {
 					"interpolant": "v.particle_age / v.particle_lifetime",
 					"gradient": {
-						"0.0": "#80EBB5A7",
-						"0.96": "#3BFFFFFF",
+						"0.0": "#802F2F2F",
+						"0.96": "#3B645F5F",
 						"2.0": "#00A5A2A2"
 					}
 				}

@@ -1,0 +1,45 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.icbm.idle": {
+			"loop": true,
+			"bones": {
+				"bone": {
+					"rotation": [-90, 0, 0]
+				}
+			}
+		},
+		"animation.icbm.fly": {
+			"animation_length": 0.5833,
+			"bones": {
+				"bone": {
+					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+				}
+			}
+		},
+		"animation.icbm.unleash": {
+			"animation_length": 2.0417,
+			"bones": {
+				"bone": {
+					"rotation": ["v.current_pitch", "v.current_yaw", 0]
+				},
+				"top": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.0833": [-30, 0, 0]
+					},
+					"scale": {
+						"0.0": [1, 1, 1],
+						"0.0833": [0, 0, 0]
+					}
+				}
+			},
+			"particle_effects": {
+				"0.0": {
+					"effect": "icbmunleash",
+					"locator": "locator2"
+				}
+			}
+		}
+	}
+}

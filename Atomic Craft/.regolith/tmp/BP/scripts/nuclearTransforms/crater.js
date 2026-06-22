@@ -1,34 +1,28 @@
-import { world, system } from "@minecraft/server";
-export function* createCrater(location, dimensionId, blockID, radius, maxDepth, nameid) {
-    function* crater1(location, dimensionId, blockID, radius, maxDepth) {
-        const dim = world.getDimension(dimensionId);
-        const cx = Math.floor(location.x);
-        const cy = Math.floor(location.y + 10);
-        const cz = Math.floor(location.z);
-        const r = Math.max(1, Math.ceil(radius));
-        const r2 = r * r;
-        for (let dx = -r; dx <= r; dx++) {
-            for (let dz = -r; dz <= r; dz++) {
-                const dist2 = dx * dx + dz * dz;
-                if (dist2 > r2)
-                    continue;
-                const d = Math.sqrt(dist2);
-                const t = d / radius;
-                const depth = Math.floor(maxDepth * (1 - t * t));
-                if (depth <= 0)
-                    continue;
-                const x = cx + dx;
-                const z = cz + dz;
-                for (let dy = 0; dy <= depth; dy++) {
-                    const y = cy - dy;
-                    dim.setBlockType({ x: x, y: y, z: z }, blockID);
-                    yield;
-                }
+import { world } from "@minecraft/server";
+export function* createCrater(location, dimensionId, block, radius, maxDepth) {
+    const dim = world.getDimension(dimensionId);
+    const cx = Math.floor(location.x);
+    const cy = Math.floor(location.y + 10);
+    const cz = Math.floor(location.z);
+    const r = Math.max(1, Math.ceil(radius));
+    const r2 = r * r;
+    for (let dx = -r; dx <= r; dx++) {
+        for (let dz = -r; dz <= r; dz++) {
+            const dist2 = dx * dx + dz * dz;
+            if (dist2 > r2)
+                continue;
+            const d = Math.sqrt(dist2);
+            const t = d / radius;
+            const depth = Math.floor(maxDepth * (1 - t * t));
+            if (depth <= 0)
+                continue;
+            const x = cx + dx;
+            const z = cz + dz;
+            for (let dy = 0; dy <= depth; dy++) {
+                const y = cy - dy;
+                dim.setBlockType({ x: x, y: y, z: z }, block);
+                yield;
             }
         }
     }
-    system.runJob((function* () {
-        yield* crater1(location, dimensionId, blockID, radius, maxDepth);
-        world.tickingAreaManager.removeTickingArea(`nukearea${nameid}`);
-    })());
 }

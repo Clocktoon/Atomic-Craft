@@ -43,6 +43,7 @@
 	"textures/entity/siren_texture",
 	"textures/entity/tactical_ballistic_texture",
 	"textures/entity/vita_tex",
+	"textures/entity/warhead_texture",
 	"textures/items/blass_item",
 	"textures/items/blue_chip",
 	"textures/items/bowlofrot",
@@ -79,6 +80,8 @@
 	"textures/particle/blackash",
 	"textures/particle/blasttex",
 	"textures/particle/darkerash",
+	"textures/particle/debris",
+	"textures/particle/exparticle",
 	"textures/particle/extex",
 	"textures/particle/missilepart",
 	"textures/particle/mortarsmokey",
@@ -86,5 +89,6 @@
 	"textures/particle/smokeeey",
 	"textures/particle/smoking",
 	"textures/particle/somkeagain",
-	"textures/particle/somkelight"
+	"textures/particle/somkelight",
+	"textures/particle/whiteplane"
 ]

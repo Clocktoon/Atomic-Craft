@@ -15,6 +15,7 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
 });
 import("./nuclearBombs/nukeCode");
 import("./scriptUI/settingsItem");
+import("./modules/explosionEffects");
 import("./onStep.js");
 import("./spawnOrbs.js");
 import("./missileSummon.js");

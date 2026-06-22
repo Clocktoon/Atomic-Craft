@@ -5,7 +5,15 @@
 			"identifier": "atomic:explosion_missile",
 			"basic_render_parameters": {
 				"material": "particles_add",
-				"texture": "textures/particle/extex"
+				"texture": "textures/particle/exparticle"
+			}
+		},
+		"curves": {
+			"variable.uppy": {
+				"type": "linear",
+				"input": "v.particle_age",
+				"horizontal_range": "v.particle_lifetime",
+				"nodes": [0.82, 0.2, 0]
 			}
 		},
 		"events": {
@@ -18,50 +26,38 @@
 		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
-				"num_particles": 60
+				"num_particles": 100
 			},
 			"minecraft:emitter_lifetime_once": {
 				"active_time": 1
 			},
-			"minecraft:emitter_lifetime_events": {
-				"creation_event": "event"
+			"minecraft:emitter_shape_box": {
+				"half_dimensions": [1, 0, 1],
+				"direction": ["math.random(-0.3,0.8)", "math.random(3,5)", "math.random(-0.3,0.8)"]
 			},
-			"minecraft:emitter_shape_point": {},
 			"minecraft:particle_lifetime_expression": {
-				"max_lifetime": "math.random(2,8)"
+				"max_lifetime": "math.random(8,16)"
 			},
-			"minecraft:particle_initial_speed": "math.random(10,5)",
+			"minecraft:particle_initial_speed": "math.random(4,7)-variable.particle_age",
 			"minecraft:particle_motion_dynamic": {
-				"linear_acceleration": [
-					"math.random(3,7)",
-					"math.random(3,7)",
-					"math.random(3,7)"
-				]
+				"linear_acceleration": ["math.random(-1,1)", 1, "math.random(-1,1)"],
+				"linear_drag_coefficient": 0.5
 			},
 			"minecraft:particle_appearance_billboard": {
-				"size": [
-					0.2,
-					0.2
-				],
+				"size": [0.8, 0.8],
 				"facing_camera_mode": "rotate_xyz",
 				"uv": {
 					"texture_width": 16,
 					"texture_height": 16,
-					"uv": [
-						4,
-						2
-					],
-					"uv_size": [
-						8,
-						8
-					]
+					"uv": [2, 2],
+					"uv_size": [12, 12]
 				}
 			},
 			"minecraft:particle_appearance_tinting": {
 				"color": {
 					"interpolant": "v.particle_age / v.particle_lifetime",
 					"gradient": {
-						"0.0": "#ffffffff",
+						"0.0": "#FF4C4C4C",
 						"1.0": "#FFF45600"
 					}
 				}

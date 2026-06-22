@@ -7,6 +7,7 @@ import {
   Vector3,
   Block,
   Player,
+  Entity,
 } from "@minecraft/server";
 import { loadChunk } from "../chunkLoaders/chunky";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
@@ -65,11 +66,11 @@ function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
  * Can be used for most if not all nuclear explosions
  * @param {string} dimensionid The dimension.id to use
  * @param {import("@minecraft/server").Vector3} location The location to use
- * @param {Block} blocky The block to use (useless)
+ * @param {Block | Entity} blocky The block to use (useless)
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block, size: number, change: number, player?: Player, miny?: number, maxy?: number) {
+export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block | Entity, size: number, change: number, player?: Player, miny?: number, maxy?: number) {
   const dimension = world.getDimension(dimensionid);
   const startx = location.x - size;
   const endx = location.x + size;

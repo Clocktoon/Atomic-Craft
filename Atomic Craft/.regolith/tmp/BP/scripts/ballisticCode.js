@@ -1,17 +1,19 @@
 import { ItemStack, Player, system, world, } from "@minecraft/server";
-import { CustomForm, ObservableString, } from "@minecraft/server-ui";
+import { CustomForm, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
+const distanceUiNumber = new ObservableNumber(0);
+let fail = false;
 function initializeMissile(missile, targetPos) {
     const launch = missile.location;
     const dx = targetPos.x - launch.x;
     const dz = targetPos.z - launch.z;
     const range = Math.sqrt(dx * dx + dz * dz);
-    const apexHeight = Math.max(150, Math.min(450, range * 0.6));
+    const apexHeight = Math.max(150, Math.min(170, range * 0.6));
     missile.setDynamicProperty("waypoint", 0);
     const yaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
     missile.setDynamicProperty("yaw", yaw);
     missile.setDynamicProperty("pitch", -80);
-    const fractions = [0.15, 0.35, 0.5, 0.65, 0.85];
-    const heights = [0.25, 0.75, 1.00, 0.75, 0.30];
+    const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
+    const heights = [0.25, 0.75, 1.0, 0.75, 0.55, 0.30];
     for (let i = 0; i < 5; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -45,13 +47,24 @@ function updateMissile(missile, target) {
     if (!missile.isValid || !target.isValid) {
         return;
     }
+    const targetDx = target.location.x - missile.location.x;
+    const targetDy = target.location.y - missile.location.y;
+    const targetDz = target.location.z - missile.location.z;
+    const targetDistance = Math.sqrt(targetDx * targetDx + targetDy * targetDy + targetDz * targetDz);
     const pos = missile.location;
     const guidePoint = getGuidePoint(missile, target);
     const dx = guidePoint.x - pos.x;
     const dy = guidePoint.y - pos.y;
     const dz = guidePoint.z - pos.z;
     const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const back = missile.getViewDirection();
     let waypoint = missile.getDynamicProperty("waypoint");
+    //Me when blast particles
+    missile.dimension.spawnParticle("atomic:icbm_trail_partcc", {
+        x: pos.x + back.x,
+        y: pos.y - 1 + back.y,
+        z: pos.z + back.z
+    });
     // Advance waypoint
     if (waypoint <= 4 && dist < 15) {
         missile.setDynamicProperty("waypoint", waypoint + 1);
@@ -89,13 +102,13 @@ function updateMissile(missile, target) {
     const vz = Math.cos(yawRad) * Math.cos(pitchRad);
     let speed;
     if (waypoint <= 1) {
-        speed = 0.3;
+        speed = 0.4;
     }
     else if (waypoint <= 4) {
-        speed = 0.8;
+        speed = 0.9;
     }
     else {
-        speed = 1.2;
+        speed = 1.6;
     }
     //Custom movement
     const loc = missile.location;
@@ -125,16 +138,26 @@ ${Math.round(rot.x)}`;
     catch (e) {
         console.warn(`Missile error: ${e}`);
     }
-    const targetDx = target.location.x - missile.location.x;
-    const targetDy = target.location.y - missile.location.y;
-    const targetDz = target.location.z - missile.location.z;
-    const targetDistance = Math.sqrt(targetDx * targetDx + targetDy * targetDy + targetDz * targetDz);
     if (targetDistance < 5) {
         missile.triggerEvent("atomic:exposi");
+        target.dimension.spawnParticle("atomic:explosioncloud", { x: target.location.x, y: target.location.y - 6, z: target.location.z });
         target.remove();
     }
 }
-function travelSystem(x, y, z, name, entity) {
+function travelSystem(x, y, z, name, entity, player) {
+    const launchPos = entity.location;
+    const dx = x - launchPos.x;
+    const dy = y - launchPos.y;
+    const dz = z - launchPos.z;
+    const maxDistance = 3000;
+    const launchDistance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    if (launchDistance > maxDistance) {
+        new CustomForm(player, "Missile Fail")
+            .label(`Missile is out of range as it is ${Math.round(launchDistance)} blocks away, max distance is ${maxDistance} blocks`)
+            .closeButton()
+            .show();
+        return;
+    }
     const minY = Math.max(0, y - 30);
     const maxY = y + 30;
     world.tickingAreaManager
@@ -154,6 +177,7 @@ function travelSystem(x, y, z, name, entity) {
         .then(() => {
         const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
         initializeMissile(entity, target.location);
+        entity.setProperty("atomic:blastoff", true);
         entity.triggerEvent("atomic:onn");
         const missileLoop = system.runInterval(() => {
             if (!entity.isValid || !target.isValid) {
@@ -183,38 +207,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             let y = Number(yOb.getData());
             let z = Number(zOb.getData());
             const nameId = `hate${x}${y}${z}`;
-            travelSystem(x, y, z, nameId, entity);
+            travelSystem(x, y, z, nameId, entity, player);
             form.close();
         })
             .show();
-        // let form = new ModalFormData();
-        // form.title("Put in coordinates");
-        // form.textField("X", "Put x cord");
-        // form.textField("Z", "Put z cord").submitButton("Launch");
-        // form
-        //   .show(player)
-        //   .then((r) => {
-        //     if (r.canceled) return;
-        //     let [xO, zO] = r.formValues;
-        //     let x = Number(xO);
-        //     let z = Number(zO);
-        //     const y = player.dimension.getTopmostBlock({ x: x, z: z }, 0).location
-        //       .y;
-        //     /* entity.dimension.runCommand(
-        //     `tickingarea add ${x - 30} 0 ${z - 30} ${x + 30} 0 ${z + 30} spawnarea`,
-        //   ); */
-        //       world.tickingAreaManager.createTickingArea("spawnarea", {
-        //         from: { x: x - 30, y: 0, z: z - 30 },
-        //         to: { x: x + 30, y: 0, z: z + 30 },
-        //         dimension: entity.dimension,
-        //       }).then(() => {
-        //       entity.dimension.spawnEntity("atomic:hate", { x: x, y: y, z: z });
-        //       entity.runCommand("say spawned hate at " + x + " " + y + " " + z);
-        //       world.tickingAreaManager.removeTickingArea("spawnarea");
-        //   },)})
-        //   .catch((e) => {
-        //     console.error(e, e.stack);
-        //   });
     }
 });
 world.afterEvents.entityHurt.subscribe((ev) => {
@@ -227,6 +223,7 @@ world.afterEvents.entityHurt.subscribe((ev) => {
             const invComp = damager.getComponent("minecraft:inventory");
             if (invComp && invComp.container)
                 invComp.container.addItem(new ItemStack("atomic:blass", 1));
+            entity.remove();
         }
     }
 });

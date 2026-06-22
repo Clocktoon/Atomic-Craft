@@ -17,6 +17,21 @@
           "default": 0.0,
           "range": [-90.0, 90.0],
           "client_sync": true
+        },
+        "atomic:blastoff": {
+          "type": "bool",
+          "default": false,
+          "client_sync": true
+        },
+        "atomic:exploded": {
+          "type": "bool",
+          "client_sync": true,
+          "default": false
+        },
+        "atomic:pay": {
+          "type": "bool",
+          "default": false,
+          "client_sync": true
         }
       }
     },
@@ -97,6 +112,9 @@
       "atomic:exposi": {
         "add": {
           "component_groups": ["atomic:explode"]
+        },
+        "set_property": {
+          "atomic:exploded": true
         }
       },
       "atomic:off": {

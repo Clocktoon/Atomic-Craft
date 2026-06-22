@@ -22,6 +22,12 @@ type PickBomb = {
   hbomb?: boolean
 }
 
+
+function makeRandomId() {
+  //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
+  return `${Date.now()}+${Math.random()}`;
+}
+
 class RedNuclear implements BlockCustomComponent {
   constructor() {
     this.onRedstoneUpdate = this.onRedstoneUpdate.bind(this)
@@ -31,11 +37,14 @@ class RedNuclear implements BlockCustomComponent {
     event: BlockComponentRedstoneUpdateEvent,
     p: CustomComponentParameters,
   ): void {
+
     const block = event.block;
     const dimension = event.dimension;
     const params = p.params as PickBomb;
     if(event.powerLevel >= 3) {
     if (params.atom == true) {
+      const randomMath = makeRandomId();
+    const random = `${randomMath}`;
       const px = block.location.x;
       const pz = block.location.z;
       const py = block.y;
@@ -101,14 +110,16 @@ class RedNuclear implements BlockCustomComponent {
             });
             // Crater code
             const randomMath = Math.floor(Math.random() * 20)
-            createCrater(
-              block.location,
-              block.dimension.id,
-              "minecraft:air",
-              50,
-              40,
-              `crater${JSON.stringify(randomMath)}`
-            );
+            system.runJob((function* () {
+                yield* createCrater(
+                  block.location,
+                  block.dimension.id,
+                  "minecraft:air",
+                  50,
+                  30,
+                );
+                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+              })());
 
             // Sound code by MapleStar // TC (discord)
             function playExplosionAudio(
@@ -226,6 +237,8 @@ class RedNuclear implements BlockCustomComponent {
       });
     }
     if(params.gadget == true) {
+      const randomMath = makeRandomId();
+    const random = `${randomMath}`;
       
           const px = block.location.x;
           const pz = block.location.z;
@@ -294,14 +307,16 @@ class RedNuclear implements BlockCustomComponent {
                   });
                   // Crater code
                   const randomMath = Math.floor(Math.random() * 20)
-                  createCrater(
-                    block.location,
-                    block.dimension.id,
-                    "minecraft:air",
-                    30,
-                    20,
-                    `crater${JSON.stringify(randomMath)}`
-                  );
+                  system.runJob((function* () {
+                yield* createCrater(
+                  block.location,
+                  block.dimension.id,
+                  "minecraft:air",
+                  30,
+                  30,
+                );
+                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+              })());
                    block.dimension.createExplosion({
                       x: block.location.x, 
                       y: block.location.y - 21, 

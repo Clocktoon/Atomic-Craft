@@ -2,6 +2,8 @@
 	"format_version": "1.14.0",
 	"sound_definitions": {
 		"atomic.nukesound": {
+			"category": "ui",
+			"subtitle": "subtitles.ambient.nuclearbomb",
 			"sounds": [
 				"sounds/nukesound"
 			]
@@ -13,17 +15,17 @@
 			"category": "block"
 		},
 		"atomic.beep": {
+			"subtitle": "subtitles.block.beeping",
 			"sounds": [
 				"sounds/beepingsound"
 			],
 			"category": "block"
 		},
 		"atomic.explosions": {
-			"category": "block",
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
 			"sounds": [
-				{
-					"name": "sounds/explosions3"
-				},
+				"sounds/explosions3",
 				"sounds/explosions1",
 				"sounds/explosions2",
 				"sounds/explosions4",
@@ -31,12 +33,57 @@
 				"sounds/explosions6"
 			]
 		},
+		"atomic.explosionone": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions1"
+			]
+		},
+		"atomic.explosiontwo": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions2"
+			]
+		},
+		"atomic.explosionthree": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions3"
+			]
+		},
+		"atomic.explosionfour": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions4"
+			]
+		},
+		"atomic.explosionfive": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions5"
+			]
+		},
+		"atomic.explosionsix": {
+			"subtitle": "subtitles.ambient.explosionatomic",
+			"category": "ui",
+			"sounds": [
+				"sounds/explosions6"
+			]
+		},
 		"atomic.plane": {
+			"subtitle": "subtitles.plane.fly",
+			"category": "ambient",
 			"sounds": [
 				"sounds/plane_sound"
 			]
 		},
 		"atomic.plane.missile": {
+			"subtitle": "subtitles.plane.missile",
 			"sounds": [
 				"sounds/missile_plane_sound"
 			]

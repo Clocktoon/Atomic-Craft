@@ -1,4 +1,9 @@
 import { system, world } from "@minecraft/server";
+/**
+ * Gets the center of the explosion
+ * @param blocks
+ * @returns
+ */
 function getApproxExplosionCenter(blocks) {
     if (blocks.length === 0)
         return null;
@@ -15,7 +20,16 @@ function getApproxExplosionCenter(blocks) {
         z: sum.z / count,
     };
 }
-function getExplosionSound() {
+/**
+ * Custom sound function, inspired by a little thing I saw in MapleStar's given code.
+ * Gets a random sound from an array
+ * @param sounds Sounds to parse through
+ * @param soundCount Number of sounds, must be plus one from the actual number (remember that if you're using an array that the start is 0)
+ */
+function getExplosionSound(sounds, soundCount) {
+    const random = Math.floor(Math.random() * soundCount);
+    const sound = sounds[random];
+    return sound;
 }
 // Sound code by MapleStar // TC (discord)
 function playExplosionAudio(dimension, center, magnitude) {
@@ -25,6 +39,10 @@ function playExplosionAudio(dimension, center, magnitude) {
     const explosionRadius = Math.min(Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)), 60);
     const maxHearingDistance = explosionRadius * 24;
     const shakeDistance = explosionRadius * 8;
+    const explosionSounds = ["atomic.explosionone", "atomic.explosiontwo",
+        "atomic.explosionthree", "atomic.explosionfour",
+        "atomic.explosionfive", "atomic.explosionsix"];
+    const explosionSound = getExplosionSound(explosionSounds, 6);
     players.forEach((player) => {
         const playerLocation = player.location;
         const dx = playerLocation.x - center.x;
@@ -33,7 +51,6 @@ function playExplosionAudio(dimension, center, magnitude) {
         const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (distance > maxHearingDistance)
             return;
-        player.sendMessage("test test 123");
         const maxEffectRadius = explosionRadius * 2;
         const distanceRatio = Math.min(1, distance / maxHearingDistance);
         const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));
@@ -42,7 +59,7 @@ function playExplosionAudio(dimension, center, magnitude) {
         const delayMs = delayTicks * 50;
         system.runTimeout(() => {
             try {
-                player.playSound("atomic.nukesound", {
+                player.playSound(explosionSound, {
                     volume: boomVolume,
                     pitch: boomPitch,
                 });
@@ -58,10 +75,24 @@ function playExplosionAudio(dimension, center, magnitude) {
     });
 }
 world.beforeEvents.explosion.subscribe((event) => {
-    const blocks = event.getImpactedBlocks();
-    const center = getApproxExplosionCenter(blocks);
-    const dim = event.dimension;
-    if (center) {
-        playExplosionAudio(dim, center, 160);
-    }
+    system.run(() => {
+        const blocks = event.getImpactedBlocks();
+        const center = getApproxExplosionCenter(blocks);
+        const dim = event.dimension;
+        if (center) {
+            if (event.source?.typeId === "atomic:enhanced_mob") {
+                dim.spawnParticle("atomic:explosioncloud", { x: center.x, y: center.y - 3, z: center.z });
+                playExplosionAudio(dim, center, 70);
+                for (const block of blocks) {
+                    const random = Math.floor(Math.random() * 10);
+                    if (random === 1 && block.typeId !== "minecraft:air") {
+                        block.setType("minecraft:magma");
+                    }
+                }
+                return;
+            }
+            playExplosionAudio(dim, center, 30);
+            dim.spawnParticle("atomic:explosioncustom2", center);
+        }
+    });
 });

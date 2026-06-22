@@ -17,10 +17,12 @@
         "icbm_trail_partcc": "atomic:icbm_trail_partcc"
       },
       "animations": {
-        "rotate": "animation.tatical_ballistic_missile.flying"
+        "rotate": "animation.tatical_ballistic_missile.flying",
+        "sit": "animation.tatical_ballistic_missile.sitting",
+        "cont": "controller.animation.ballistic"
       },
       "scripts": {
-        "animate": ["rotate"],
+        "animate": ["cont"],
 
         "initialize": [
           "variable.current_yaw=0;",
