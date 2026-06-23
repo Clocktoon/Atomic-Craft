@@ -8,6 +8,8 @@ import {
   Block,
   Player,
   Entity,
+  TickingArea,
+  TickingAreaOptions,
 } from "@minecraft/server";
 import { loadChunk } from "../chunkLoaders/chunky";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
@@ -78,6 +80,7 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
   const endz = location.z + size;
 
   let chunkCount = 0;
+  let tickingAreaQueue: TickingAreaOptions[] = []
 
   //loops go silly
   for (let x = startx; x <= endx; x += 16) {
@@ -94,14 +97,16 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
       const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
       currentPhase = distanceFromCenter > change ? 1 : 2;
       
-
+     let tickingArea: TickingArea | null = null
       const bounds = chunkBoundsFromBlock(x, z, 0, 255);
-      const tickingArea = await new ChunkTicker(dimension, nameId)
+      tickingArea = await new ChunkTicker(dimension, nameId)
       .load({ x: x + 8, y: 64, z: z + 8 }, true, {
       dimension: dimension,
       from: bounds.from,
       to: bounds.to,
-     });
+     }, 
+     tickingAreaQueue
+    );
 
       // waits until it's fully loaded, then fill
       if (tickingArea) {

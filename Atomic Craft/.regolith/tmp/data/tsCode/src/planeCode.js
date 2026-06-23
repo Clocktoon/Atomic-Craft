@@ -42,14 +42,17 @@ world.afterEvents.entitySpawn.subscribe( (event) => {
     system.run( () => {
 
       const sy = system.runInterval( () => {
-        if(!entity.isValid)
+        if(!entity.isValid) {
           system.clearRun(sy)
+          return;
+        }
+
         if(entity.isOnGround) {
           entity.dimension.createExplosion(entity.location, 6, { causesFire: true });
           entity.dimension.spawnParticle("atomic:explosioncloud", entity.location)
 
         system.clearRun(sy)
       }
-    })})
+    }, 1)})
   }
 })

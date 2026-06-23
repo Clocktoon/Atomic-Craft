@@ -1,16 +1,7 @@
-import { world, } from "@minecraft/server";
-/*
-okay so I want to make a class way of doing ticking areas, here is what needs to be done:
-1. I need some way of keeping track of when a chunk is done? I think
-2. for it to actually work
-
-*/
-/* Inspired by gameza_src's chunk loader system and Coolbep's, credit goes to them
-gameza's code: https://github.com/gamezaSRC/ChunkLoader
-link to gameza's github: https://github.com/gamezaSRC
-discord: gameza_src
-website that Coolbep's code is on: https://bedrock-resources.vercel.app/ (can't link the exact thing)
- */
+import { system, world, } from "@minecraft/server";
+function nameMaker(x, z, dimension) {
+    return `NK_${x},${z},${dimension.id}`;
+}
 /**
  * @class chunkTicker
  * @description Manages ticking areas for the bombs of glory addon
@@ -69,15 +60,14 @@ class ChunkTicker {
      * @returns {Promise<void>}
      * @throws Error if the ticking area manager is full
      */
-    async load(locationVec, nuclear = false, options) {
+    async load(locationVec, nuclear = false, options, queue) {
         if (!this.#tickingarea.hasCapacity(options)) {
-            this.#tickingarea.removeAllTickingAreas();
+            queue.push(options);
             throw new Error("Ticking area manager became full");
         }
         //TODO: MAKE THE LOCATION STUFF AND JUST ALL THE CODE WORK
         //Figure out how to have the location work, does it need to be moved to a different class? Look at chunkLoader.js for help please
         if (this.#tickingarea.hasTickingArea(this.#name)) {
-            this.#tickingarea.removeTickingArea(this.#name);
             world.sendMessage("ticking area " + this.#name + " is loaded");
         }
         try {
@@ -88,19 +78,28 @@ class ChunkTicker {
             world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`);
             throw err;
         }
-        if (nuclear === true) {
-            //WIP, will probably need changing, please look over
-            //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
-            const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
-            const tickingArea = this.#tickingarea.getTickingArea(this.#name);
-            if (!tickingArea) {
-                throw new Error(`TickingArea ${this.#name} not found after creation`);
-            }
-            else {
-                world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
-            }
-            return tickingArea;
+        system.runInterval(() => {
+            queue = queue.filter(async (are) => {
+                const tickingOptions = are;
+                if (world.tickingAreaManager.hasCapacity(tickingOptions)) {
+                    const namdeGen = nameMaker(tickingOptions.from.x, tickingOptions.to.z, tickingOptions.dimension);
+                    const nameUse = `${namdeGen}`;
+                    const ticking = await world.tickingAreaManager.createTickingArea(nameUse, tickingOptions);
+                    return ticking;
+                }
+            });
+        });
+        //WIP, will probably need changing, please look over
+        //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
+        const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
+        const tickingArea = this.#tickingarea.getTickingArea(this.#name);
+        if (!tickingArea) {
+            throw new Error(`TickingArea ${this.#name} not found after creation`);
         }
+        else {
+            world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
+        }
+        return tickingArea;
     }
     /**
      * Unloads the ticking area

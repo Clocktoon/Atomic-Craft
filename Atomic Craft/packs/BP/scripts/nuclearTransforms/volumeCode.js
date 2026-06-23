@@ -62,6 +62,7 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
     const startz = location.z - size;
     const endz = location.z + size;
     let chunkCount = 0;
+    let tickingAreaQueue = [];
     //loops go silly
     for (let x = startx; x <= endx; x += 16) {
         for (let z = startz; z <= endz; z += 16) {
@@ -74,13 +75,14 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
             const nameId = `NK_${x},${z},${dimension.id}`;
             const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
             currentPhase = distanceFromCenter > change ? 1 : 2;
+            let tickingArea = null;
             const bounds = chunkBoundsFromBlock(x, z, 0, 255);
-            const tickingArea = await new ChunkTicker(dimension, nameId)
+            tickingArea = await new ChunkTicker(dimension, nameId)
                 .load({ x: x + 8, y: 64, z: z + 8 }, true, {
                 dimension: dimension,
                 from: bounds.from,
                 to: bounds.to,
-            });
+            }, tickingAreaQueue);
             // waits until it's fully loaded, then fill
             if (tickingArea) {
                 while (!tickingArea.isFullyLoaded) {

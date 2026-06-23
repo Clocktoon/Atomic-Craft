@@ -29,6 +29,11 @@
           "type": "bool",
           "default": false,
           "client_sync": true
+        },
+        "atomic:nuke": {
+          "type": "bool",
+          "client_sync": true,
+          "default": false
         }
       }
     },
@@ -69,16 +74,22 @@
       "minecraft:health": {
         "value": 100
       },
-      "minecraft:interact": {
-        "interactions": [
+      "minecraft:collision_box": {
+        "height": 1,
+        "width": 1
+      },
+      "minecraft:entity_sensor": {
+        "subsensors": [
           {
-            "interact_text": "Open Missile GUI"
+            "event_filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "target"
+            },
+            "range": 15,
+            "event": "atomic:nuclearexplode"
           }
         ]
-      },
-      "minecraft:collision_box": {
-        "height": 6,
-        "width": 1
       },
       "minecraft:target_nearby_sensor": {
         "must_see": false,
@@ -120,6 +131,9 @@
         "add": {
           "component_groups": ["atomic:on"]
         }
+      },
+      "atomic:nuclearexplode": {
+        "set_property": {"atomic:nuke": true}
       }
     }
   }

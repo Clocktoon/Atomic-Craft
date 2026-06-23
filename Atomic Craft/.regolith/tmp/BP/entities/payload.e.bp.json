@@ -1,11 +1,15 @@
 {
-  "format_version": "1.26.10",
+  "format_version": "1.26.20",
   "minecraft:entity": {
     "description": {
-      "identifier": "atomic:ballistic_missile",
+      "identifier": "atomic:payload_entity",
       "is_spawnable": false,
       "is_summonable": true,
       "properties": {
+        "atomic:ex": {
+          "type": "bool",
+          "default": false
+        },
         "atomic:yaw": {
           "type": "float",
           "default": 0.0,
@@ -19,16 +23,6 @@
           "client_sync": true
         },
         "atomic:blastoff": {
-          "type": "bool",
-          "default": false,
-          "client_sync": true
-        },
-        "atomic:exploded": {
-          "type": "bool",
-          "client_sync": true,
-          "default": false
-        },
-        "atomic:pay": {
           "type": "bool",
           "default": false,
           "client_sync": true
@@ -57,7 +51,7 @@
           "damage": 0
         },
         "minecraft:follow_range": {
-          "value": 10000
+          "value": 3000
         },
         "minecraft:physics": {
           "has_collision": true,
@@ -67,7 +61,7 @@
     },
     "components": {
       "minecraft:type_family": {
-        "family": ["bmissile"]
+        "family": ["tmissile"]
       },
       "minecraft:health": {
         "value": 100
@@ -114,7 +108,7 @@
           "component_groups": ["atomic:explode"]
         },
         "set_property": {
-          "atomic:exploded": true
+          "atomic:ex": true
         }
       },
       "atomic:off": {

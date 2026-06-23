@@ -8,14 +8,8 @@ import {
   TickingArea,
 } from "@minecraft/server";
 
-/* 
-okay so I want to make a class way of doing ticking areas, here is what needs to be done:
-1. I need some way of keeping track of when a chunk is done? I think
-2. for it to actually work
 
-*/
-
-/* Inspired by gameza_src's chunk loader system and Coolbep's, credit goes to them
+/*Heavily inspired by gameza_src's chunk loader system and Coolbep's, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src
@@ -23,6 +17,15 @@ website that Coolbep's code is on: https://bedrock-resources.vercel.app/ (can't 
  */
 
 
+interface tickingAreaQueue {
+  tickingArea: TickingArea | null,
+  tickingOptions: TickingAreaOptions | null
+
+}
+
+function nameMaker(x: number, z: number, dimension: Dimension) {
+  return `NK_${x},${z},${dimension.id}`;
+}
 
 /**
  * @class chunkTicker
@@ -87,9 +90,12 @@ class ChunkTicker {
     locationVec: Vector3,
     nuclear = false,
     options: TickingAreaOptions,
-  ) {
+    queue: TickingAreaOptions[]
+  ): Promise<TickingArea> {
+
+    
     if (!this.#tickingarea.hasCapacity(options)) {
-      this.#tickingarea.removeAllTickingAreas()
+        queue.push(options)
       throw new Error("Ticking area manager became full");
     }
 
@@ -98,7 +104,6 @@ class ChunkTicker {
 
 
     if (this.#tickingarea.hasTickingArea(this.#name)) {
-      this.#tickingarea.removeTickingArea(this.#name);
       world.sendMessage("ticking area " + this.#name + " is loaded")
     }
     try {
@@ -108,7 +113,21 @@ class ChunkTicker {
       world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`)
       throw err
     }
-    if (nuclear === true) {
+
+    system.runInterval( () => {
+      queue = queue.filter(async are => {
+        const tickingOptions = are
+        if(world.tickingAreaManager.hasCapacity(tickingOptions)) {
+          const namdeGen = nameMaker(tickingOptions.from.x, tickingOptions.to.z, tickingOptions.dimension)
+          const nameUse = `${namdeGen}`
+         const ticking = await world.tickingAreaManager.createTickingArea(
+            nameUse,
+            tickingOptions
+          )
+          return ticking
+        }
+      })
+    })
       //WIP, will probably need changing, please look over
       //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
       const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
@@ -122,7 +141,7 @@ class ChunkTicker {
         }
 
       return tickingArea;
-    }
+    
   }
   /**
    * Unloads the ticking area

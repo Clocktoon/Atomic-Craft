@@ -24,6 +24,18 @@
                 "con": "controller.animation.himar_missile"
             },
             "scripts": {
+                "initialize": [
+                    "v.current_rotation_x=0;",
+                    "v.current_rotation_y=0;",
+                    "v.target_rotation_x=query.target_x_rotation;",
+                    "v.target_rotation_y=query.target_y_rotation;"
+                ],
+                "pre_animation": [
+                    "v.current_rotation_x=math.lerprotate(v.current_rotation_x,v.target_rotation_x,q.delta_time*10);",
+                    "v.current_rotation_y=math.lerprotate(v.current_rotation_y,v.target_rotation_y,q.delta_time*10);",
+                    "v.target_rotation_x=query.target_x_rotation;",
+                    "v.target_rotation_y=query.target_y_rotation;"
+                ],
                 "animate": [
                     "con"
                 ]

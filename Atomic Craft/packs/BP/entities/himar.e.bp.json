@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.10",
+  "format_version": "1.26.20",
   "minecraft:entity": {
     "description": {
       "identifier": "atomic:himar",
@@ -8,6 +8,12 @@
       "properties": {
         "atomic:launching": {
           "type": "bool",
+          "default": false,
+          "client_sync": true
+        },
+        "atomic:riderhas": {
+          "type": "bool",
+          "client_sync": true,
           "default": false
         }
       }
@@ -90,7 +96,7 @@
       "minecraft:jump.dynamic": {},
 
       "minecraft:collision_box": {
-        "height": 4.7,
+        "height": 2.7,
         "width": 2
       },
       "minecraft:physics": {
@@ -111,7 +117,7 @@
         "on_rider_enter_event": "atomic:wpn",
         "on_rider_exit_event": "atomic:off",
         "seats": {
-          "position": [-1, 24, -10]
+          "position": [0, 1, 0]
         }
       }
     },
@@ -129,12 +135,14 @@
       "atomic:wpn": {
         "add": {
           "component_groups": ["atomic:int"]
-        }
+        },
+        "set_property": {"atomic:riderhas": true}
       },
       "atomic:off": {
         "remove": {
           "component_groups": ["atomic:int"]
-        }
+        },
+        "set_property": {"atomic:riderhas": false}
       }
     }
   }

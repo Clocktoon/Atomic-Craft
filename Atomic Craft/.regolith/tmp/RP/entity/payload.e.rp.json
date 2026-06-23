@@ -1,0 +1,38 @@
+{
+  "format_version": "1.26.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "atomic:payload_entity",
+      "geometry": {
+        "default": "geometry.payload"
+      },
+      
+      "animations": {
+        "flying": "animation.payload.flying",
+        "co": "controller.animation.payload"
+      },
+      "scripts": {
+        "initialize": ["variable.current_yaw=0;", "variable.current_pitch=0;"],
+        "pre_animation": [
+          "v.current_yaw = v.current_yaw ? v.current_yaw : q.property('atomic:yaw');",
+          "v.current_pitch = v.current_pitch ? v.current_pitch : q.property('atomic:pitch');",
+
+          "v.current_yaw = math.lerprotate(v.current_yaw, q.property('atomic:yaw'), q.delta_time * 10);",
+          "v.current_pitch = math.lerprotate(v.current_pitch, q.property('atomic:pitch'), q.delta_time * 10);"
+        ],
+        "animate": [
+            "co"
+        ]
+      },
+      "textures": {
+        "default": "textures/entity/payload"
+      },
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "render_controllers": [
+        "controller.render.payload"
+      ]
+    }
+  }
+}

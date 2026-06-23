@@ -8,6 +8,9 @@
       }
     },
     "components": {
+      "minecraft:display_name": {
+        "value": "Rotten Soup"
+      },
         "minecraft:use_animation": "eat",
         "minecraft:use_modifiers": {
             "use_duration": 2

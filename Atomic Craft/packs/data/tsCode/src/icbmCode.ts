@@ -203,7 +203,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
 
   const range = Math.sqrt(dx * dx + dz * dz);
 
-  const apexHeight = Math.max(200, Math.min(250, range * 0.6));
+  const apexHeight = Math.max(100, Math.min(120, range * 0.5));
 
   missile.setDynamicProperty("waypoint", 0);
 
@@ -214,7 +214,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
   missile.setDynamicProperty("pitch", -80);
 
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 1.3, 0.75, 0.55, 0.30];
+    const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.30];
 
   for (let i = 0; i < 6; i++) {
     missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
@@ -263,6 +263,7 @@ function updateMissile(missile: Entity, target: Entity, warhead: Entity | null, 
   let waypoint = missile.getDynamicProperty("waypoint") as number;
 
   if (waypoint >= 6 && !warhead?.isValid) {
+    console.warn("WARHEAD NOT VAILD")
     return null;
   }
 
@@ -296,7 +297,7 @@ function updateMissile(missile: Entity, target: Entity, warhead: Entity | null, 
   }
 
   // Advance waypoint
-  if (waypoint <= 5 && dist < 15) {
+  if (waypoint <= 4 && dist < 15) {
     missile.setDynamicProperty("waypoint", waypoint + 1);
     return warhead;
   }
@@ -404,7 +405,7 @@ ${Math.round(rot.x)}`;
     console.warn(`Missile error: ${e}`);
   }
 
-  if (targetDistance < 20) {
+  if (active.getProperty(`atomic:nuke`) === true || targetDistance < 20) {
     nuclearExplosion(player, active, target)
   }
 
@@ -504,3 +505,20 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
       .show();
   }
 });
+
+// world.afterEvents.entityHurt.subscribe((ev) => {
+//   const entity = ev.hurtEntity;
+//   const damageSource = ev.damageSource;
+//   if (
+//     entity.typeId === "atomic:icbm" &&
+//     damageSource.damagingEntity instanceof Player
+//   ) {
+//     const damager = damageSource.damagingEntity;
+//     if (damager instanceof Player) {
+//       const invComp = damager.getComponent("minecraft:inventory");
+//       if (invComp && invComp.container)
+//         invComp.container.addItem(new ItemStack("atomic:icbm_item", 1));
+//         entity.remove()
+//     }
+//   }
+// });

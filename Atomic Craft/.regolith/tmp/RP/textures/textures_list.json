@@ -38,6 +38,7 @@
 	"textures/entity/icmb_texture",
 	"textures/entity/missile_tex",
 	"textures/entity/non_texture",
+	"textures/entity/payload",
 	"textures/entity/plane_bomb_tex",
 	"textures/entity/plane_tex",
 	"textures/entity/siren_texture",

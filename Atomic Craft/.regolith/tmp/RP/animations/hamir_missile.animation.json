@@ -7,6 +7,11 @@
 		"animation.hamir_missile.flyinair": {
 			"loop": true,
 			"animation_length": 120.0833,
+			"bones": {
+				"bone": {
+					"rotation": ["-v.current_rotation_x", "-v.current_rotation_y", 0]
+				}
+			},
 			"particle_effects": {
 				"0.0": {
 					"effect": "icbm_trail_partcc",

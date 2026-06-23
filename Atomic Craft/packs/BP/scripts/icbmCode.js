@@ -108,21 +108,14 @@ function* nuclearExplosion(playerEntity, entity, target) {
             if (!playerEntity)
                 return;
             const playdi = playerEntity.dimension;
-            //Shockwave and explosion sound
+            //Explosion sound
             playExplosionAudio(playdi, entity.location, 260);
-            // shockwaveBlast(
-            //   dimension,
-            //   block.location,
-            //   3,
-            //   50,
-            //   { x: 6, z: 4 },
-            //   1,
-            // );
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
             world.tickingAreaManager.removeTickingArea("nukearea");
             //Nuke Code!!!
             nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity);
+            target.remove();
         }
         system.runJob(blockGen());
     });
@@ -132,13 +125,13 @@ function initializeMissile(missile, targetPos) {
     const dx = targetPos.x - launch.x;
     const dz = targetPos.z - launch.z;
     const range = Math.sqrt(dx * dx + dz * dz);
-    const apexHeight = Math.max(200, Math.min(200, range * 0.6));
+    const apexHeight = Math.max(100, Math.min(120, range * 0.5));
     missile.setDynamicProperty("waypoint", 0);
     const yaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
     missile.setDynamicProperty("yaw", yaw);
     missile.setDynamicProperty("pitch", -80);
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 1.0, 0.75, 0.55, 0.30];
+    const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.30];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -168,12 +161,13 @@ function getGuidePoint(missile, target) {
     return target.location;
 }
 //THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
-function updateMissile(missile, target, warhead) {
+function updateMissile(missile, target, warhead, player) {
     if (!missile.isValid || !target.isValid) {
         return warhead;
     }
     let waypoint = missile.getDynamicProperty("waypoint");
     if (waypoint >= 6 && !warhead?.isValid) {
+        console.warn("WARHEAD NOT VAILD");
         return null;
     }
     const active = waypoint >= 6 ? warhead : missile;
@@ -202,6 +196,7 @@ function updateMissile(missile, target, warhead) {
         return warhead;
     }
     // Warhead stage
+    world.sendMessage("SCREAM");
     if (waypoint === 5 && dist < 15) {
         missile.setDynamicProperty("waypoint", 6);
         missile.setProperty("atomic:warphase", true);
@@ -287,8 +282,7 @@ ${Math.round(rot.x)}`;
         console.warn(`Missile error: ${e}`);
     }
     if (targetDistance < 20) {
-        active.triggerEvent("atomic:exposi");
-        target.remove();
+        nuclearExplosion(player, active, target);
     }
     return warhead;
 }
@@ -334,7 +328,7 @@ function travelSystem(x, y, z, name, entity, player) {
                 system.clearRun(missileLoop);
                 return;
             }
-            warhead = updateMissile(entity, target, warhead);
+            warhead = updateMissile(entity, target, warhead, player);
         }, 1);
     });
 }
@@ -363,3 +357,19 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             .show();
     }
 });
+// world.afterEvents.entityHurt.subscribe((ev) => {
+//   const entity = ev.hurtEntity;
+//   const damageSource = ev.damageSource;
+//   if (
+//     entity.typeId === "atomic:icbm" &&
+//     damageSource.damagingEntity instanceof Player
+//   ) {
+//     const damager = damageSource.damagingEntity;
+//     if (damager instanceof Player) {
+//       const invComp = damager.getComponent("minecraft:inventory");
+//       if (invComp && invComp.container)
+//         invComp.container.addItem(new ItemStack("atomic:icbm_item", 1));
+//         entity.remove()
+//     }
+//   }
+// });

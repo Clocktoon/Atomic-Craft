@@ -24,7 +24,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
 
   const range = Math.sqrt(dx * dx + dz * dz);
 
-  const apexHeight = Math.max(150, Math.min(170, range * 0.6));
+  const apexHeight = Math.max(100, Math.min(100, range * 0.4));
 
   missile.setDynamicProperty("waypoint", 0);
 
@@ -35,7 +35,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
   missile.setDynamicProperty("pitch", -80);
 
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 1.7, 0.80, 0.65, 0.30];
+    const heights = [0.25, 0.75, 0.90, 0.75, 0.65, 0.30];
 
   for (let i = 0; i < 6; i++) {
     missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
@@ -76,7 +76,7 @@ function getGuidePoint(missile: Entity, target: Entity) {
 }
 
 //THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
-function updateMissile(missile: Entity, target: Entity, payload: Entity | null) {
+function updateMissile(missile: Entity, target: Entity, payload: Entity | null): Entity | null {
    if (!missile.isValid || !target.isValid) {
       return payload;
     }
@@ -84,6 +84,7 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null) 
     let waypoint = missile.getDynamicProperty("waypoint") as number;
   
     if (waypoint >= 6 && !payload?.isValid) {
+      world.sendMessage("PAYLOAD NOT VAILD")
       return null;
     }
   
@@ -117,35 +118,36 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null) 
     }
   
     // Advance waypoint
-    if (waypoint <= 5 && dist < 15) {
+    if (waypoint <= 4 && dist < 15) {
       missile.setDynamicProperty("waypoint", waypoint + 1);
       return payload;
     }
   
-    // payload stage
-    if (waypoint === 4 && dist < 15) {
-      missile.setDynamicProperty("waypoint", 6);
-  
+    //payload stage
+    if (waypoint === 5 && dist < 15) {
+
+      missile.setDynamicProperty("waypoint", 6)
       missile.setProperty("atomic:pay", true)
-      const newpayload = missile.dimension.spawnEntity("atomic:payload", missile.location);
-      newpayload.dimension.spawnParticle("atomic:icbmunleash", {
-        x: newpayload.location.x,
-        y: newpayload.location.y,
-        z: newpayload.location.z - 1
+      const newPayLoad = missile.dimension.spawnEntity("atomic:payload_entity", missile.location);
+      newPayLoad.dimension.spawnParticle("atomic:icbmunleash", {
+        x: newPayLoad.location.x,
+        y: newPayLoad.location.y,
+        z: newPayLoad.location.z - 1
       })
       const yaw = missile.getDynamicProperty("yaw") as number;
       const pitch = missile.getDynamicProperty("pitch") as number;
   
-      newpayload.setDynamicProperty("yaw", yaw);
-      newpayload.setDynamicProperty("pitch", pitch);
-      newpayload.setProperty("atomic:yaw", yaw);
-      newpayload.setProperty("atomic:pitch", pitch);
+      newPayLoad.setDynamicProperty("yaw", yaw);
+      newPayLoad.setDynamicProperty("pitch", pitch);
+      newPayLoad.setProperty("atomic:yaw", yaw);
+      newPayLoad.setProperty("atomic:pitch", pitch);
       system.runTimeout( () => {
         missile.remove()
       }, 40)
   
-      return newpayload;
+      return newPayLoad;
     }
+
     //Just marking it so it's easier to find
   
     const horizontal = Math.sqrt(dx * dx + dz * dz);
@@ -227,7 +229,7 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null) 
 
 
   if (targetDistance < 5) {
-    missile.triggerEvent("atomic:exposi");
+    active.triggerEvent("atomic:exposi");
     target.dimension.spawnParticle("atomic:explosioncloud", 
       {x: target.location.x, y: target.location.y - 6, z: target.location.z})
 
@@ -267,7 +269,7 @@ function travelSystem(
   const minY = Math.max(0, y - 30);
   const maxY = y + 30;
 
-    let payload: Entity | null = null;
+  let payload: Entity | null = null;
 
   world.tickingAreaManager
     .createTickingArea(name, {
