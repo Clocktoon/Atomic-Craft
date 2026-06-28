@@ -27,3 +27,4 @@ const Dev = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:dev_component", Dev);
 });
+//# sourceMappingURL=devItem.js.map

@@ -1,0 +1,32 @@
+{
+    "format_version": "1.26.0",
+    "animation_controllers": {
+        "controller.animation.mortar": {
+            "initial_state": "stall",
+            "states": {
+                "stall":
+                {
+                    "animations": [
+                        "stale"
+                    ],
+                    "transitions": [
+                        {
+                            "shot": "query.property('atomic:fired')"
+                        }
+                    ]
+                },
+                "shot":
+                {
+                    "animations": [
+                        "shot"
+                    ],
+                    "transitions": [
+                        {
+                            "stall": "!query.property('atomic:fired')"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

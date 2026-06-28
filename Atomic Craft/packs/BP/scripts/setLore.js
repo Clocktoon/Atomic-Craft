@@ -10,3 +10,4 @@ system.runInterval(() => {
         }
     }
 });
+//# sourceMappingURL=setLore.js.map

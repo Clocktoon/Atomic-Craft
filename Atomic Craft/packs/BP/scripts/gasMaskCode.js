@@ -8,3 +8,4 @@ system.runInterval(() => {
         }
     }
 }, 20);
+//# sourceMappingURL=gasMaskCode.js.map

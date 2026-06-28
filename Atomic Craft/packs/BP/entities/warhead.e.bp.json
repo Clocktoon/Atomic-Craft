@@ -74,7 +74,7 @@
               "subject": "other",
               "value": "target"
             },
-            "range": 15,
+            "range": [15,15],
             "event": "atomic:nuclearexplode"
           }
         ]

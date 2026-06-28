@@ -1,0 +1,25 @@
+{
+    "format_version": "1.26.20",
+    "minecraft:item": {
+        "description": {
+            "identifier": "atomic:mortar_item",
+            "menu_category": {
+                "category": "items"
+            }
+        },
+        "components": {
+            "minecraft:max_stack_size": 16,
+            "minecraft:display_name": {
+                "value": "Mortar"
+            },
+            "minecraft:icon": {
+                "textures": {
+                    "default": "atomic_mortar_item"
+                }
+            },
+            "minecraft:entity_placer": {
+                "entity": "atomic:mortar"
+            }
+        }
+    }
+}

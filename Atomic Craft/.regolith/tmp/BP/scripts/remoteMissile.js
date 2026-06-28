@@ -23,3 +23,4 @@ const Remote = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:remote", Remote);
 });
+//# sourceMappingURL=remoteMissile.js.map

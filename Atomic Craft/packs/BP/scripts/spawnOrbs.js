@@ -37,3 +37,4 @@ const BlockExperienceRewardComponent = {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:orbs", BlockExperienceRewardComponent);
 });
+//# sourceMappingURL=spawnOrbs.js.map

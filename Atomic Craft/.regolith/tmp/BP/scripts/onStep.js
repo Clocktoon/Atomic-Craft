@@ -15,3 +15,4 @@ const OnStep = {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:step", OnStep);
 });
+//# sourceMappingURL=onStep.js.map

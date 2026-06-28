@@ -32,6 +32,11 @@
           "type": "bool",
           "default": false,
           "client_sync": true
+        },
+        "atomic:launching": {
+          "type": "bool",
+          "client_sync": true,
+          "default": false
         }
       }
     },

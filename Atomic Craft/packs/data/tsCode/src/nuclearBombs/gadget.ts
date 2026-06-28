@@ -59,9 +59,9 @@ class OnClickGadget implements BlockCustomComponent {
 
     //Ticking area for the stuff close to the explosion
     world.tickingAreaManager
-      .createTickingArea("nukearea", {
-        from: { x: px - 60, y: 0, z: pz - 60 },
-        to: { x: px + 60, y: 0, z: pz + 60 },
+      .createTickingArea(`nukearea${random}`, {
+        from: { x: px - 70, y: 0, z: pz - 70 },
+        to: { x: px + 70, y: 0, z: pz + 70 },
         dimension: block.dimension,
       })
       .then(() => {
@@ -140,18 +140,11 @@ class OnClickGadget implements BlockCustomComponent {
                   30,
                   30,
                 );
-                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+              world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
               })());
-             block.dimension.createExplosion({
-                x: block.location.x, 
-                y: block.location.y - 21, 
-                z: block.location.z}, 
-                15, 
-                {
-              causesFire: true,
-              allowUnderwater: false,
-            });
-
+              
+              yield
+            
             // Sound code by MapleStar // TC (discord)
             function playExplosionAudio(
               dimension: Dimension,
@@ -259,12 +252,13 @@ class OnClickGadget implements BlockCustomComponent {
               },
             );
 
-            aftermath(
-              dimension.id,
-              radius,
-              volume,
-              Math.floor(Math.random() * 4),
-            );
+            // GOING TO BE ADDED IN A LATER UPDATE
+            // aftermath(
+            //   dimension.id,
+            //   radius,
+            //   volume,
+            //   Math.floor(Math.random() * 4),
+            // );
           }
 
           system.runJob(blockGen());

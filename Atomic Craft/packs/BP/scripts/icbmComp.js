@@ -14,3 +14,4 @@ const Spawn = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:icbm_code", Spawn);
 });
+//# sourceMappingURL=icbmComp.js.map

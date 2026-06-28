@@ -59,3 +59,4 @@ const ConsoleCode = {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:console_code", ConsoleCode);
 });
+//# sourceMappingURL=consoleCode.js.map

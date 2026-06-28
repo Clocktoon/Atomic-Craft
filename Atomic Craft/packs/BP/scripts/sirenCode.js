@@ -42,3 +42,4 @@ world.afterEvents.entityDie.subscribe((event) => {
         entity.runCommand("stopsound @a atomic.siren");
     }
 });
+//# sourceMappingURL=sirenCode.js.map

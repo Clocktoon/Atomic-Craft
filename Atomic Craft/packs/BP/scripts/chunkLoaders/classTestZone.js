@@ -156,3 +156,4 @@ const OnClick = {
 // system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
 //   blockComponentRegistry.registerCustomComponent("atomic:nuclear", OnClick);
 // });
+//# sourceMappingURL=classTestZone.js.map

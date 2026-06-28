@@ -14,3 +14,4 @@ const MissileSummon = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:missile_summon", MissileSummon);
 });
+//# sourceMappingURL=missileSummon.js.map

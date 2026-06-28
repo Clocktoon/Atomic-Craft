@@ -18,3 +18,4 @@ const Rotten = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:rotten", Rotten);
 });
+//# sourceMappingURL=rottenEat.js.map

@@ -20,6 +20,7 @@
         "rotate": "animation.tatical_ballistic_missile.flying",
         "sit": "animation.tatical_ballistic_missile.sitting",
         "paid": "animation.tatical_ballistic_missile.payload",
+        "launch": "animation.tatical_ballistic_missile.launch",
         "cont": "controller.animation.ballistic"
       },
       "scripts": {

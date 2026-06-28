@@ -2,6 +2,12 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_mortar_ammo": {
+			"textures": "textures/items/mortar_ammo"
+		},
+		"atomic_mortar_item": {
+			"textures": "textures/items/mortar_item"
+		},
 		"atomic_tablet_settings": {
 			"textures": "textures/items/tabletatomic"
 		},

@@ -12,12 +12,7 @@
 			},
 			"bones": [
 				{
-					"name": "root",
-					"pivot": [0, 0, 0]
-				},
-				{
 					"name": "missile",
-					"parent": "root",
 					"pivot": [0, 0, 0]
 				},
 				{

@@ -9,3 +9,4 @@ const LandStep = {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:step_explode", LandStep);
 });
+//# sourceMappingURL=landMineCode.js.map

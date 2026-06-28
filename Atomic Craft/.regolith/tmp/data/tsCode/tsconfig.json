@@ -6,6 +6,7 @@
     "target": "es2024",
     "ignoreDeprecations": "6.0",
     "moduleResolution": "node",
+    "sourceMap": true,
     "skipLibCheck": true,
     "outDir": "../../BP/scripts",
     "rootDir": "./src",

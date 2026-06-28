@@ -17,3 +17,4 @@ export const decrementStack = (player, mainhand) => {
 export const permutation = (block, state, value) => {
     block.setPermutation(block.permutation.withState(state, value));
 };
+//# sourceMappingURL=utils.js.map

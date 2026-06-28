@@ -37,9 +37,9 @@ class OnClick {
             const px = block.location.x;
             const pz = block.location.z;
             const py = block.y;
+            const ran = `nukearea${random}`;
             //Ticking area for the stuff close to the explosion
-            world.tickingAreaManager
-                .createTickingArea(`nukearea${random}`, {
+            world.tickingAreaManager.createTickingArea(ran, {
                 from: { x: px - 60, y: 0, z: pz - 60 },
                 to: { x: px + 60, y: 0, z: pz + 60 },
                 dimension: block.dimension,
@@ -182,3 +182,4 @@ export { OnClick };
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:atom_bomb", new OnClick());
 });
+//# sourceMappingURL=nukeCode.js.map

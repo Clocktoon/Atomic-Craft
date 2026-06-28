@@ -37,3 +37,4 @@ export async function shockwaveBlast(dimensionid, center, strength, maxDist, upV
         }
     }
 }
+//# sourceMappingURL=shockwave.js.map

@@ -26,3 +26,4 @@ export function* createCrater(location, dimensionId, block, radius, maxDepth) {
         }
     }
 }
+//# sourceMappingURL=crater.js.map

@@ -39,3 +39,4 @@ export function aftermath(dimensionid, radius, volume, chance) {
         }, 20);
     }
 }
+//# sourceMappingURL=aftermath.js.map

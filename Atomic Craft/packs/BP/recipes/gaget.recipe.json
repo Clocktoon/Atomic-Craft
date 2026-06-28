@@ -1,0 +1,14 @@
+{
+  "format_version": "1.21.100",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "atomic:gadget_recipe" },
+    "tags": ["crafting_table"],
+    "pattern": ["###", "#P#", "###"],
+    "key": {
+      "P": { "item": "atomic:core" },
+      "#": { "item": "minecraft:iron_block" }
+    },
+    "unlock": [{ "item": "atomic:core" }, { "item": "minecraft:iron_block" }],
+    "result": { "item": "atomic:gadget_bomb" }
+  }
+}

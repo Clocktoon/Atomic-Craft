@@ -8,7 +8,10 @@
             }
         },
         "components": {
-            "minecraft:icon": "atomic_core"
+            "minecraft:icon": "atomic_core",
+            "minecraft:display_name": {
+                "value": "Atomic Core"
+            }
         }
     }
 }

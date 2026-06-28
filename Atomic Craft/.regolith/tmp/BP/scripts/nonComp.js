@@ -14,3 +14,4 @@ const Spawning = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:non_icbm_compi", Spawning);
 });
+//# sourceMappingURL=nonComp.js.map

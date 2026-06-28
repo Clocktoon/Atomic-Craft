@@ -1,0 +1,41 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:blass"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "S": {
+                "item": "atomic:steel_ingot"
+            },
+            "T": {
+                "item": "atomic:enhanced_tnt"
+            },
+            "O": {
+                "item": "minecraft:observer"
+            }
+        },
+        "pattern": [
+            "SOS",
+            "STS",
+            "SSS"
+        ],
+        "unlock": [
+            {
+                "item": "atomic:steel_ingot"
+            },
+            {
+                "item": "atomic:enhanced_tnt"
+            },
+            {
+                "item": "minecraft:observer"
+            }
+        ],
+        "result": {
+            "item": "atomic:blass",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

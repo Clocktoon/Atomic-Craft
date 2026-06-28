@@ -49,10 +49,12 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./icbmCode.js")
     import("./ballisticCode.js")
     import("./himarCode.js")
-    import("./radiationSystem/radEffect.js")
+    //Will add radiation next update
+    // import("./radiationSystem/radEffect.js")
     import("./nuclearTransforms/crater.js")
     import("./aftermath.js")
     import("./nuclearTransforms/shockwave.js")
+    import("./mortar")
     //import("./itempickups.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")

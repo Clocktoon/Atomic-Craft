@@ -6,3 +6,4 @@ system.runInterval(() => {
         player.onScreenDisplay.setActionBar(`Radiation level: ${JSON.stringify(value)}`);
     }
 }, 20);
+//# sourceMappingURL=RadiDisplaySystem.js.map

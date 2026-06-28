@@ -12,3 +12,4 @@ world.afterEvents.entityItemPickup.subscribe((event) => {
         }
     }
 });
+//# sourceMappingURL=itempickups.js.map

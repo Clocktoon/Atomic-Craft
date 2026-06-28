@@ -39,3 +39,4 @@ export function getBlastResistance(block) {
 export function getBlastResistanceById(blockId) {
     return BlastResistance[blockId] ?? 0;
 }
+//# sourceMappingURL=blastResistance.js.map

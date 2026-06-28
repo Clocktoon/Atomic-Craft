@@ -33,3 +33,4 @@ class RadiSettings {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:settings_comp", new RadiSettings);
 });
+//# sourceMappingURL=settingsItem.js.map

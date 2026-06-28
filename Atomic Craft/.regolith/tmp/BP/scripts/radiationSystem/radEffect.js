@@ -86,3 +86,4 @@ const runny = system.runInterval(() => {
     }
     ;
 }, 600);
+//# sourceMappingURL=radEffect.js.map

@@ -287,3 +287,4 @@ class RedNuclear {
 system.beforeEvents.startup.subscribe((blockComponentRegistry) => {
     blockComponentRegistry.blockComponentRegistry.registerCustomComponent("atomic:redstone_nuke", new RedNuclear);
 });
+//# sourceMappingURL=redstoneHelpers.js.map

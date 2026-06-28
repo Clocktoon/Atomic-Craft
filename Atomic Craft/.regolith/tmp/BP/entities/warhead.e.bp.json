@@ -26,7 +26,13 @@
           "type": "bool",
           "default": false,
           "client_sync": true
+        },
+        "atomic:nuke": {
+          "type": "bool",
+          "client_sync": true,
+          "default": false
         }
+        
       }
     },
       "component_groups": {
@@ -60,6 +66,19 @@
         }
       },
     "components": {
+      "minecraft:entity_sensor": {
+        "subsensors": [
+          {
+            "event_filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "target"
+            },
+            "range": [15,15],
+            "event": "atomic:nuclearexplode"
+          }
+        ]
+      },
       "minecraft:type_family": {
         "family": ["tmissile"]
       },
@@ -120,6 +139,9 @@
         "add": {
           "component_groups": ["atomic:on"]
         }
+      },
+       "atomic:nuclearexplode": {
+        "set_property": {"atomic:nuke": true}
       }
     }
   }

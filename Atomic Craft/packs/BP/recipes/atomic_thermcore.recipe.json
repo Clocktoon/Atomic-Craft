@@ -1,0 +1,32 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "atomic:thermo_core"
+        },
+        "tags": ["crafting_table"],
+        "ingredients": [
+            {
+                "item": "atomic:core",
+                "count": 1
+            },
+            {
+                "item": "minecraft:quartz",
+                "count": 2
+            }
+        ],
+        "unlock": [
+            {
+                "item": "atomic:core"
+            },
+            {
+                "item": "minecraft:quartz"
+            }
+        ],
+        "result": {
+            "item": "atomic:thermo_core",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

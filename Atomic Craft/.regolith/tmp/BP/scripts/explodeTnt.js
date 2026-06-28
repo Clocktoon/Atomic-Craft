@@ -10,3 +10,4 @@ world.afterEvents.playerInteractWithBlock.subscribe((Event) => {
         tntEntity;
     }
 });
+//# sourceMappingURL=explodeTnt.js.map

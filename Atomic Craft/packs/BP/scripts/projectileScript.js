@@ -15,3 +15,4 @@ world.afterEvents.projectileHitEntity.subscribe((Event) => {
         }, 20);
     }
 });
+//# sourceMappingURL=projectileScript.js.map

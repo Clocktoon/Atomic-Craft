@@ -105,3 +105,4 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
         }
     }
 }
+//# sourceMappingURL=volumeCode.js.map

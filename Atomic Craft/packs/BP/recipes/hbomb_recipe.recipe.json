@@ -1,0 +1,27 @@
+{
+  "format_version": "1.21.100",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "atomic:hydrogen_bomb" },
+    "tags": ["crafting_table"],
+    "pattern": ["###", "#P#", "###"],
+    "key": {
+      "P": { 
+        "item": "atomic:thermo_core" 
+      },
+      "#": { 
+        "item": "minecraft:netherite_ingot" 
+      }
+    },
+    "unlock": [
+      { 
+        "item": "atomic:thermo_core" 
+      },
+      { 
+        "item": "minecraft:netherite_ingot" 
+      }
+    ],
+    "result": { 
+      "item": "atomic:hydrogen_bomb" 
+    }
+  }
+}

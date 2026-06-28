@@ -6,3 +6,4 @@ world.afterEvents.playerSpawn.subscribe((ev) => {
         player.sendMessage("§6Thank you for playing §jbombs of glory");
     }
 });
+//# sourceMappingURL=welcomeText.js.map

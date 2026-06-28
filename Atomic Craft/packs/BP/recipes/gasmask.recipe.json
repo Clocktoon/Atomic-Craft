@@ -1,0 +1,31 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "atomic:gas_mask"
+        },
+        "tags": ["crafting_table"],
+        "ingredients": [
+            {
+                "item": "atomic:gas_tank",
+                "count": 2
+            },
+            {
+                "item": "atomic:gas_storage",
+                "count": 1
+            }
+        ],
+        "unlock": [
+            {
+                "item": "atomic:gas_tank"
+            },
+            {
+                "item": "atomic:gas_storage"
+            }
+        ],
+        "result": {
+            "item": "atomic:gas_mask",
+            "count": 1
+        }
+    }
+}

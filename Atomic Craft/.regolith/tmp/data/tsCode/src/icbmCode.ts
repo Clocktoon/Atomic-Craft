@@ -26,7 +26,7 @@ let fail = false;
 
 function makeRandomId() {
   //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
-  return `${Date.now()}+${Math.random()}`;
+  return `${Date.now()}+${Math.random() * 100}`;
 }
 function* nuclearExplosion(playerEntity: Player, entity: Entity, target: Entity) {
     if (!playerEntity) return;
@@ -303,7 +303,6 @@ function updateMissile(missile: Entity, target: Entity, warhead: Entity | null, 
   }
 
   // Warhead stage
-  world.sendMessage("SCREAM")
   if (waypoint === 5 && dist < 15) {
     missile.setDynamicProperty("waypoint", 6);
 
@@ -406,8 +405,11 @@ ${Math.round(rot.x)}`;
     console.warn(`Missile error: ${e}`);
   }
 
-  if (targetDistance < 20) {
-    nuclearExplosion(player, active, target)
+  if (active.getProperty(`atomic:nuke`) === true || targetDistance < 10) {
+    system.runJob(nuclearExplosion(player, active, target))
+    active.remove()
+    target.remove()
+    
   }
 
   return warhead;
@@ -497,9 +499,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
       .divider()
       .button("Launch", () => {
         let x = Number(xOb.getData());
-        let y = Number(yOb.getData());
         let z = Number(zOb.getData());
+         let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
         const nameId = `hate${x}${y}${z}`;
+        if(y)
         travelSystem(x, y, z, nameId, entity, player);
         form.close();
       })

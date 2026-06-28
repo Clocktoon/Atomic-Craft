@@ -11,3 +11,4 @@ const EatEffect = {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:eat_effect", EatEffect);
 });
+//# sourceMappingURL=EatEffects.js.map

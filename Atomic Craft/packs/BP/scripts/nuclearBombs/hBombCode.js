@@ -211,3 +211,4 @@ class Fus {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     blockComponentRegistry.registerCustomComponent("atomic:hb_explode", new Fus());
 });
+//# sourceMappingURL=hBombCode.js.map

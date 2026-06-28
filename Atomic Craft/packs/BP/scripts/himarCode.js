@@ -54,3 +54,4 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             .show();
     }
 });
+//# sourceMappingURL=himarCode.js.map

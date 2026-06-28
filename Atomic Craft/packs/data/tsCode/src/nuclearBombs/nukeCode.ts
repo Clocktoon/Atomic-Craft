@@ -58,9 +58,9 @@ class OnClick implements BlockCustomComponent {
     const pz = block.location.z;
     const py = block.y;
 
+    const ran = `nukearea${random}`
     //Ticking area for the stuff close to the explosion
-    world.tickingAreaManager
-      .createTickingArea(`nukearea${random}`, {
+    world.tickingAreaManager.createTickingArea(ran, {
         from: { x: px - 60, y: 0, z: pz - 60 },
         to: { x: px + 60, y: 0, z: pz + 60 },
         dimension: block.dimension,
@@ -144,6 +144,7 @@ class OnClick implements BlockCustomComponent {
                 );
                 world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
               })());
+           
 
             // Sound code by MapleStar // TC (discord)
             function playExplosionAudio(
@@ -250,12 +251,13 @@ class OnClick implements BlockCustomComponent {
               },
             );
 
-            aftermath(
-              dimension.id,
-              radius,
-              volume,
-              Math.floor(Math.random() * 4),
-            );
+            // FOR LATER UPDATE
+            // aftermath(
+            //   dimension.id,
+            //   radius,
+            //   volume,
+            //   Math.floor(Math.random() * 4),
+            // );
           }
 
           system.runJob(blockGen());

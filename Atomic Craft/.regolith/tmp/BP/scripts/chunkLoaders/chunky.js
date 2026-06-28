@@ -17,3 +17,4 @@ export async function loadChunk(location, dimensionid) {
         to: location,
     });
 }
+//# sourceMappingURL=chunky.js.map

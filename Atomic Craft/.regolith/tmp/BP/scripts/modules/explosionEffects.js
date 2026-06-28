@@ -96,3 +96,4 @@ world.beforeEvents.explosion.subscribe((event) => {
         }
     });
 });
+//# sourceMappingURL=explosionEffects.js.map

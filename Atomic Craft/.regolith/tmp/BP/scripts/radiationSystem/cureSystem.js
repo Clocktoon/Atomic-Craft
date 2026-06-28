@@ -15,3 +15,4 @@ function Rotten(ev) {
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:rotten", { onConsume: Rotten });
 });
+//# sourceMappingURL=cureSystem.js.map

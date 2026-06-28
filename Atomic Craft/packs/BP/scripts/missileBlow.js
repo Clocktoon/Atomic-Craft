@@ -6,3 +6,4 @@ world.afterEvents.entityDie.subscribe((Event) => {
         entity.dimension.spawnParticle("atomic:explosion_missile", entity.location);
     }
 });
+//# sourceMappingURL=missileBlow.js.map

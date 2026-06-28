@@ -86,7 +86,7 @@
               "subject": "other",
               "value": "target"
             },
-            "range": 15,
+            "range": [10,15],
             "event": "atomic:nuclearexplode"
           }
         ]
@@ -114,6 +114,13 @@
       "minecraft:tick_world": {
         "never_despawn": true,
         "radius": 2
+      },
+      "minecraft:interact": {
+        "interactions": [
+          {
+            "interact_text": "Open missile panel"
+          }
+        ]
       }
     },
     "events": {

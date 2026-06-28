@@ -1,0 +1,34 @@
+{
+    "format_version": "1.26.20",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:mortar",
+            "geometry": {
+                "default": "geometry.mortar"
+            },
+            "textures": {
+                "default": "textures/entity/mortar_tex"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "particle_effects": {
+                "mortarsmoke": "atomic:mortarsmoke"
+            },
+            "sound_effects": {
+                "mortarshotsound": "atomic.mortar.shoot"
+            },
+            "render_controllers": [
+                "controller.render.mortar"
+            ],
+            "animations": {
+                "stale": "animation.mortar.idle",
+                "shot": "animation.mortar.shoot",
+                "con": "controller.animation.mortar"
+            },
+            "scripts": {
+                "animate": ["con"]
+            }
+        }
+    }
+}

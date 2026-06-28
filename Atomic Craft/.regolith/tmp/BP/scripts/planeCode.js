@@ -48,3 +48,4 @@ world.afterEvents.entitySpawn.subscribe((event) => {
         });
     }
 });
+//# sourceMappingURL=planeCode.js.map

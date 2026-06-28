@@ -160,3 +160,4 @@ function spawnSmokeTrajectory(center, dimension, angle, verticalAngle, maxDistan
     }
 }
 ;
+//# sourceMappingURL=testTs.js.map

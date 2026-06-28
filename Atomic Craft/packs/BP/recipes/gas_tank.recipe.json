@@ -1,0 +1,35 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:gas_tank"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "H": {
+                "item": "minecraft:heart_of_the_sea"
+            },
+            "I": {
+                "item": "minecraft:iron_ingot"
+            }
+        },
+        "pattern": [
+            " I ",
+            "IHI",
+            " I "
+        ],
+        "unlock":[
+            {
+                "item": "minecraft:heart_of_the_sea"
+            },
+            {
+                "item": "minecraft:iron_ingot"
+            }
+        ],
+        "result": {
+            "item": "atomic:gas_tank",
+            "count": 2,
+            "data": 0
+        }
+    }
+}

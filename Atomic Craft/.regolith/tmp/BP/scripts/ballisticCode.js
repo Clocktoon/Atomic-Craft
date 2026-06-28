@@ -73,39 +73,14 @@ function updateMissile(missile, target, payload) {
         });
     }
     // Advance waypoint
-    if (waypoint <= 5 && dist < 15) {
+    if (waypoint <= 4 && dist < 15) {
         missile.setDynamicProperty("waypoint", waypoint + 1);
         return payload;
     }
-    // payload stage
-    // if (waypoint === 5) {
-    //   world.sendMessage("TEST 1")
-    //   missile.setDynamicProperty("waypoint", 6);
-    //   world.sendMessage("TEST 2")
-    //   missile.setProperty("atomic:pay", true)
-    //   world.sendMessage("TEST 3")
-    //   const newPayLoad = missile.dimension.spawnEntity("atomic:payload_entity", missile.location);
-    //   world.sendMessage("PAYLOAD PHASE STARTED")
-    //   newPayLoad
-    //   newPayLoad.dimension.spawnParticle("atomic:icbmunleash", {
-    //     x: newPayLoad.location.x,
-    //     y: newPayLoad.location.y,
-    //     z: newPayLoad.location.z - 1
-    //   })
-    //   const yaw = missile.getDynamicProperty("yaw") as number;
-    //   const pitch = missile.getDynamicProperty("pitch") as number;
-    //   newPayLoad.setDynamicProperty("yaw", yaw);
-    //   newPayLoad.setDynamicProperty("pitch", pitch);
-    //   newPayLoad.setProperty("atomic:yaw", yaw);
-    //   newPayLoad.setProperty("atomic:pitch", pitch);
-    //   system.runTimeout( () => {
-    //     missile.remove()
-    //   }, 40)
-    //   return newPayLoad;
-    // }
+    //payload stage
     if (waypoint === 5 && dist < 15) {
         missile.setDynamicProperty("waypoint", 6);
-        missile.setProperty("atomic:atomic:pay", true);
+        missile.setProperty("atomic:pay", true);
         const newPayLoad = missile.dimension.spawnEntity("atomic:payload_entity", missile.location);
         newPayLoad.dimension.spawnParticle("atomic:icbmunleash", {
             x: newPayLoad.location.x,
@@ -283,3 +258,4 @@ world.afterEvents.entityHurt.subscribe((ev) => {
         }
     }
 });
+//# sourceMappingURL=ballisticCode.js.map
