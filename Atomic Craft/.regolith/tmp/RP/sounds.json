@@ -18,6 +18,16 @@
                 },
                 "pitch": 1,
                 "volume": 1
+            },
+            "atomic:himar": {
+                "events": {
+                    "hurt": {
+                        "sound": "mob.irongolem.hit"
+                    },
+                    "death": {
+                        "sound": "break.iron"
+                    }
+                }
             }
         }
     }

@@ -1,0 +1,41 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:himar_item"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "G": {
+                "item": "minecraft:green_concrete"
+            },
+            "M": {
+                "item": "atomic:blass"
+            }
+        },
+        "unlock": [
+            {
+                "item": "minecraft:green_concrete"
+            },
+            {
+                "item": "atomic:blass"
+            },
+            {
+                "item": "minecraft:gunpowder"
+            },
+            {
+                "item": "atomic:enhanced_tnt"
+            }
+        ],
+        "pattern": [
+            "GGG",
+            "GMG",
+            "   "
+        ],
+        "result": {
+            "item": "atomic:himar_item",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

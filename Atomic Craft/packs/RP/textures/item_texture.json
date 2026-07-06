@@ -2,6 +2,9 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_nethernuim": {
+			"textures": "textures/items/nethernuim"
+		},
 		"atomic_thermo_core": {
 			"textures": "textures/items/thermo_core"
 		},

@@ -1,6 +1,5 @@
 import { system, world, BlockVolume, EquipmentSlot } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
-import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 function makeRandomId() {
     //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
@@ -138,7 +137,13 @@ class RedNuclear {
                             y: block.location.y + 20,
                             z: block.location.z + 20,
                         });
-                        aftermath(dimension.id, radius, volume, Math.floor(Math.random() * 4));
+                        // LATER UPDATE THING
+                        // aftermath(
+                        //   dimension.id,
+                        //   radius,
+                        //   volume,
+                        //   Math.floor(Math.random() * 4),
+                        // );
                     }
                     system.runJob(blockGen());
                 });
@@ -275,7 +280,13 @@ class RedNuclear {
                                 y: block.location.y + 20,
                                 z: block.location.z + 20,
                             });
-                            aftermath(dimension.id, radius, volume, Math.floor(Math.random() * 4));
+                            // LATER UPDATE TO BE ADDED YOU GET IT
+                            // aftermath(
+                            //   dimension.id,
+                            //   radius,
+                            //   volume,
+                            //   Math.floor(Math.random() * 4),
+                            // );
                         }
                         system.runJob(blockGen());
                     }, 400);

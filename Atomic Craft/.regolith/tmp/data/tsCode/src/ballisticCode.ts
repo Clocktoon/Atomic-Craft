@@ -11,6 +11,7 @@ import {
   CustomForm,
   ObservableNumber,
   ObservableString,
+  ObservableBoolean
 } from "@minecraft/server-ui";
 
 const distanceUiNumber = new ObservableNumber(0)
@@ -239,6 +240,8 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null):
   return payload
 }
 
+
+
 function travelSystem(
   x: number,
   y: number,
@@ -305,34 +308,143 @@ function travelSystem(
     });
 }
 
+// @lantern-links-entities ["atomic:ballistic_missile"]
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
   const entity = ev.target;
   const player = ev.player;
 
   if (entity.typeId === "atomic:ballistic_missile") {
     const xOb = new ObservableString("", { clientWritable: true });
-    const yOb = new ObservableString("", { clientWritable: true });
     const zOb = new ObservableString("", { clientWritable: true });
+     const cordMode = new ObservableNumber(0, { clientWritable: true });
+        const launchBool = new ObservableBoolean(true, { clientWritable: true });
+        const saveCordBool = new ObservableBoolean(false, { clientWritable: true });
+        const useSaved = new ObservableBoolean(false, { clientWritable: true });
+    
+        cordMode.subscribe((mode: number) => {
+          if (mode === 0) {
+            launchBool.setData(true);
+            saveCordBool.setData(false);
+            useSaved.setData(false);
+          }
+          if (mode === 1) {
+            launchBool.setData(false);
+            if (entity.getDynamicProperty("saved") === true) {
+              useSaved.setData(true);
+            }
+    
+            if (
+              entity.getDynamicProperty("saved") === undefined ||
+              entity.getDynamicProperty("saved") === false
+            ) {
+              saveCordBool.setData(true);
+            } else {
+              saveCordBool.setData(false);
+            }
+          }
+        });
     const form = new CustomForm(player, "Missile Control Panel");
     form
       .textField("X", xOb)
-      .textField("Y", yOb)
       .textField("Z", zOb)
       .closeButton()
       .divider()
-      .button("Launch", () => {
-        let x = Number(xOb.getData());
-        let y = Number(yOb.getData());
-        let z = Number(zOb.getData());
-        const nameId = `hate${x}${y}${z}`;
-        //TODO: Add a wait period and have smoke blast out
-        //TODO: Make it so missile wobbles a bit
-        //TODO:Have missile blast staright up before heading towards target
-        //TODO:Change way Y cord is gotten
-        //TODO: ANTI MISSILE SYSTEM?
-        travelSystem(x, y, z, nameId, entity, player);
-        form.close();
-      })
+      .button(
+        "Launch",
+        () => {
+          let x = Number(xOb.getData());
+          let z = Number(zOb.getData());
+          let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
+          const nameId = `hate${x}${y}${z}`;
+          let time = 10;
+          const timer = system.runInterval(() => {
+            if (time < 0) {
+              system.clearRun(timer);
+            }
+            if (time >= 4) {
+              player.onScreenDisplay.setActionBar(`${time}`);
+              entity.dimension.spawnParticle(
+                "atomic:ballistic_smoke",
+                entity.location,
+              );
+            }
+            if (time < 4) {
+              player.onScreenDisplay.setActionBar(`§4${time}`);
+              entity.dimension.spawnParticle(
+                "atomic:ballistic_smoke",
+                entity.location,
+              );
+            }
+            time--;
+          }, 20);
+          system.runTimeout(() => {
+            if (y) 
+              travelSystem(x, y, z, nameId, entity, player);
+          }, 200);
+          form.close();
+        },
+        { visible: launchBool },
+      )
+
+      .button(
+        "Save coordinates",
+        () => {
+          let x = Number(xOb.getData());
+          let z = Number(zOb.getData());
+          let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
+          if (y) {
+            entity.setDynamicProperty("missileCord", { x: x, y: y, z: z });
+            entity.setDynamicProperty("saved", true);
+            form.close();
+          } else {
+            world.sendMessage("AHHHHHHHHHHHHH CONSOLE BROKE");
+          }
+        },
+        { visible: saveCordBool },
+      )
+      .button(
+        "Fire at saved location",
+        () => {
+          const location: Vector3 = entity.getDynamicProperty(
+            "missileCord",
+          ) as Vector3;
+          const nameId = `hate${location.x}${location.y}${location.z}`;
+          let time = 10;
+          const timer = system.runInterval(() => {
+            if (time < 0) {
+              system.clearRun(timer);
+            }
+            if (time >= 4) {
+              player.onScreenDisplay.setActionBar(`${time}`);
+              entity.dimension.spawnParticle(
+                "atomic:ballistic_smoke",
+                entity.location,
+              );
+            }
+            if (time < 4) {
+              player.onScreenDisplay.setActionBar(`§4${time}`);
+              entity.dimension.spawnParticle(
+                "atomic:ballistic_smoke",
+                entity.location,
+              );
+            }
+            time--;
+          }, 20);
+          system.runTimeout(() => {
+            if (location.y)
+              travelSystem(
+                location.x,
+                location.y,
+                location.z,
+                nameId,
+                entity,
+                player,
+              );
+          }, 200);
+          form.close();
+        },
+        { visible: useSaved },
+      )
       .show();
   }
 });

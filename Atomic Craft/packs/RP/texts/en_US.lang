@@ -1,5 +1,6 @@
 pack.name=Atomic Craft RP
 pack.description=I am became Steve, destroyer of mines
+tile.atomic:crsuag_banner.name=Crsuag nation banner
 tile.atomic:uranium_ore.name=Uranium ore
 item.atomic:raw_uranium.name=Raw uranium
 tile.atomic:atom_bomb.name=Atomic bomb
@@ -70,7 +71,10 @@ item.atomic:himar_item.name=Himar item
 item.atomic:thermo_core.name=Thermo Nuclear Core
 item.atomic:atomic_settings.name=Atomic Manage Item
 
-tile.atomic:atomic_slab_item.name= Radiation plank slab
+tile.atomic:radiation_slab.name= Radiation plank slab
+item.atomic:nethernuim.name=Nethernuim
+
+group.atomic:nucleargroup.name=Nuclear bombs
 
 action.interact.plane.leave=Leave plane by pressing :_input_key.sneak: and press :_input_key.use: to use weapons
 action.interact.himar.enter=Press :_input_key.sneak: to exit Himar and press :_input_key.use: to use weapons

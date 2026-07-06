@@ -64,6 +64,9 @@
           }
         ]
       },
+      "minecraft:loot": {
+        "table": "loot_tables/entities/himar.json"
+      },
       "minecraft:health": {
         "value": 17
       },

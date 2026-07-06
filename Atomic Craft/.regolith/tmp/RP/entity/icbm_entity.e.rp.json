@@ -17,6 +17,9 @@
         "icbm_trail_partcc": "atomic:icbm_trail_partcc",
         "icbmunleash": "atomic:icbmunleash"
       },
+      "sound_effects": {
+        "missilelaunch": "atomic.missile.launch"
+      },
       "animations": {
         "idleny": "animation.icbm.idle",
         "flying": "animation.icbm.fly",

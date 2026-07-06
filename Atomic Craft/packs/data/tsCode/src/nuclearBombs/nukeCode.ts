@@ -226,7 +226,7 @@ class OnClick implements BlockCustomComponent {
 
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
-            world.tickingAreaManager.removeTickingArea("nukearea");
+            
 
             //Nuke Code!!!
             nuclearArea(

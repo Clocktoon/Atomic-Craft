@@ -224,12 +224,13 @@ class RedNuclear implements BlockCustomComponent {
               },
             );
 
-            aftermath(
-              dimension.id,
-              radius,
-              volume,
-              Math.floor(Math.random() * 4),
-            );
+            // LATER UPDATE THING
+            // aftermath(
+            //   dimension.id,
+            //   radius,
+            //   volume,
+            //   Math.floor(Math.random() * 4),
+            // );
           }
 
           system.runJob(blockGen());
@@ -430,12 +431,13 @@ class RedNuclear implements BlockCustomComponent {
                     },
                   );
       
-                  aftermath(
-                    dimension.id,
-                    radius,
-                    volume,
-                    Math.floor(Math.random() * 4),
-                  );
+                  // LATER UPDATE TO BE ADDED YOU GET IT
+                  // aftermath(
+                  //   dimension.id,
+                  //   radius,
+                  //   volume,
+                  //   Math.floor(Math.random() * 4),
+                  // );
                 }
       
                 system.runJob(blockGen());

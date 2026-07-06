@@ -1,10 +1,11 @@
-import { system, world, } from "@minecraft/server";
-import { EquipmentSlot, } from "@minecraft/server";
+import { ItemStack, Player, system, world, } from "@minecraft/server";
+import { EquipmentSlot } from "@minecraft/server";
 import { createCrater } from "./nuclearTransforms/crater.js";
 import { nuclearArea } from "./nuclearTransforms/volumeCode.js";
-import { CustomForm, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
+import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
 const distanceUiNumber = new ObservableNumber(0);
 let fail = false;
+let stopGoing = false;
 function makeRandomId() {
     //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
     return `${Date.now()}+${Math.random() * 100}`;
@@ -37,7 +38,7 @@ function* nuclearExplosion(playerEntity, entity, target) {
                 minDistance: 1,
                 maxDistance: 100,
             })) {
-                eny.setOnFire(20);
+                eny.setOnFire(64);
                 if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
                     eny.typeId !== "atomic:gen_entity" &&
                     eny.typeId != "minecraft:player") {
@@ -45,7 +46,9 @@ function* nuclearExplosion(playerEntity, entity, target) {
                 }
             }
             for (const playerRadi of players) {
-                if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
+                if (playerRadi
+                    .getComponent("minecraft:equippable")
+                    ?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
                     playerRadi.setDynamicProperty("radiation", 100);
                 }
                 //TODO: Make gas mask worth with players
@@ -92,7 +95,7 @@ function* nuclearExplosion(playerEntity, entity, target) {
                         try {
                             player.playSound("atomic.nukesound", {
                                 volume: boomVolume,
-                                pitch: boomPitch
+                                pitch: boomPitch,
                             });
                             if (distance <= shakeDistance) {
                                 const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
@@ -112,10 +115,11 @@ function* nuclearExplosion(playerEntity, entity, target) {
             playExplosionAudio(playdi, entity.location, 260);
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
-            world.tickingAreaManager.removeTickingArea("nukearea");
             //Nuke Code!!!
-            nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity);
-            target.remove();
+            nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity).then(() => {
+                entity.remove();
+                target.remove();
+            });
         }
         system.runJob(blockGen());
     });
@@ -131,7 +135,7 @@ function initializeMissile(missile, targetPos) {
     missile.setDynamicProperty("yaw", yaw);
     missile.setDynamicProperty("pitch", -80);
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.30];
+    const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.3];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -186,7 +190,7 @@ function updateMissile(missile, target, warhead, player) {
     if (waypoint <= 4) {
         missile.dimension.spawnParticle("atomic:icbm_trail_partcc", {
             x: missile.location.x + back.x * 1.5,
-            y: missile.location.y,
+            y: missile.location.y - 1,
             z: missile.location.z + back.z * 1.5,
         });
     }
@@ -203,7 +207,7 @@ function updateMissile(missile, target, warhead, player) {
         newWarhead.dimension.spawnParticle("atomic:icbmunleash", {
             x: newWarhead.location.x,
             y: newWarhead.location.y,
-            z: newWarhead.location.z - 1
+            z: newWarhead.location.z - 1,
         });
         const yaw = missile.getDynamicProperty("yaw");
         const pitch = missile.getDynamicProperty("pitch");
@@ -246,13 +250,13 @@ function updateMissile(missile, target, warhead, player) {
     const vz = Math.cos(yawRad) * Math.cos(pitchRad);
     let speed;
     if (waypoint <= 1) {
-        speed = 0.4;
+        speed = 0.7;
     }
     else if (waypoint <= 5) {
         speed = 0.9;
     }
     else {
-        speed = 1.6;
+        speed = 1.7;
     }
     const loc = active.location;
     active.teleport({
@@ -281,13 +285,25 @@ ${Math.round(rot.x)}`;
         console.warn(`Missile error: ${e}`);
     }
     if (active.getProperty(`atomic:nuke`) === true || targetDistance < 10) {
-        system.runJob(nuclearExplosion(player, active, target));
-        active.remove();
-        target.remove();
+        active.addEffect("invisibility", 2000000, { showParticles: false });
+        if (!stopGoing) {
+            system.runJob(nuclearExplosion(player, active, target));
+            stopGoing = true;
+        }
     }
     return warhead;
 }
-function travelSystem(x, y, z, name, entity, player) {
+/**
+ * Missile travel system
+ *
+ * @param {number} x x cord of target loctation
+ * @param {number} y y cord of target location
+ * @param {number} z z cord of target location
+ * @param {string} name name to be used for ticking area
+ * @param {Entity} entity
+ * @param {Player} player
+ */
+export function travelSystem(x, y, z, name, entity, player) {
     const launchPos = entity.location;
     const dx = x - launchPos.x;
     const dy = y - launchPos.y;
@@ -304,46 +320,120 @@ function travelSystem(x, y, z, name, entity, player) {
     fail = false;
     const minY = Math.max(0, y - 30);
     const maxY = y + 30;
-    let warhead = null;
-    world.tickingAreaManager
-        .createTickingArea(name, {
-        from: {
-            x: x - 30,
-            y: minY,
-            z: z - 30,
-        },
-        to: {
-            x: x + 30,
-            y: maxY,
-            z: z + 30,
-        },
-        dimension: entity.dimension,
-    })
-        .then(() => {
-        const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
-        initializeMissile(entity, target.location);
-        entity.setProperty("atomic:blastoff", true);
-        entity.triggerEvent("atomic:onn");
-        const missileLoop = system.runInterval(() => {
-            if (!entity.isValid || !target.isValid) {
-                system.clearRun(missileLoop);
-                return;
-            }
-            warhead = updateMissile(entity, target, warhead, player);
-        }, 1);
-    });
+    const launchUp = system.runInterval(() => {
+        if (!entity.isValid) {
+            system.clearRun(launchUp);
+            return;
+        }
+        entity.applyImpulse({
+            x: 0,
+            y: 1,
+            z: 0
+        });
+    }, 20);
+    system.runTimeout(() => {
+        system.clearRun(launchUp);
+        let warhead = null;
+        if (world.tickingAreaManager.hasCapacity({
+            from: {
+                x: x - 30,
+                y: minY,
+                z: z - 30,
+            },
+            to: {
+                x: x + 30,
+                y: maxY,
+                z: z + 30,
+            },
+            dimension: entity.dimension,
+        })) {
+            world.tickingAreaManager
+                .createTickingArea(name, {
+                from: {
+                    x: x - 30,
+                    y: minY,
+                    z: z - 30,
+                },
+                to: {
+                    x: x + 30,
+                    y: maxY,
+                    z: z + 30,
+                },
+                dimension: entity.dimension,
+            })
+                .then(() => {
+                const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+                initializeMissile(entity, target.location);
+                entity.setProperty("atomic:blastoff", true);
+                entity.triggerEvent("atomic:onn");
+                const missileLoop = system.runInterval(() => {
+                    if (!entity.isValid || !target.isValid) {
+                        system.clearRun(missileLoop);
+                        return;
+                    }
+                    warhead = updateMissile(entity, target, warhead, player);
+                }, 1);
+            });
+        }
+        else {
+            const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+            initializeMissile(entity, target.location);
+            entity.setProperty("atomic:blastoff", true);
+            entity.triggerEvent("atomic:onn");
+            const missileLoop = system.runInterval(() => {
+                if (!entity.isValid || !target.isValid) {
+                    system.clearRun(missileLoop);
+                    return;
+                }
+                warhead = updateMissile(entity, target, warhead, player);
+            }, 1);
+        }
+    }, 300);
 }
+//@lantern-links-entities ["atomic:icbm"]
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
     const entity = ev.target;
     const player = ev.player;
     if (entity.typeId === "atomic:icbm") {
         const xOb = new ObservableString("", { clientWritable: true });
-        const yOb = new ObservableString("", { clientWritable: true });
         const zOb = new ObservableString("", { clientWritable: true });
+        const cordMode = new ObservableNumber(0, { clientWritable: true });
+        const launchBool = new ObservableBoolean(true, { clientWritable: true });
+        const saveCordBool = new ObservableBoolean(false, { clientWritable: true });
+        const useSaved = new ObservableBoolean(false, { clientWritable: true });
+        cordMode.subscribe((mode) => {
+            if (mode === 0) {
+                launchBool.setData(true);
+                saveCordBool.setData(false);
+                useSaved.setData(false);
+            }
+            if (mode === 1) {
+                launchBool.setData(false);
+                if (entity.getDynamicProperty("saved") === true) {
+                    useSaved.setData(true);
+                }
+                if (entity.getDynamicProperty("saved") === undefined ||
+                    entity.getDynamicProperty("saved") === false) {
+                    saveCordBool.setData(true);
+                }
+                else {
+                    saveCordBool.setData(false);
+                }
+            }
+        });
         const form = new CustomForm(player, "Missile Control Panel");
         form
+            .dropdown("Mode", cordMode, [
+            {
+                label: "Launch now mode",
+                value: 0,
+            },
+            {
+                label: "Save coordinates for later mode",
+                value: 1,
+            },
+        ])
             .textField("X", xOb)
-            .textField("Y", yOb)
             .textField("Z", zOb)
             .closeButton()
             .divider()
@@ -352,27 +442,79 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             let z = Number(zOb.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
             const nameId = `hate${x}${y}${z}`;
-            if (y)
-                travelSystem(x, y, z, nameId, entity, player);
+            let time = 10;
+            const timer = system.runInterval(() => {
+                if (time < 0) {
+                    system.clearRun(timer);
+                }
+                if (time >= 4) {
+                    player.onScreenDisplay.setActionBar(`${time}`);
+                    entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
+                }
+                if (time < 4) {
+                    player.onScreenDisplay.setActionBar(`§4${time}`);
+                    entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
+                }
+                time--;
+            }, 20);
+            system.runTimeout(() => {
+                if (y)
+                    travelSystem(x, y, z, nameId, entity, player);
+            }, 200);
             form.close();
-        })
+        }, { visible: launchBool })
+            .button("Save coordinates", () => {
+            let x = Number(xOb.getData());
+            let z = Number(zOb.getData());
+            let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
+            if (y) {
+                entity.setDynamicProperty("missileCord", { x: x, y: y, z: z });
+                entity.setDynamicProperty("saved", true);
+                form.close();
+            }
+            else {
+                world.sendMessage("AHHHHHHHHHHHHH CONSOLE BROKE");
+            }
+        }, { visible: saveCordBool })
+            .button("Fire at saved location", () => {
+            const location = entity.getDynamicProperty("missileCord");
+            const nameId = `hate${location.x}${location.y}${location.z}`;
+            let time = 10;
+            const timer = system.runInterval(() => {
+                if (time < 0) {
+                    system.clearRun(timer);
+                }
+                if (time >= 4) {
+                    player.onScreenDisplay.setActionBar(`${time}`);
+                    entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
+                }
+                if (time < 4) {
+                    player.onScreenDisplay.setActionBar(`§4${time}`);
+                    entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
+                }
+                time--;
+            }, 20);
+            system.runTimeout(() => {
+                if (location.y)
+                    travelSystem(location.x, location.y, location.z, nameId, entity, player);
+            }, 200);
+            form.close();
+        }, { visible: useSaved })
             .show();
     }
 });
-// world.afterEvents.entityHurt.subscribe((ev) => {
-//   const entity = ev.hurtEntity;
-//   const damageSource = ev.damageSource;
-//   if (
-//     entity.typeId === "atomic:icbm" &&
-//     damageSource.damagingEntity instanceof Player
-//   ) {
-//     const damager = damageSource.damagingEntity;
-//     if (damager instanceof Player) {
-//       const invComp = damager.getComponent("minecraft:inventory");
-//       if (invComp && invComp.container)
-//         invComp.container.addItem(new ItemStack("atomic:icbm_item", 1));
-//         entity.remove()
-//     }
-//   }
-// });
+world.afterEvents.entityHurt.subscribe((ev) => {
+    const entity = ev.hurtEntity;
+    const damageSource = ev.damageSource;
+    if (entity.typeId === "atomic:icbm" &&
+        damageSource.damagingEntity instanceof Player) {
+        const damager = damageSource.damagingEntity;
+        if (damager instanceof Player) {
+            const invComp = damager.getComponent("minecraft:inventory");
+            if (invComp && invComp.container)
+                invComp.container.addItem(new ItemStack("atomic:icbm_item", 1));
+            entity.remove();
+        }
+    }
+});
 //# sourceMappingURL=icbmCode.js.map

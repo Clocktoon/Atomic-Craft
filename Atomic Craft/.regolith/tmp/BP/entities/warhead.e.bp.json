@@ -83,7 +83,7 @@
         "family": ["tmissile"]
       },
       "minecraft:health": {
-        "value": 100
+        "value": 1000
       },
       "minecraft:interact": {
         "interactions": [

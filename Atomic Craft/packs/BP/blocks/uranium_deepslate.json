@@ -11,7 +11,16 @@
             "minecraft:light_dampening": 15,
             "minecraft:light_emission": 0,
             "minecraft:selection_box": true,
-            "minecraft:loot": "loot_tables/uranium_ore_loot.json"
+            "minecraft:loot": "loot_tables/uranium_ore_loot.json",
+            "minecraft:material_instances": {
+                "*": {
+                    "render_method": "opaque",
+                    "texture": "atomic_uranium_deepslate"
+                }
+            },
+            "minecraft:geometry": {
+                "identifier": "minecraft:geometry.full_block"
+            }
         }
     }
 }

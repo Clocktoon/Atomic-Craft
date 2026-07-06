@@ -10,10 +10,16 @@
 			}
 		},
 		"animation.icbm.fly": {
-			"animation_length": 0.5833,
+			"animation_length": 22.6667,
 			"bones": {
 				"bone": {
 					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "missilelaunch",
+					"locator": "locator"
 				}
 			}
 		},

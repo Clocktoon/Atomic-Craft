@@ -1,0 +1,19 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:template_pool": {
+        "description": {
+            "identifier": "atomic:bunker"
+        },
+        "elements": [
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/bunker_start",
+                    "projection": "terrain_matching",
+                    "processors": "atomic:mossy_turn"
+                },
+                "weight": 1
+            }
+        ]
+    }
+}

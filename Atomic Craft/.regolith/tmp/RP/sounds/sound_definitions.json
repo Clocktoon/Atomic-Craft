@@ -92,6 +92,17 @@
 			"sounds": [
 				"sounds/mortarshotsound"
 			]
+		},
+		"atomic.console.click": {
+			"sounds": [
+				"sounds/consoleclick"
+			],
+			"category": "ui"
+		},
+		"atomic.missile.launch": {
+			"sounds": [
+				"sounds/missilelaunch"
+			]
 		}
 	}
 }

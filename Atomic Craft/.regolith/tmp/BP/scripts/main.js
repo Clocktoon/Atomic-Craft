@@ -1,4 +1,4 @@
-import { world, system, } from "@minecraft/server";
+import { world, system, ItemStack, } from "@minecraft/server";
 /**
  * Main file for BOG (bombs of glory)
  * @author Abaddon
@@ -24,7 +24,7 @@ import("./landMineCode.js");
 import("./nuclearBombs/hBombCode.js");
 import("./icbmComp.js");
 import("./consoleCode.js");
-import("./nonComp.js");
+// import("./nonComp.js")
 import("./EatEffects.js");
 import("./radiationSystem/cureSystem");
 import("./devItem.js");
@@ -33,6 +33,12 @@ import("./nuclearBombs/gadget");
 world.afterEvents.worldLoad.subscribe(() => {
     if (typeof world.getDynamicProperty("powerful") !== "boolean") {
         world.setDynamicProperty("powerful", true);
+    }
+    if (typeof world.getDynamicProperty("explosionEffect") !== "boolean") {
+        world.setDynamicProperty("explosionEffect", true);
+    }
+    if (typeof world.getDynamicProperty("logs") !== "boolean") {
+        world.setDynamicProperty("logs", false);
     }
     import("./explodeTnt.js");
     import("./projectileScript.js");
@@ -53,5 +59,23 @@ world.afterEvents.worldLoad.subscribe(() => {
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
     //import("./setLore.js")
+});
+world.afterEvents.playerSpawn.subscribe((event) => {
+    const player = event.player;
+    const inventory = player.getComponent('inventory');
+    if (event.initialSpawn) {
+        if (inventory) {
+            const container = inventory.container;
+            const settingsItem = new ItemStack("atomic:atomic_settings", 1);
+            if (!container.contains(settingsItem)) {
+                if (container.emptySlotsCount > 0) {
+                    container.addItem(settingsItem);
+                }
+                else {
+                    player.dimension.spawnEntity(settingsItem.typeId, player.location);
+                }
+            }
+        }
+    }
 });
 //# sourceMappingURL=main.js.map

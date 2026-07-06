@@ -4,6 +4,11 @@ system.run(() => {
         world.setDynamicProperty("powerful", true);
     }
 });
+system.run(() => {
+    if (typeof world.getDynamicProperty("logs") !== "boolean") {
+        world.setDynamicProperty("logs", false);
+    }
+});
 /**
  * @class ChunkFiller
  * @description Does the actual filling of blocks for the nuclear explosions
@@ -102,6 +107,7 @@ class ChunkFiller {
                         "minecraft:wooden_slab",
                         "minecraft:short_dry_grass",
                         "minecraft:tall_dry_grass",
+                        "minecraft:snow_layer"
                     ],
                     excludeTags: ["log"],
                 }, true);

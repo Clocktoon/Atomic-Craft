@@ -30,6 +30,7 @@
             "minecraft:light_dampening": 15,
             "minecraft:light_emission": 0,
             "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:map_color": "#1f1f1f",
             "atomic:step": {}
         }
     }

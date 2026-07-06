@@ -12,7 +12,7 @@
             "minecraft:max_stack_size": 1,
             "minecraft:can_destroy_in_creative": false,
             "minecraft:display_name": {
-                "value": "Bombs of Glory Settings"
+                "value": "item.atomic:atomic_settings"
             },
             "atomic:settings_comp": {}
         }

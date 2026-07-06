@@ -46,6 +46,14 @@
 		{
 			"module_name": "@minecraft/server-ui",
 			"version": "2.1.0"
+		},
+		{
+			"uuid": "1fb0a806-aaf1-458a-8694-d397e28cbb4e",
+			"version": [
+			1,
+			0,
+			0
+		]
 		}
 	]
 }

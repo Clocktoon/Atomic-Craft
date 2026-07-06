@@ -1,6 +1,5 @@
 import { system, world, BlockVolume, EquipmentSlot, } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
-import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
 function makeRandomId() {
@@ -158,7 +157,6 @@ class OnClickGadget {
                         // );
                         yield;
                         //Gets rid of ticking area and starts the real nuclear explosion code
-                        world.tickingAreaManager.removeTickingArea("nukearea");
                         //Nuke Code!!!
                         nuclearArea(block.dimension.id, block.location, block, 112, 40, playerEntity
                         //   40,
@@ -173,7 +171,13 @@ class OnClickGadget {
                             y: block.location.y + 20,
                             z: block.location.z + 20,
                         });
-                        aftermath(dimension.id, radius, volume, Math.floor(Math.random() * 4));
+                        // GOING TO BE ADDED IN A LATER UPDATE
+                        // aftermath(
+                        //   dimension.id,
+                        //   radius,
+                        //   volume,
+                        //   Math.floor(Math.random() * 4),
+                        // );
                     }
                     system.runJob(blockGen());
                 }, 400);

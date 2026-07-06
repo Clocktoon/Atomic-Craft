@@ -1,0 +1,89 @@
+{
+  "format_version": "1.26.30",
+  "minecraft:block": {
+    "description": {
+      "identifier": "atomic:crsuag_banner",
+      "menu_category": {
+        "category": "construction"
+      },
+      "traits": {
+                "minecraft:placement_direction": {
+                    "enabled_states": [
+                        "minecraft:cardinal_direction"
+                    ],
+                    "y_rotation_offset": 180
+                }
+            }
+    },
+    "components": {
+      "minecraft:geometry": {
+        "identifier": "geometry.villager_banner"
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "atomic_crsuag"
+        }
+      },
+      "minecraft:display_name": "tile.atomic:crsuag_banner.name",
+      "minecraft:collision_box": {
+        "origin": [-8, 0, 4],
+        "size": [16, 16, 4]
+      },
+      "minecraft:selection_box": {
+        "origin": [-8, 0, 4],
+        "size": [16, 16, 4]
+      },
+      "minecraft:light_dampening": 15
+    },
+    "permutations": [
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'north'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'west'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'south'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            180,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:cardinal_direction') == 'east'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            -90,
+                            0
+                        ]
+                    }
+                }
+            }
+        ]
+  }
+}

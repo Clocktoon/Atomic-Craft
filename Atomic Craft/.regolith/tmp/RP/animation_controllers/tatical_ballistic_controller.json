@@ -2,7 +2,7 @@
   "format_version": "1.26.0",
   "animation_controllers": {
     "controller.animation.ballistic": {
-      "initial_state": "flying",
+      "initial_state": "sitting",
       "states": {
         "flying": {
           "animations": ["rotate"],
@@ -12,9 +12,6 @@
 			},
             { 
 				"payload": "query.property('atomic:pay')" 
-			},
-            { 
-				"launch": "query.property('atomic:launching')" 
 			}
           ]
         },
@@ -23,9 +20,6 @@
           "transitions": [
 			{ 
 			"flying": "query.property('atomic:blastoff')" 
-			},
-			{
-				"launch": "query.property('atomic:launching')"
 			}
 		]
         },
@@ -34,26 +28,10 @@
           "transitions": [
             {
               "flying": "!query.property('atomic:pay')"
-            },
-			{
-				"launch": "query.property('atomic:launching') && !query.property('atomic:pay')"
-			}
-          ]
-        },
-        "launch": {
-          "animations": ["launch"],
-          "transitions": [
-            {
-              "flying": "!query.property('atomic:launching')"
-            },
-            {
-              "sitting": "!query.property('atomic:launching') && !query.property('atomic:blastoff')"
-            },
-            {
-              "payload": "query.property('atomic:pay')"
             }
           ]
         }
+        
       }
     }
   }

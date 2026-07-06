@@ -1,0 +1,37 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:mortar_item"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "S": {
+                "item": "minecraft:spyglass"
+            },
+            "E": {
+                "item": "atomic:enhanced_tnt"
+            }
+        },
+        "pattern": [
+            "   ",
+            " S ",
+            " E "
+        ],
+        "unlock": [
+            {
+                "item": "minecraft:spyglass",
+                "count": 1
+            },
+            {
+                "item": "atomic:enhanced_tnt",
+                "count": 1
+            }
+        ],
+        "result": {
+            "item": "atomic:mortar_item",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

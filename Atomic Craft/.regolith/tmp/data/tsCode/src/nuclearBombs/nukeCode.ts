@@ -226,7 +226,7 @@ class OnClick implements BlockCustomComponent {
 
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
-            world.tickingAreaManager.removeTickingArea("nukearea");
+            
 
             //Nuke Code!!!
             nuclearArea(
@@ -251,12 +251,13 @@ class OnClick implements BlockCustomComponent {
               },
             );
 
-            aftermath(
-              dimension.id,
-              radius,
-              volume,
-              Math.floor(Math.random() * 4),
-            );
+            // FOR LATER UPDATE
+            // aftermath(
+            //   dimension.id,
+            //   radius,
+            //   volume,
+            //   Math.floor(Math.random() * 4),
+            // );
           }
 
           system.runJob(blockGen());

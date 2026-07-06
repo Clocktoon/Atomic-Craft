@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:structure_set": {
+        "description": {
+            "identifier": "atomic:bunker"
+        },
+        "placement": {
+            "type": "minecraft:random_spread",
+            "salt": 635479,
+            "separation": 4,
+            "spacing": 100,
+            "spread_type": "triangular"
+        },
+        "structures": [
+            {
+                "structure": "atomic:bunker_base",
+                "weight": 1
+            }
+        ]
+    }
+}

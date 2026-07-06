@@ -19,6 +19,13 @@ system.run(() => {
   }
 })
 
+system.run(() => {
+  if(typeof world.getDynamicProperty("logs") !== "boolean") {
+    world.setDynamicProperty("logs", false)
+  }
+})
+
+
   
 export interface ChunkFillRequest {
   area: TickingArea;
@@ -153,6 +160,7 @@ class ChunkFiller {
               "minecraft:wooden_slab",
               "minecraft:short_dry_grass",
               "minecraft:tall_dry_grass",
+              "minecraft:snow_layer"
             ],
             excludeTags: ["log"],
           },

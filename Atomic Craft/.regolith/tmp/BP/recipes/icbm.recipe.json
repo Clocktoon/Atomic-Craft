@@ -1,0 +1,47 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:icbm_item"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "S": {
+                "item": "atomic:steel_block"
+            },
+            "I":{
+                "item": "atomic:steel_ingot"
+            },
+            "A": {
+                "item": "atomic:atom_bomb"
+            },
+            "O": {
+                "item": "minecraft:observer"
+            }
+        },
+        "pattern": [
+            "SOS",
+            "SAS",
+            "SIS"
+        ],
+        "unlock": [
+            {
+                "item": "atomic:steel_ingot"
+            },
+            {
+                "item": "atomic:steel_block"
+            },
+            {
+                "item": "atomic:atom_bomb"
+            },
+            {
+                "item": "minecraft:observer"
+            }
+        ],
+        "result": {
+            "item": "atomic:icbm_item",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

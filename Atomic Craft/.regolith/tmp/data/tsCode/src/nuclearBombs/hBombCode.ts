@@ -284,12 +284,13 @@ class Fus implements BlockCustomComponent {
                 },
               );
 
-              aftermath(
-                dimension.id,
-                radius,
-                volume,
-                Math.floor(Math.random() * 4),
-              );
+              //WILL BE ADDED IN LATER UPDATE
+              // aftermath(
+              //   dimension.id,
+              //   radius,
+              //   volume,
+              //   Math.floor(Math.random() * 4),
+              // );
             }
 
             system.runJob(blockGen());

@@ -105,7 +105,9 @@ world.beforeEvents.explosion.subscribe((event) => {
      const blocks = event.getImpactedBlocks();
   const center = getApproxExplosionCenter(blocks);
   const dim = event.dimension;
-
+  if(world.getDynamicProperty("explosionEffect") === false)
+    return;
+  
   if (center) {
     if(event.source?.typeId === "atomic:enhanced_mob") {
       dim.spawnParticle("atomic:explosioncloud", {x: center.x, y: center.y - 3, z: center.z})

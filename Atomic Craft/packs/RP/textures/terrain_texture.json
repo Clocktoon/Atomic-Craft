@@ -4,6 +4,12 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"atomic_crsuag": {
+			"textures": "textures/blocks/villager_banner"
+		},
+		"atomic_skyward": {
+			"textures": "textures/blocks/skyward_banner"
+		},
 		"atomic_uranium_ore": {
 			"textures": "textures/blocks/uranium ore texture"
 		},
@@ -29,7 +35,7 @@
 			"textures": "textures/blocks/enchanced_tnt"
 		},
 		"atomic_uranium_deepslate": {
-			"textures": "textures/blocks/uranium_deepslate1"
+			"textures": "textures/blocks/uranium_deepslate_new"
 		},
 		"atomic_landmine": {
 			"textures": "textures/blocks/landminetex"

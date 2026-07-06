@@ -1,34 +1,42 @@
 {
-    "format_version": "1.26.10",
-    "minecraft:entity": {
-        "description": {
-            "identifier": "atomic:hate",
-            "is_spawnable": false,
-            "is_summonable": true
-        },
-        "components": {
-            "minecraft:health": {
-                "value": 1000
-            },
-            "minecraft:tick_world": {
-                "never_despawn": true,
-                "radius": 2
-            },
-            "minecraft:breathable": {
-                "breathes_water": true
-            },
-            "minecraft:collision_box": {
-                "height": 1,
-                "width": 1
-            },
-            "minecraft:physics": {
-                "has_collision": true,
-                "has_gravity": true
-            },
-            "minecraft:type_family": {
-                "family": ["target","hated"]
-            }
-            
-        }
+  "format_version": "1.26.10",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "atomic:hate",
+      "is_spawnable": false,
+      "is_summonable": true
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 1000
+      },
+      "minecraft:tick_world": {
+        "never_despawn": true,
+        "radius": 2
+      },
+      "minecraft:spell_effects": {
+        "add_effects": [
+          {
+            "visible": false,
+            "effect": "invisibility",
+            "duration": "infinite"
+          }
+        ]
+      },
+      "minecraft:breathable": {
+        "breathes_water": true
+      },
+      "minecraft:collision_box": {
+        "height": 1,
+        "width": 1
+      },
+      "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": true
+      },
+      "minecraft:type_family": {
+        "family": ["target", "hated"]
+      }
     }
+  }
 }

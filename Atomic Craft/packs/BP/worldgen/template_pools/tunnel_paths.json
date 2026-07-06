@@ -1,0 +1,45 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:template_pool": {
+        "description": {
+            "identifier": "atomic:tunnel_paths"
+        },
+        "elements": [
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/bunker_bedroom",
+                    "processors": "atomic:mossy_turn"
+                }
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/bunker_desk",
+                    "processors": "atomic:mossy_turn"
+                }
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/power_room",
+                    "processors": "atomic:mossy_turn"
+                }
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/small_main",
+                    "processors": "atomic:mossy_turn"
+                }
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "bunker/tunnel_small",
+                    "processors": "atomic:mossy_turn"
+                }
+            }
+        ]
+    }
+}

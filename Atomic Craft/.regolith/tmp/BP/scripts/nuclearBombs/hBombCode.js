@@ -1,5 +1,4 @@
 import { system, world, BlockVolume, } from "@minecraft/server";
-import { aftermath } from "../aftermath.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
 function makeRandomId() {
@@ -200,7 +199,13 @@ class Fus {
                             y: block.location.y + 20,
                             z: block.location.z + 20,
                         });
-                        aftermath(dimension.id, radius, volume, Math.floor(Math.random() * 4));
+                        //WILL BE ADDED IN LATER UPDATE
+                        // aftermath(
+                        //   dimension.id,
+                        //   radius,
+                        //   volume,
+                        //   Math.floor(Math.random() * 4),
+                        // );
                     }
                     system.runJob(blockGen());
                 }, 400);

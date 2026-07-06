@@ -1,11 +1,16 @@
 import { world, system, } from "@minecraft/server";
-import { CustomForm, ObservableBoolean } from "@minecraft/server-ui";
+import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString } from "@minecraft/server-ui";
+// @lantern-links-items ["atomic:atomic_settings"]
 class RadiSettings {
     onUse(e) {
         const yielding = new ObservableBoolean(true, { clientWritable: true });
         const explosionEffects = new ObservableBoolean(true, { clientWritable: true });
+        const logsBool = new ObservableBoolean(false, { clientWritable: true });
+        //in case pages in different sections are ever needed
+        // const page = new ObservableNumber(0, { clientWritable: true})
         const currentPower = world.getDynamicProperty("powerful");
         const exEffect = world.getDynamicProperty("explosionEffect");
+        const logsOn = world.getDynamicProperty("logs");
         if (typeof currentPower === "boolean") {
             yielding.setData(currentPower);
         }
@@ -20,14 +25,194 @@ class RadiSettings {
             world.setDynamicProperty("explosionEffect", true);
             explosionEffects.setData(true);
         }
+        if (typeof logsOn === "boolean") {
+            logsBool.setData(logsOn);
+        }
+        else {
+            world.setDynamicProperty("logs", false);
+            logsBool.setData(false);
+        }
         yielding.subscribe((v) => world.setDynamicProperty("powerful", v));
         explosionEffects.subscribe((v) => world.setDynamicProperty("explosionEffect", v));
-        new CustomForm(e.source, "Bombs of glory settings")
+        logsBool.subscribe((v) => world.setDynamicProperty("logs", v));
+        //#region Pages
+        const uranDrop = new ObservableNumber(0, { clientWritable: true });
+        const uranText = new ObservableString("Pick section", { clientWritable: true });
+        uranDrop.subscribe((nu) => {
+            if (nu === 0) {
+                uranText.setData(`Uranium is the main ore of this addon, 
+          it's used to make all of the nuclear bombs. It can be found from the Y cords -47 to 62, 
+          with more heavy amounts in the middle of the non negative cords. Uranium has a green look, making it somewhat like emeralds.
+
+          Uranium can also be gotten from the uranium vita, a new mob that spawns in dark areas, being the living weird version of uranium itself.
+          
+          The raw uranium can be cooked in a furnace to make its cooked form, which is the item that is actually useful.
+          Once you reach the nether, you can combine cooked uranium with quartz to make nethernuim, more on that in the useage section`);
+            }
+            if (nu === 1) {
+                uranText.setData(`The main useage of uranium is making nuclear bombs, 
+        uranium is used in both versions of the nuclear bomb cores, the first atomic core used for the first two nuke tiers is made 
+        via putting iron around cooked uranium, while the thermonuclear is made using nethernium around the first atomic core.
+        
+        Uranium can also be used to make enhanced tnt, which is a more powerful version of normal tnt, which is used later on for missiles and other things.`);
+            }
+        });
+        const uranium = new CustomForm(e.source, "Uranium")
+            .dropdown("Section", uranDrop, [
+            {
+                label: "Ore block info",
+                value: 0
+            },
+            {
+                label: "Ore usage",
+                value: 1
+            }
+        ])
+            .label(uranText)
+            .button("Back", () => {
+            uranium.close();
+            system.run(() => {
+                wikiScreen.show();
+            });
+        });
+        const bombDrop = new ObservableNumber(0, { clientWritable: true });
+        const bombText = new ObservableString("Pick section", { clientWritable: true });
+        bombDrop.subscribe(() => {
+            if (bombDrop.getData() === 0) {
+                bombText.setData(`Bombs of glory has many types of bombs, the recipes for each can be unlocked via getting ores and gunpowder in most cases, below is a list of each and some basic info on them.
+          
+          
+          Grenade: Can be thrown, explodes after a few seconds on the ground.
+          
+          Enhanced tnt: A more powerful version of normal tnt made with uranium, explodes a pretty big area.
+          
+          Mortar: A type of cannon that fires a bomb at a nearby location, it requires ammo to fire, click on it with ammo to shoot.
+          
+          Plane bombs: A plane entity can be made. The plane can drop down a bomb that explodes the ground below it.
+          
+          Himar missiles: A himar can be made, this entity fires out missiles that head to a set location via UI, missile explodes on impact.
+          
+          Missile button + Remote missile: Fires down a missile at a location by rather holding down on for the button, or looking at a block for the remote.
+          
+          Ballistic missiles + ICBM: These ones are made via steel blocks and their bomb type, they sit in place until given cords to head to, in which case they fire off towards the cords, once hitting target they explode.
+          The ICBM is the nuclear one made with an atomic bomb at the center, 
+          while the normal ballistic one has an enhanced tnt at the center.
+
+          Nuclear bombs: Each of the nuclear bombs work roughly the same, 
+          they will create a crater, and will change the area around it in a scaling size.
+          The first one, the gadget is made with iron, the second one is made with netherite, and last one with steel.`);
+            }
+            if (bombDrop.getData() === 1) {
+                bombText.setData(`Nuclear explosions will turn the area around it into a toxic place, the ground becomes dangerous to walk on and
+          it becomes a bad idea to try and live there, in a future update radiation will also be added thus making these places truly dangerous forever.
+          The effects of death from these blocks can be avoided by wearing a gas mask, craft one to save yourself from the pain!
+          `);
+            }
+        });
+        const bombs = new CustomForm(e.source, "Bombs and Nuclear")
+            .dropdown("Section", bombDrop, [
+            {
+                label: "List of bombs and basic info",
+                value: 0
+            },
+            {
+                label: "Nuclear details",
+                value: 1
+            }
+        ])
+            .label(bombText)
+            .button("Back", () => {
+            bombs.close();
+            system.run(() => {
+                wikiScreen.show();
+            });
+        });
+        const steelDrop = new ObservableNumber(0, { clientWritable: true });
+        const steelText = new ObservableString("Pick section", { clientWritable: true });
+        steelDrop.subscribe((v) => {
+            if (v === 0) {
+                steelText.setData(`Steel is made via putting 2 netherite scrap, 
+          and 4 iron ingots in a crafting table`);
+            }
+            if (v === 1) {
+                steelText.setData(`Steel ingots are used to make several bomb types, such as missiles. 
+          Get a ton of it as you'll likely need a lot of it, for instance the ballistic missiles need steel blocks to be made`);
+            }
+        });
+        const steel = new CustomForm(e.source, "Steel Ore")
+            .dropdown("Section", steelDrop, [
+            {
+                label: "How to get Steel",
+                value: 0
+            },
+            {
+                label: "Steel useage",
+                value: 1
+            }
+        ])
+            .label(steelText)
+            .button("Back", () => {
+            steel.close();
+            system.run(() => {
+                wikiScreen.show();
+            });
+        });
+        //#endregion
+        //The main screen
+        const mainScreen = new CustomForm(e.source, "Bombs of glory manage");
+        mainScreen
+            .button("Settings", () => {
+            mainScreen.close();
+            system.run(() => {
+                settingsScreen.show();
+            });
+        })
+            .button("Wiki", () => {
+            mainScreen.close();
+            system.run(() => {
+                wikiScreen.show();
+            });
+        }).show();
+        //Look at recipes, scripts, and use that to make the wiki pages
+        const wikiScreen = new CustomForm(e.source, "Bombs of glory wiki")
+            .button("Back", () => {
+            wikiScreen.close();
+            system.run(() => {
+                mainScreen.show();
+            });
+        });
+        wikiScreen.button("Uranium", () => {
+            wikiScreen.close();
+            system.run(() => {
+                uranium.show();
+            });
+        })
+            .button("Bombs + Nuclear details", () => {
+            wikiScreen.close();
+            system.run(() => {
+                bombs.show();
+            });
+        })
+            .button("Steel", () => {
+            wikiScreen.close();
+            system.run(() => {
+                steel.show();
+            });
+        });
+        //TODO: PAGES TO DO: 1. STEEL, 2. BUILDINGS, 3. RECIPES, 4. CREDITS
+        //Settings menu
+        const settingsScreen = new CustomForm(e.source, "Bombs of glory settings")
             .label("Use this to change the settings of the world")
             .toggle("Slower mode", yielding, { description: "Turning this off will probably crash your game with the bigger nukes" })
-            .toggle("Explsion effects", explosionEffects)
-            .closeButton()
-            .show();
+            .toggle("Explsion effects", explosionEffects, { description: "Turns off general explosion effects (ex. booms after any explosion goes off), does not count for nuclear bombs or nuclear missiles" })
+            .toggle("Log chat messages", logsBool, { description: "Turns on or off progress messages during certain things, like nukes" })
+            .button("Back", () => {
+            settingsScreen.close();
+            system.run(() => {
+                mainScreen.show();
+            });
+        })
+            .closeButton();
     }
 }
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {

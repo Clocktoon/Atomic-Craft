@@ -1,4 +1,4 @@
-import { world, BlockComponentRegistry, system,  } from "@minecraft/server"
+import { world, BlockComponentRegistry, system, ItemStack,  } from "@minecraft/server"
 /**
  * Main file for BOG (bombs of glory)
  * @author Abaddon
@@ -8,6 +8,7 @@ import { world, BlockComponentRegistry, system,  } from "@minecraft/server"
 
 //Custom slab code by https://discord.com/channels/523663022053392405/1495937194949349526 (Barred)
 import { slabComponent, slabBlockComponent } from './slabComponent';
+import { number } from "zod";
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
   blockComponentRegistry.registerCustomComponent("namespace:slab", new slabBlockComponent());
@@ -29,7 +30,7 @@ import("./landMineCode.js")
 import("./nuclearBombs/hBombCode.js")
 import("./icbmComp.js")
 import("./consoleCode.js")
-import("./nonComp.js")
+// import("./nonComp.js")
 import("./EatEffects.js")
 import("./radiationSystem/cureSystem")
 import("./devItem.js")
@@ -39,6 +40,12 @@ world.afterEvents.worldLoad.subscribe(() => {
   
   if(typeof world.getDynamicProperty("powerful") !== "boolean") {
     world.setDynamicProperty("powerful", true)
+  }
+  if(typeof world.getDynamicProperty("explosionEffect") !== "boolean") {
+    world.setDynamicProperty("explosionEffect", true)
+  }
+  if(typeof world.getDynamicProperty("logs") !== "boolean") {
+    world.setDynamicProperty("logs", false)
   }
     import("./explodeTnt.js")
     import("./projectileScript.js")
@@ -61,4 +68,26 @@ world.afterEvents.worldLoad.subscribe(() => {
     //import("./setLore.js")
 
 }
+)
+
+world.afterEvents.playerSpawn.subscribe((event) => {
+  const player = event.player
+  const inventory = player.getComponent('inventory')
+  
+  if(event.initialSpawn) {
+    if(inventory) {
+        const container = inventory.container
+        const settingsItem = new ItemStack("atomic:atomic_settings", 1)
+      
+        if(!container.contains(settingsItem)) {
+            if(container.emptySlotsCount > 0) {
+              container.addItem(settingsItem) 
+            }
+            else {
+              player.dimension.spawnEntity(settingsItem.typeId, player.location)
+            }
+        } 
+    }
+  }
+  }
 )

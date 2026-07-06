@@ -10,7 +10,8 @@
     },
     "unlock": [
       { "item": "atomic:core" },
-      { "item": "minecraft:netherite_ingot" }
+      { "item": "minecraft:netherite_ingot" },
+      {"item": "atomic:raw_uranium"}
     ],
     "result": { "item": "atomic:atom_bomb" }
   }

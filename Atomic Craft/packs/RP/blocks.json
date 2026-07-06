@@ -12,8 +12,7 @@
 		"sound": "netherite"
 	},
 	"atomic:radiation_block": {
-		"sound": "tuff",
-		"textures": "atomic_radiation_block"
+		"sound": "tuff"
 	},
 	"atomic:burned_log": {
 		"sound": "wood"
@@ -25,8 +24,7 @@
 		"sound": "iron"
 	},
 	"atomic:uranium_deepslate": {
-		"sound": "deepslate",
-		"textures": "atomic_uranium_deepslate"
+		"sound": "deepslate"
 	},
 	"atomic:landmine": {
 		"sound": "iron"

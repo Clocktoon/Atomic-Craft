@@ -3,9 +3,16 @@
 	"animations": {
 		"animation.tatical_ballistic_missile.flying": {
 			"loop": true,
+			"animation_length": 22.5417,
 			"bones": {
 				"missile": {
-					"rotation": ["v.current_pitch", "v.current_yaw", 0]
+					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "missilelaunch",
+					"locator": "locator"
 				}
 			}
 		},
@@ -30,44 +37,6 @@
 						"0.0": [1, 1, 1],
 						"0.0417": [1, 1, 0.1],
 						"0.0833": [1, 1, 0]
-					}
-				}
-			}
-		},
-		"animation.tatical_ballistic_missile.launch": {
-			"loop": true,
-			"animation_length": 1,
-			"bones": {
-				"missile": {
-					"rotation": {
-						"0.0": [-90, 0, 0],
-						"0.1667": [-87.5, 0, 0],
-						"0.3333": [-92.5, 0, 0],
-						"0.5": [-82.5, 0, 0],
-						"0.6667": [-95, 0, 0],
-						"0.7083": [-95.83, 0, 0],
-						"0.7917": [-97.5, 0, 0],
-						"0.9583": [-90, 0, 0]
-					}
-				},
-				"body": {
-					"rotation": {
-						"0.0": [0, 0, 0],
-						"0.25": [-2.5, 0, 0],
-						"0.5": [2.5, 0, 0]
-					}
-				},
-				"payload": {
-					"rotation": {
-						"0.0": [0, 0, 0],
-						"0.9167": [5, 0, 0]
-					},
-					"position": {
-						"0.0": [0, 0, 0],
-						"0.1667": [0, 2, 0],
-						"0.375": [0, 0, 0],
-						"0.5": [0, -3, 0],
-						"0.9167": [0, -4, 0]
 					}
 				}
 			}
