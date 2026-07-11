@@ -54,7 +54,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             );
             const missile = entity.dimension.spawnEntity("atomic:himar_missile", {
               x: entity.location.x,
-              y: entity.location.y + 4,
+              y: entity.location.y + 10,
               z: entity.location.z,
             });
             missile
@@ -65,6 +65,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
               if(!missile.isValid) {
                 target.remove()
                 system.clearRun(sys);
+                world.tickingAreaManager.removeTickingArea(nameId)
               }
             })
           }

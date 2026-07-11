@@ -9,19 +9,19 @@
 		],
 		"ingredients": [
 			{
-				"item": "redstone_block",
+				"item": "minecraft:redstone_block",
 				"count": 1
 			},
 			{
-				"item": "tnt"
+				"item": "minecraft:tnt"
 			}
 		],
 		"unlock": [
 			{
-				"item": "tnt"
+				"item": "minecraft:tnt"
 			},
 			{
-				"item": "redstone_block"
+				"item": "minecraft:redstone_block"
 			}
 		],
 		"result": {

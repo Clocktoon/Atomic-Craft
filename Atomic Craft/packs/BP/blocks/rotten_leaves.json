@@ -16,7 +16,7 @@
             },
             "minecraft:material_instances": {
                 "*": {
-                    "render_method": "alpha_test",
+                    "render_method": "alpha_test_to_opaque",
                     "texture": "atomic_rotten_leaf"
                 }
             },

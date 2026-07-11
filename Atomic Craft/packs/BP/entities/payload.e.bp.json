@@ -54,7 +54,7 @@
           "value": 3000
         },
         "minecraft:physics": {
-          "has_collision": true,
+          "has_collision": false,
           "has_gravity": false
         }
       }

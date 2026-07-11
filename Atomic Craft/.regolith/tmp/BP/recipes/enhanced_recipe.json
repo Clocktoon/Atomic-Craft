@@ -14,10 +14,10 @@
 		],
 		"key": {
 			"S": {
-				"item": "gunpowder"
+				"item": "minecraft:gunpowder"
 			},
 			"D": {
-				"item": "tnt"
+				"item": "minecraft:tnt"
 			},
 			"W": {
 				"item": "atomic:uranium_cooked",
@@ -29,7 +29,7 @@
 				"item": "atomic:uranium_cooked"
 			},
 			{
-				"item": "tnt"
+				"item": "minecraft:tnt"
 			}
 		],
 		"result": {

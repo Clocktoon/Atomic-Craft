@@ -170,7 +170,7 @@ class OnClickGadget implements BlockCustomComponent {
 
                 if (distance > maxHearingDistance) return;
 
-                player.sendMessage("test test 123");
+               
 
                 const maxEffectRadius = explosionRadius * 2;
 

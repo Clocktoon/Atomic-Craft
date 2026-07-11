@@ -1,10 +1,12 @@
 import { world, system, } from "@minecraft/server";
-import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString } from "@minecraft/server-ui";
+import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
 // @lantern-links-items ["atomic:atomic_settings"]
 class RadiSettings {
     onUse(e) {
         const yielding = new ObservableBoolean(true, { clientWritable: true });
-        const explosionEffects = new ObservableBoolean(true, { clientWritable: true });
+        const explosionEffects = new ObservableBoolean(true, {
+            clientWritable: true,
+        });
         const logsBool = new ObservableBoolean(false, { clientWritable: true });
         //in case pages in different sections are ever needed
         // const page = new ObservableNumber(0, { clientWritable: true})
@@ -37,7 +39,9 @@ class RadiSettings {
         logsBool.subscribe((v) => world.setDynamicProperty("logs", v));
         //#region Pages
         const uranDrop = new ObservableNumber(0, { clientWritable: true });
-        const uranText = new ObservableString("Pick section", { clientWritable: true });
+        const uranText = new ObservableString("Pick section", {
+            clientWritable: true,
+        });
         uranDrop.subscribe((nu) => {
             if (nu === 0) {
                 uranText.setData(`Uranium is the main ore of this addon, 
@@ -61,12 +65,12 @@ class RadiSettings {
             .dropdown("Section", uranDrop, [
             {
                 label: "Ore block info",
-                value: 0
+                value: 0,
             },
             {
                 label: "Ore usage",
-                value: 1
-            }
+                value: 1,
+            },
         ])
             .label(uranText)
             .button("Back", () => {
@@ -76,7 +80,9 @@ class RadiSettings {
             });
         });
         const bombDrop = new ObservableNumber(0, { clientWritable: true });
-        const bombText = new ObservableString("Pick section", { clientWritable: true });
+        const bombText = new ObservableString("Pick section", {
+            clientWritable: true,
+        });
         bombDrop.subscribe(() => {
             if (bombDrop.getData() === 0) {
                 bombText.setData(`Bombs of glory has many types of bombs, the recipes for each can be unlocked via getting ores and gunpowder in most cases, below is a list of each and some basic info on them.
@@ -94,9 +100,10 @@ class RadiSettings {
           
           Missile button + Remote missile: Fires down a missile at a location by rather holding down on for the button, or looking at a block for the remote.
           
-          Ballistic missiles + ICBM: These ones are made via steel blocks and their bomb type, they sit in place until given cords to head to, in which case they fire off towards the cords, once hitting target they explode.
-          The ICBM is the nuclear one made with an atomic bomb at the center, 
-          while the normal ballistic one has an enhanced tnt at the center.
+          Ballistic missiles: Made with iron blocks, enhanced tnt and an observer, these are the none nuclear form of ballistic missiles, they sit in place until given cords and fired,
+           at which point they head towards the target location and explode on impact.
+
+          ICBM: These are made via steel blocks and an atomic bomb + an observer, they sit in place until given cords to head to, in which case they fire off towards the cords, once hitting target they cause a nuclear explosion.
 
           Nuclear bombs: Each of the nuclear bombs work roughly the same, 
           they will create a crater, and will change the area around it in a scaling size.
@@ -113,12 +120,12 @@ class RadiSettings {
             .dropdown("Section", bombDrop, [
             {
                 label: "List of bombs and basic info",
-                value: 0
+                value: 0,
             },
             {
                 label: "Nuclear details",
-                value: 1
-            }
+                value: 1,
+            },
         ])
             .label(bombText)
             .button("Back", () => {
@@ -128,7 +135,9 @@ class RadiSettings {
             });
         });
         const steelDrop = new ObservableNumber(0, { clientWritable: true });
-        const steelText = new ObservableString("Pick section", { clientWritable: true });
+        const steelText = new ObservableString("Pick section", {
+            clientWritable: true,
+        });
         steelDrop.subscribe((v) => {
             if (v === 0) {
                 steelText.setData(`Steel is made via putting 2 netherite scrap, 
@@ -143,18 +152,32 @@ class RadiSettings {
             .dropdown("Section", steelDrop, [
             {
                 label: "How to get Steel",
-                value: 0
+                value: 0,
             },
             {
                 label: "Steel useage",
-                value: 1
-            }
+                value: 1,
+            },
         ])
             .label(steelText)
             .button("Back", () => {
             steel.close();
             system.run(() => {
                 wikiScreen.show();
+            });
+        });
+        const credits = new CustomForm(e.source, "Credits")
+            .label(`Sound + shockwave system by MapleStar
+
+Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loader systems
+
+Concept for chunk filling system by Conmaster
+
+Thank you to people from the BOA discord for all their help as well with coding issues`)
+            .button("Back", () => {
+            credits.close();
+            system.run(() => {
+                mainScreen.show();
             });
         });
         //#endregion
@@ -172,16 +195,23 @@ class RadiSettings {
             system.run(() => {
                 wikiScreen.show();
             });
-        }).show();
+        })
+            .button("Credits", () => {
+            mainScreen.close();
+            system.run(() => {
+                credits.show();
+            });
+        })
+            .show();
         //Look at recipes, scripts, and use that to make the wiki pages
-        const wikiScreen = new CustomForm(e.source, "Bombs of glory wiki")
-            .button("Back", () => {
+        const wikiScreen = new CustomForm(e.source, "Bombs of glory wiki").button("Back", () => {
             wikiScreen.close();
             system.run(() => {
                 mainScreen.show();
             });
         });
-        wikiScreen.button("Uranium", () => {
+        wikiScreen
+            .button("Uranium", () => {
             wikiScreen.close();
             system.run(() => {
                 uranium.show();
@@ -203,9 +233,15 @@ class RadiSettings {
         //Settings menu
         const settingsScreen = new CustomForm(e.source, "Bombs of glory settings")
             .label("Use this to change the settings of the world")
-            .toggle("Slower mode", yielding, { description: "Turning this off will probably crash your game with the bigger nukes" })
-            .toggle("Explsion effects", explosionEffects, { description: "Turns off general explosion effects (ex. booms after any explosion goes off), does not count for nuclear bombs or nuclear missiles" })
-            .toggle("Log chat messages", logsBool, { description: "Turns on or off progress messages during certain things, like nukes" })
+            .toggle("Slower mode", yielding, {
+            description: "Turning this off will probably crash your game with the bigger nukes",
+        })
+            .toggle("Explsion effects", explosionEffects, {
+            description: "Turns off general explosion effects (ex. booms after any explosion goes off), does not count for nuclear bombs or nuclear missiles",
+        })
+            .toggle("Log chat messages", logsBool, {
+            description: "Turns on or off progress messages during certain things, like nukes",
+        })
             .button("Back", () => {
             settingsScreen.close();
             system.run(() => {
@@ -216,6 +252,6 @@ class RadiSettings {
     }
 }
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
-    itemComponentRegistry.registerCustomComponent("atomic:settings_comp", new RadiSettings);
+    itemComponentRegistry.registerCustomComponent("atomic:settings_comp", new RadiSettings());
 });
 //# sourceMappingURL=settingsItem.js.map

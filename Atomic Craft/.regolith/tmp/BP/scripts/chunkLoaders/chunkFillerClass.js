@@ -46,14 +46,18 @@ class ChunkFiller {
             }
             const bbox = request.area.boundingBox;
             if (!bbox || !bbox.min || !bbox.max) {
-                world.sendMessage(`§4TickingArea ${request.area.identifier || "unknown"} missing boundingBox`);
+                if (world.getDynamicProperty("logs") === true) {
+                    world.sendMessage(`§4TickingArea ${request.area.identifier || "unknown"} missing boundingBox`);
+                }
                 this.requests.shift();
                 continue;
             }
             const spanX = bbox.max.x - bbox.min.x;
             const spanZ = bbox.max.z - bbox.min.z;
             if (spanX < 15 || spanZ < 15) {
-                world.sendMessage(`§4Warning: small boundingBox for ${request.area.identifier}: ${JSON.stringify({ min: bbox.min, max: bbox.max })}`);
+                if (world.getDynamicProperty("logs") === true) {
+                    world.sendMessage(`§4Warning: small boundingBox for ${request.area.identifier}: ${JSON.stringify({ min: bbox.min, max: bbox.max })}`);
+                }
             }
             const min = {
                 x: bbox.min.x,
@@ -140,7 +144,8 @@ class ChunkFiller {
                         "minecraft:soul_torch",
                         "minecraft:copper_torch",
                         "minecraft:redstone_torch",
-                        "minecraft:cactus"
+                        "minecraft:cactus",
+                        "atomic:radi_leave"
                     ],
                 }, true);
                 const blockLogs = request.area.dimension.getBlocks(volume, {
@@ -153,29 +158,67 @@ class ChunkFiller {
                     ],
                     includeTags: ["log"],
                 }, true);
+                request.area.dimension.fillBlocks(volume, "atomic:radiation_block", {
+                    blockFilter: {
+                        excludeTypes: [
+                            "minecraft:obsidian",
+                            "minecraft:air",
+                            "minecraft:bedrock",
+                            "minecraft:water",
+                            "minecraft:lava",
+                            "minecraft:flowing_lava",
+                            "minecraft:flowing_water",
+                            "minecraft:jungle_leaves",
+                            "minecraft:azalea_leaves",
+                            "minecraft:oak_leaves",
+                            "minecraft:birch_leaves",
+                            "minecraft:spruce_leaves",
+                            "minecraft:acacia_leaves",
+                            "minecraft:dark_oak_leaves",
+                            "minecraft:azalea_leaves_flowered",
+                            "minecraft:cherry_leaves",
+                            "minecraft:pale_oak_leaves",
+                            "minecraft:mangrove_log",
+                            "minecraft:cherry_log",
+                            "minecraft:pale_oak_log",
+                            "minecraft:crimson_stem",
+                            "minecraft:warped_stem",
+                            "minecraft:fire",
+                            "minecraft:glass",
+                            "minecraft:iron_block",
+                            "minecraft:piston",
+                            "minecraft:sticky_piston",
+                            "minecraft:iron_door",
+                            "minecraft:vine",
+                            "minecraft:bamboo",
+                            "minecraft:short_grass",
+                            "minecraft:tall_grass",
+                            "minecraft:planks",
+                            "minecraft:wooden_slab",
+                            "minecraft:short_dry_grass",
+                            "minecraft:tall_dry_grass",
+                            "minecraft:snow_layer"
+                        ],
+                        excludeTags: ["log"],
+                    }
+                });
                 for (const loc of blockList.getBlockLocationIterator()) {
                     any = true;
                     const block1 = request.area.dimension.getBlock(loc);
                     if (block1) {
                         //one with yield
                         if (world.getDynamicProperty("powerful") === true) {
-                            // if(block1.typeId === "minecraft:diamond_ore" || block1.typeId === "minecraft:deepslate_diamond_ore") {
-                            //     block1.setType("atomic:radiation_diamond_block")
-                            //     yield
-                            // }
-                            // else {
-                            block1.setType("atomic:radiation_block");
+                            if (block1.typeId === "minecraft:diamond_ore" || block1.typeId === "minecraft:deepslate_diamond_ore") {
+                                block1.setType("atomic:radiation_diamond_block");
+                                yield;
+                            }
                             yield;
-                            // }
                         }
                         //One for if yield is off
                         else {
-                            // if(block1.typeId === "minecraft:diamond_ore" || block1.typeId === "minecraft:deepslate_diamond_ore") {
-                            //     block1.setType("atomic:radiation_diamond_block")
-                            // }
-                            // else {
-                            block1.setType("atomic:radiation_block");
-                            // }
+                            if (block1.typeId === "minecraft:diamond_ore" || block1.typeId === "minecraft:deepslate_diamond_ore") {
+                                block1.setType("atomic:radiation_diamond_block");
+                            }
                         }
                     }
                 }
@@ -217,16 +260,16 @@ class ChunkFiller {
                                 woodBlock.setType("atomic:radiation_plank");
                                 yield;
                             }
-                            if (woodBlock.typeId === "minecraft:wooden_slab") {
+                            if (woodBlock.typeId.includes("slabs")) {
                                 woodBlock.setType("atomic:radiation_slab");
                                 yield;
                             }
                         }
                         else {
-                            if (woodBlock.typeId === "minecraft:planks") {
+                            if (woodBlock.typeId.includes("planks")) {
                                 woodBlock.setType("atomic:radiation_plank");
                             }
-                            if (woodBlock.typeId === "minecraft:wooden_slab") {
+                            if (woodBlock.typeId.includes("slabs")) {
                                 woodBlock.setType("atomic:radiation_slab");
                             }
                         }
@@ -343,11 +386,13 @@ class ChunkFiller {
                 ;
             }
             if (!any) {
-                world.sendMessage(`No blocks found in volume for ${request.name}`);
+                if (world.getDynamicProperty("logs") === true)
+                    world.sendMessage(`No blocks found in volume for ${request.name}`);
             }
             this.requests.shift();
         }
-        world.sendMessage("ChunkFiller queue drained");
+        if (world.getDynamicProperty("logs") === true)
+            world.sendMessage("ChunkFiller queue drained");
         this.#currentGenerator = undefined;
     }
 }

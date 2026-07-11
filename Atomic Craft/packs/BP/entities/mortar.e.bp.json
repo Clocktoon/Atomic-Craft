@@ -29,7 +29,7 @@
             "minecraft:interact": {
                 "interactions": [
                     {
-                        "interact_text": "action.interact.mortar.fire"
+                        "interact_text": "action.interact.mortar.fire.name"
                     }
                 ]
             },

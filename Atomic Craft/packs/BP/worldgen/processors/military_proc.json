@@ -1,0 +1,26 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:processor_list": {
+        "description": {
+            "identifier": "atomic:military_proc"
+        },
+        "processors": [
+            {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "input_predicate": {
+                            "block": "minecraft:barrel",
+                            "predicate_type": "minecraft:block_match"
+                        },
+                        "output_state": "minecraft:barrel",
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "loot_tables/chest/military_base_loot.json"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

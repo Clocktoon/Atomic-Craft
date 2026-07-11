@@ -13,7 +13,7 @@
                 "value": true
             },
             "minecraft:display_name": {
-                "value": "Raw uranium"
+                "value": "item.atomic:raw_uranium.name"
             },
             "minecraft:hand_equipped": true,
             "minecraft:max_stack_size": 64,

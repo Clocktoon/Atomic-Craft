@@ -23,7 +23,7 @@
         "replace_block_item": true
       },
       "minecraft:display_name": {
-        "value": "tile.namespace:atomic_slab_item.name"
+        "value": "tile.atomic:radiation_slab.name"
       }
     }
   }

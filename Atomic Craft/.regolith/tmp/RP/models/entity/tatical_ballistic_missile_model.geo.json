@@ -7,8 +7,8 @@
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 11,
-				"visible_bounds_height": 7.5,
-				"visible_bounds_offset": [0, 3.25, 0]
+				"visible_bounds_height": 12,
+				"visible_bounds_offset": [0, 1, 0]
 			},
 			"bones": [
 				{
@@ -80,7 +80,10 @@
 					"parent": "othersidefines",
 					"pivot": [0, 0, 0],
 					"locators": {
-						"locator": [0, 0, 0]
+						"locator": {
+							"offset": [0, 0, 0],
+							"rotation": [90, 0, 0]
+						}
 					}
 				},
 				{

@@ -9,7 +9,7 @@
 		],
 		"key": {
 			"J": {
-				"item": "copper_ingot"
+				"item": "minecraft:copper_ingot"
 			},
 			"R": {
 				"item": "blast_furnace"
@@ -22,10 +22,10 @@
 		],
 		"unlock": [
 			{
-				"item": "copper_ingot"
+				"item": "minecraft:copper_ingot"
 			},
 			{
-				"item": "blast_furnace"
+				"item": "minecraft:blast_furnace"
 			}
 		],
 		"result": {

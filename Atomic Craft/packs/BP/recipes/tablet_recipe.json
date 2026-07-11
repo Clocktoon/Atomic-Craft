@@ -14,7 +14,7 @@
         ],
         "key": {
             "V": {
-                "item": "iron_ingot"
+                "item": "minecraft:iron_ingot"
             },
             "A": {
                 "item": "atomic:enhanced_tnt",
@@ -26,7 +26,7 @@
                 "item": "atomic:enhanced_tnt"
             },
             {
-                "item": "iron_ingot"
+                "item": "minecraft:iron_ingot"
             }
         ],
         "result": {

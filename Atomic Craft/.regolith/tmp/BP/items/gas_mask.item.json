@@ -9,6 +9,9 @@
 		},
 		"components": {
 			"minecraft:icon": "atomic_gas_mask",
+			"minecraft:display_name": {
+				"value": "item.atomic:gas_mask.name"
+			},
 			"minecraft:wearable": {
 				"slot": "slot.armor.head",
 				"protection": 2

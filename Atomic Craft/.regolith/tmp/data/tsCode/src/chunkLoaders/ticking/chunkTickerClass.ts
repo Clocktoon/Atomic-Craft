@@ -16,6 +16,11 @@ discord: gameza_src
 website that Coolbep's code is on: https://bedrock-resources.vercel.app/ (can't link the exact thing)
  */
 
+system.run(() => {
+  if(typeof world.getDynamicProperty("logs") !== "boolean") {
+    world.setDynamicProperty("logs", false)
+  }
+})
 
 interface tickingAreaQueue {
   tickingArea: TickingArea | null,
@@ -104,13 +109,16 @@ class ChunkTicker {
 
 
     if (this.#tickingarea.hasTickingArea(this.#name)) {
-      world.sendMessage("ticking area " + this.#name + " is loaded")
+      if(world.getDynamicProperty("logs") === true)
+        world.sendMessage("ticking area " + this.#name + " is loaded")
     }
     try {
     await this.#tickingarea.createTickingArea(this.#name, options);
-    world.sendMessage("the §3ticking area " + this.#name + " has been created")
+    if(world.getDynamicProperty("logs") === true)
+      world.sendMessage("the §3ticking area " + this.#name + " has been created")
     } catch(err) {
-      world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`)
+      if(world.getDynamicProperty("logs") === true)
+        world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`)
       throw err
     }
 
@@ -137,7 +145,8 @@ class ChunkTicker {
         if (!tickingArea) {
           throw new Error(`TickingArea ${this.#name} not found after creation`)
         } else {
-          world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
+          if(world.getDynamicProperty("logs") === true)
+            world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
         }
 
       return tickingArea;

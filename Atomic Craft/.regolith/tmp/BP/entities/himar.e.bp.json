@@ -113,7 +113,7 @@
       "minecraft:rideable": {
         "controlling_seat": 0,
         "crouching_skip_interact": true,
-        "interact_text": "action.interact.himar.enter",
+        "interact_text": "action.interact.himar.enter.name",
         "pull_in_entities": false,
         "rider_can_interact": true,
         "seat_count": 1,

@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:structure_set": {
+        "description": {
+            "identifier": "atomic:holdout"
+        },
+        "placement": {
+            "salt": 678341,
+            "spacing": 100,
+            "separation": 10,
+            "spread_type": "linear",
+            "type": "minecraft:random_spread"
+        },
+        "structures": [
+            {
+                "structure": "atomic:holdout",
+                "weight": 1
+            }
+        ]
+    }
+}

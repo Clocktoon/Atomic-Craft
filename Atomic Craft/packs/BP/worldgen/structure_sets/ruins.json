@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:structure_set": {
+        "description": {
+            "identifier": "atomic:ruined"
+        },
+        "placement": {
+            "type": "minecraft:random_spread",
+            "salt": 744015,
+            "separation": 4,
+            "spacing": 100,
+            "spread_type": "triangular"
+        },
+        "structures": [
+            {
+                "structure": "atomic:ruin",
+                "weight": 1
+            }
+        ]
+    }
+}

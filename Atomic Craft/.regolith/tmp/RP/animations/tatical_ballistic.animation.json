@@ -2,11 +2,10 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.tatical_ballistic_missile.flying": {
-			"loop": true,
 			"animation_length": 22.5417,
 			"bones": {
 				"missile": {
-					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+					"rotation": ["v.current_pitch", "v.current_yaw", 0]
 				}
 			},
 			"sound_effects": {

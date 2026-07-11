@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:structure_set": {
+        "description": {
+            "identifier": "atomic:camp"
+        },
+        "placement": {
+            "type": "minecraft:random_spread",
+            "salt": 748379,
+            "separation": 4,
+            "spacing": 40,
+            "spread_type": "linear"
+        },
+        "structures": [
+            {
+                "structure": "atomic:camp",
+                "weight": 1
+            }
+        ]
+    }
+}

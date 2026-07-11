@@ -1,0 +1,35 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:jigsaw": {
+        "description": {
+            "identifier": "atomic:ruin"
+        },
+        "start_pool": "atomic:ruin_pool",
+        "max_depth": 1,
+        "step": "surface_structures",
+        "heightmap_projection": "world_surface",
+        "biome_filters": [
+            {
+                "all_of": [
+                    {
+                        "test": "has_biome_tag",
+                        "operator": "!=",
+                        "value": "ocean"
+                    },
+                    {
+                        "test": "has_biome_tag",
+                        "operator": "!=",
+                        "value": "river"
+                    }
+                ]
+            }
+        ],
+        "start_height": {
+            "type": "constant",
+            "value": {
+                "absolute": 0
+            }
+        },
+        "terrain_adaptation": "beard_box"
+    }
+}

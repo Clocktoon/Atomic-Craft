@@ -1,0 +1,35 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:ballistic_missile_console"
+        },
+        "tags": ["crafting_table"],
+        "key": {
+            "S": {
+                "item": "atomic:steel_ingot"
+            },
+            "N": {
+                "item": "minecraft:noteblock"
+            }
+        },
+        "unlock": [
+            {
+                "item": "atomic:steel_ingot"
+            },
+            {
+                "item": "minecraft:noteblock"
+            }
+        ],
+        "pattern": [
+            "SSS",
+            "SNS",
+            "SSS"
+        ],
+        "result": {
+            "item": "atomic:ballistic_missile_console",
+            "count": 3,
+            "data": 0
+        }
+    }
+}

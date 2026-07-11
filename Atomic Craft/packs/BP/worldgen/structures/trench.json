@@ -1,0 +1,29 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:jigsaw": {
+        "description": {
+            "identifier": "atomic:trench"
+        },
+        "start_pool": "atomic:trench_pool",
+        "max_depth": 1,
+        "step": "surface_structures",
+        "heightmap_projection": "world_surface",
+        "liquid_settings": "apply_waterlogging",
+        "biome_filters": {
+            "any_of": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "equals",
+                    "value": "plains"
+                }
+            ]
+        },
+        "start_height": {
+            "type": "constant",
+            "value": {
+                "absolute": -7
+            }
+        },
+        "terrain_adaptation": "none"
+    }
+}

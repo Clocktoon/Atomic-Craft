@@ -9,10 +9,10 @@
 		],
 		"key": {
 			"O": {
-				"item": "clay"
+				"item": "minecraft:clay"
 			},
 			"H": {
-				"item": "iron_ingot"
+				"item": "minecraft:iron_ingot"
 			}
 		},
 		"pattern": [
@@ -22,7 +22,10 @@
 		],
 		"unlock": [
 			{
-				"item": "clay"
+				"item": "minecraft:clay"
+			},
+			{
+				"item": "minecraft:iron_ingot"
 			}
 		],
 		"result": {

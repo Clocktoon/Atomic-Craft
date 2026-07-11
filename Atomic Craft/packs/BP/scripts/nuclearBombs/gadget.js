@@ -118,7 +118,6 @@ class OnClickGadget {
                                 const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
                                 if (distance > maxHearingDistance)
                                     return;
-                                player.sendMessage("test test 123");
                                 const maxEffectRadius = explosionRadius * 2;
                                 const distanceRatio = Math.min(1, distance / maxHearingDistance);
                                 const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));

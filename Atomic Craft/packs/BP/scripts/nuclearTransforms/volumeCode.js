@@ -6,6 +6,11 @@ import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
 discord: gameza_src */
+system.run(() => {
+    if (typeof world.getDynamicProperty("logs") !== "boolean") {
+        world.setDynamicProperty("logs", false);
+    }
+});
 //TODO: Figure out how to make filler know when to switch to far out block effects
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
@@ -89,17 +94,19 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
                     await new Promise((resolve) => {
                         system.runTimeout(() => resolve(), 1);
                         const chunkChecker = dimension.getBlock({ x: bounds.from.x + 8, y: 64, z: bounds.from.z + 8 });
-                        //I should probably stringify all world.sendmessages that output a location right TwT
-                        world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`);
+                        if (world.getDynamicProperty("logs") === true)
+                            world.sendMessage(`Chunk is loaded at ${JSON.stringify(chunkChecker?.location)}`);
                     });
                 }
                 const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase, miny ?? undefined, maxy ?? undefined);
                 await fillGeneratorSequential(generator, 50);
-                world.sendMessage(`Ticking area filled: ${nameId}`);
+                if (world.getDynamicProperty("logs") === true)
+                    world.sendMessage(`Ticking area filled: ${nameId}`);
                 world.tickingAreaManager.removeTickingArea(tickingArea);
             }
             else {
-                world.sendMessage(`Ticking area not returned: ${nameId}`);
+                if (world.getDynamicProperty("logs") === true)
+                    world.sendMessage(`Ticking area not returned: ${nameId}`);
             }
             chunkCount++;
         }

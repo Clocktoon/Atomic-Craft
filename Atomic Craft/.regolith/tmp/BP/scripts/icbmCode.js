@@ -115,11 +115,14 @@ function* nuclearExplosion(playerEntity, entity, target) {
             playExplosionAudio(playdi, entity.location, 260);
             yield;
             //Gets rid of ticking area and starts the real nuclear explosion code
+            console.warn("Pre nuclear ICBM, aka explosion audio, done");
             //Nuke Code!!!
             nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity).then(() => {
                 entity.remove();
                 target.remove();
+                console.warn("Nuclear code for ICBM done");
             });
+            console.warn("Running nuclear code for ICBM");
         }
         system.runJob(blockGen());
     });
@@ -134,6 +137,9 @@ function initializeMissile(missile, targetPos) {
     const yaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
     missile.setDynamicProperty("yaw", yaw);
     missile.setDynamicProperty("pitch", -80);
+    missile.setProperty("atomic:yaw", yaw);
+    missile.setProperty("atomic:pitch", -80);
+    missile.setRotation({ x: -80, y: yaw });
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
     const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.3];
     for (let i = 0; i < 6; i++) {
@@ -190,8 +196,8 @@ function updateMissile(missile, target, warhead, player) {
     if (waypoint <= 4) {
         missile.dimension.spawnParticle("atomic:icbm_trail_partcc", {
             x: missile.location.x + back.x * 1.5,
-            y: missile.location.y - 1,
-            z: missile.location.z + back.z * 1.5,
+            y: missile.location.y,
+            z: missile.location.z + back.z - 1,
         });
     }
     // Advance waypoint
@@ -215,6 +221,7 @@ function updateMissile(missile, target, warhead, player) {
         newWarhead.setDynamicProperty("pitch", pitch);
         newWarhead.setProperty("atomic:yaw", yaw);
         newWarhead.setProperty("atomic:pitch", pitch);
+        newWarhead.setRotation({ x: pitch, y: yaw });
         system.runTimeout(() => {
             missile.remove();
         }, 40);
@@ -222,10 +229,15 @@ function updateMissile(missile, target, warhead, player) {
     }
     //Just marking it so it's easier to find
     const horizontal = Math.sqrt(dx * dx + dz * dz);
-    const desiredYaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
-    const desiredPitch = -((Math.atan2(dy, horizontal) * 180) / Math.PI);
+    let desiredYaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
+    let desiredPitch = -((Math.atan2(dy, horizontal) * 180) / Math.PI);
     let yaw = active.getDynamicProperty("yaw");
     let pitch = active.getDynamicProperty("pitch");
+    if (horizontal < 2) {
+        desiredPitch = Math.max(-70, Math.min(70, desiredPitch));
+        const diff = desiredPitch - pitch;
+        desiredPitch = pitch + Math.sign(diff) * Math.min(6, Math.abs(diff));
+    }
     const yawRate = 8;
     let pitchRate;
     if (waypoint <= 1) {
@@ -258,6 +270,10 @@ function updateMissile(missile, target, warhead, player) {
     else {
         speed = 1.7;
     }
+    active.setRotation({
+        x: pitch,
+        y: yaw,
+    });
     const loc = active.location;
     active.teleport({
         x: loc.x + vx * speed,
@@ -268,10 +284,6 @@ function updateMissile(missile, target, warhead, player) {
         keepVelocity: false,
     });
     try {
-        active.setRotation({
-            x: pitch,
-            y: yaw,
-        });
         const rot = active.getRotation();
         active.nameTag = `Wanted:
 ${Math.round(yaw)}
@@ -286,9 +298,10 @@ ${Math.round(rot.x)}`;
     }
     if (active.getProperty(`atomic:nuke`) === true || targetDistance < 10) {
         active.addEffect("invisibility", 2000000, { showParticles: false });
-        if (!stopGoing) {
+        if (active.getProperty("atomic:nuclearphase") === false) {
             system.runJob(nuclearExplosion(player, active, target));
-            stopGoing = true;
+            console.warn("Nuclear explosion via ICBM went off");
+            active.setProperty("atomic:nuclearphase", true);
         }
     }
     return warhead;
@@ -303,7 +316,7 @@ ${Math.round(rot.x)}`;
  * @param {Entity} entity
  * @param {Player} player
  */
-export function travelSystem(x, y, z, name, entity, player) {
+export async function travelSystem(x, y, z, name, entity, player) {
     const launchPos = entity.location;
     const dx = x - launchPos.x;
     const dy = y - launchPos.y;
@@ -320,21 +333,50 @@ export function travelSystem(x, y, z, name, entity, player) {
     fail = false;
     const minY = Math.max(0, y - 30);
     const maxY = y + 30;
-    const launchUp = system.runInterval(() => {
-        if (!entity.isValid) {
-            system.clearRun(launchUp);
-            return;
-        }
-        entity.applyImpulse({
-            x: 0,
-            y: 1,
-            z: 0
+    let warhead = null;
+    if (world.tickingAreaManager.hasCapacity({
+        from: {
+            x: x - 30,
+            y: minY,
+            z: z - 30,
+        },
+        to: {
+            x: x + 30,
+            y: maxY,
+            z: z + 30,
+        },
+        dimension: entity.dimension,
+    })) {
+        world.tickingAreaManager
+            .createTickingArea(name, {
+            from: {
+                x: x - 30,
+                y: minY,
+                z: z - 30,
+            },
+            to: {
+                x: x + 30,
+                y: maxY,
+                z: z + 30,
+            },
+            dimension: entity.dimension,
+        })
+            .then(() => {
+            const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+            initializeMissile(entity, target.location);
+            entity.setProperty("atomic:blastoff", true);
+            entity.triggerEvent("atomic:onn");
+            const missileLoop = system.runInterval(() => {
+                if (!entity.isValid || !target.isValid) {
+                    system.clearRun(missileLoop);
+                    return;
+                }
+                warhead = updateMissile(entity, target, warhead, player);
+            }, 1);
         });
-    }, 20);
-    system.runTimeout(() => {
-        system.clearRun(launchUp);
-        let warhead = null;
-        if (world.tickingAreaManager.hasCapacity({
+    }
+    else {
+        while (!world.tickingAreaManager.hasCapacity({
             from: {
                 x: x - 30,
                 y: minY,
@@ -347,35 +389,26 @@ export function travelSystem(x, y, z, name, entity, player) {
             },
             dimension: entity.dimension,
         })) {
-            world.tickingAreaManager
-                .createTickingArea(name, {
-                from: {
-                    x: x - 30,
-                    y: minY,
-                    z: z - 30,
-                },
-                to: {
-                    x: x + 30,
-                    y: maxY,
-                    z: z + 30,
-                },
-                dimension: entity.dimension,
-            })
-                .then(() => {
-                const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
-                initializeMissile(entity, target.location);
-                entity.setProperty("atomic:blastoff", true);
-                entity.triggerEvent("atomic:onn");
-                const missileLoop = system.runInterval(() => {
-                    if (!entity.isValid || !target.isValid) {
-                        system.clearRun(missileLoop);
-                        return;
-                    }
-                    warhead = updateMissile(entity, target, warhead, player);
-                }, 1);
+            await new Promise((resolve) => {
+                system.runTimeout(() => resolve(), 1);
+                console.warn("ICBM ticking area made");
             });
         }
-        else {
+        world.tickingAreaManager
+            .createTickingArea(name, {
+            from: {
+                x: x - 30,
+                y: minY,
+                z: z - 30,
+            },
+            to: {
+                x: x + 30,
+                y: maxY,
+                z: z + 30,
+            },
+            dimension: entity.dimension,
+        })
+            .then(() => {
             const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
             initializeMissile(entity, target.location);
             entity.setProperty("atomic:blastoff", true);
@@ -387,8 +420,8 @@ export function travelSystem(x, y, z, name, entity, player) {
                 }
                 warhead = updateMissile(entity, target, warhead, player);
             }, 1);
-        }
-    }, 300);
+        });
+    }
 }
 //@lantern-links-entities ["atomic:icbm"]
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
@@ -451,7 +484,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                     player.onScreenDisplay.setActionBar(`${time}`);
                     entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
                 }
-                if (time < 4) {
+                if (time < 4 && time >= 0) {
                     player.onScreenDisplay.setActionBar(`§4${time}`);
                     entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
                 }

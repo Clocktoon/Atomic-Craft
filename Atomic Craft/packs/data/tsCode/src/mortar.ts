@@ -17,7 +17,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((event) => {
     entity.setProperty("atomic:fired", true);
     const view = entity.getViewDirection()
     const headster = entity.getHeadLocation()
-    const random = 3 + Math.floor((Math.random() + Math.random()) * 4); // 20ish blocks away
+    const random = 3 + Math.floor((Math.random() + Math.random()) * 10); // 20ish blocks away
     let x = headster.x + view.x * 20
     let y = headster.y + view.y * 20
     let z = headster.z + view.z * 20

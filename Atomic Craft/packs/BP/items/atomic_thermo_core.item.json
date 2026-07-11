@@ -8,6 +8,9 @@
             }
         },
         "components": {
+            "minecraft:display_name": {
+                "value": "item.atomic:thermo_core.name"
+            },
             "minecraft:icon": {
                 "textures": {
                     "default": "atomic_thermo_core"

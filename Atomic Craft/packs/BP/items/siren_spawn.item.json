@@ -13,6 +13,9 @@
                 "dispense_on": [],
                 "entity": "atomic:siren"
             },
+            "minecraft:display_name": {
+                "value": "item.atomic:siren_spawn.name"
+            },
             "minecraft:max_stack_size": 64
         }
     }

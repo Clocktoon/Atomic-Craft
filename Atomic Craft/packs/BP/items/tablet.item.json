@@ -14,7 +14,7 @@
             "minecraft:rarity": "rare",
             "atomic:remote": {},
             "minecraft:display_name": {
-                "value": "Remote Missile Tablet"
+                "value": "item.atomic:tablet.name"
             },
             "minecraft:durability": {
                 "damage_chance": {

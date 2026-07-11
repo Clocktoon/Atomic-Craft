@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:structure_set": {
+        "description": {
+            "identifier": "atomic:silo"
+        },
+        "placement": {
+            "type": "minecraft:random_spread",
+            "salt": 866756,
+            "separation": 4,
+            "spacing": 100,
+            "spread_type": "triangular"
+        },
+        "structures": [
+            {
+                "structure": "atomic:slio",
+                "weight": 1
+            }
+        ]
+    }
+}

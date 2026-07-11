@@ -29,16 +29,13 @@
         "animate": ["cont"],
 
         "initialize": [
-          "variable.current_yaw=0;",
-          "variable.current_pitch=0;"
+          "variable.current_yaw = q.property('atomic:yaw');",
+          "variable.current_pitch = q.property('atomic:pitch');"
         ],
 
         "pre_animation": [
-          "v.current_yaw = v.current_yaw ? v.current_yaw : q.property('atomic:yaw');",
-          "v.current_pitch = v.current_pitch ? v.current_pitch : q.property('atomic:pitch');",
-
-          "v.current_yaw = math.lerprotate(v.current_yaw, q.property('atomic:yaw'), q.delta_time * 10);",
-          "v.current_pitch = math.lerprotate(v.current_pitch, q.property('atomic:pitch'), q.delta_time * 10);"
+          "v.current_yaw = math.lerprotate(v.current_yaw, q.property('atomic:yaw'), q.delta_time * 60);",
+          "v.current_pitch = math.lerprotate(v.current_pitch, q.property('atomic:pitch'), q.delta_time * 60);"
         ]
       }
     }

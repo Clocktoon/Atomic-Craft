@@ -11,7 +11,7 @@
             "minecraft:icon": "atomic_uranium_cooked",
             "minecraft:max_stack_size": 64,
             "minecraft:display_name": {
-                "value": "item.atomic:uranium_cooked"
+                "value": "item.atomic:uranium_cooked.name"
             }
         }
     }

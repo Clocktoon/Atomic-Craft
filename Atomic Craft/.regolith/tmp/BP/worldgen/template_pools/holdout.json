@@ -1,0 +1,17 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:template_pool": {
+        "description": {
+            "identifier": "atomic:holdout_pool"
+        },
+        "elements": [
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "holdout/holdout",
+                    "processors": "atomic:military_proc"
+                }
+            }
+        ]
+    }
+}

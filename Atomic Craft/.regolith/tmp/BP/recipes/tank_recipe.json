@@ -9,10 +9,10 @@
 		],
 		"key": {
 			"T": {
-				"item": "iron_ingot"
+				"item": "minecraft:iron_ingot"
 			},
 			"C": {
-				"item": "glass_bottle"
+				"item": "minecraft:glass_bottle"
 			}
 		},
 		"pattern": [
@@ -22,10 +22,10 @@
 		],
 		"unlock": [
 			{
-				"item": "glass_bottle"
+				"item": "minecraft:glass_bottle"
 			},
 			{
-				"item": "iron_ingot"
+				"item": "minecraft:iron_ingot"
 			}
 		],
 		"result": {

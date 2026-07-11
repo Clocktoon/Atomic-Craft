@@ -7,6 +7,9 @@
             },
             "entries": [
                 {
+                    "type": "empty"
+                },
+                {
                     "type": "item",
                     "name": "atomic:mortar_ammo",
                     "functions": [

@@ -1,6 +1,7 @@
 import { system } from "@minecraft/server";
 import { CustomForm, ObservableString } from "@minecraft/server-ui";
 import { travelSystem } from "./icbmCode";
+import { btravelSystem } from "./ballisticCode";
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 class ConsoleCode {
     constructor() {
@@ -17,7 +18,7 @@ class ConsoleCode {
         const form = new CustomForm(player, "Missile launch console");
         const inter = system.runInterval(() => {
             const entities = block.dimension.getEntities({
-                families: ["intermissile"],
+                families: ["intermissile", "bmissile"],
                 location: block.location,
                 minDistance: 1,
                 maxDistance: 30
@@ -39,7 +40,12 @@ class ConsoleCode {
                 const location = entity.getDynamicProperty("missileCord");
                 if (location) {
                     const nameId = `hate${location.x}${location.y}${location.z}`;
-                    travelSystem(location.x, location.y, location.z, nameId, entity, player);
+                    if (entity.typeId === "atomic:ballistic_missile") {
+                        btravelSystem(location.x, location.y, location.z, nameId, entity, player);
+                    }
+                    if (entity.typeId === "atomic:icbm") {
+                        travelSystem(location.x, location.y, location.z, nameId, entity, player);
+                    }
                 }
             }
             player.playSound("atomic.console.click");

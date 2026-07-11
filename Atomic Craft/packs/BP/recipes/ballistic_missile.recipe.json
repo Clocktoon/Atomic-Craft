@@ -7,7 +7,7 @@
         "tags": ["crafting_table"],
         "key": {
             "S": {
-                "item": "atomic:steel_ingot"
+                "item": "minecraft:iron_block"
             },
             "T": {
                 "item": "atomic:enhanced_tnt"
@@ -23,7 +23,7 @@
         ],
         "unlock": [
             {
-                "item": "atomic:steel_ingot"
+                "item": "minecraft:iron_block"
             },
             {
                 "item": "atomic:enhanced_tnt"

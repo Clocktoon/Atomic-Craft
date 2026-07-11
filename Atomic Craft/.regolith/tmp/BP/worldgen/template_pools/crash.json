@@ -1,0 +1,17 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:template_pool": {
+        "description": {
+            "identifier": "atomic:crash_pool"
+        },
+        "elements": [
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "crashsite/crash",
+                    "processors": "atomic:crash_proc"
+                }
+            }
+        ]
+    }
+}

@@ -1,6 +1,7 @@
 import {BlockCustomComponent, system, BlockComponentPlayerInteractEvent, Vector3} from "@minecraft/server"
 import {CustomForm, ModalFormData, ObservableNumber, ObservableString} from "@minecraft/server-ui"
 import { travelSystem } from "./icbmCode"
+import { btravelSystem } from "./ballisticCode"
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 
@@ -28,7 +29,7 @@ class ConsoleCode implements BlockCustomComponent {
 
 
        const entities = block.dimension.getEntities({
-            families: ["intermissile"],
+            families: ["intermissile","bmissile"],
             location: block.location,
             minDistance: 1,
             maxDistance: 30
@@ -52,6 +53,17 @@ class ConsoleCode implements BlockCustomComponent {
             const location: Vector3 = entity.getDynamicProperty("missileCord") as Vector3
             if(location) {
                 const nameId = `hate${location.x}${location.y}${location.z}`;
+                if(entity.typeId === "atomic:ballistic_missile") {
+                    btravelSystem(
+                        location.x,
+                        location.y,
+                        location.z,
+                        nameId,
+                        entity,
+                        player
+                    )
+                }
+                if(entity.typeId === "atomic:icbm") {
                 travelSystem
                 (location.x,
               location.y,
@@ -59,6 +71,7 @@ class ConsoleCode implements BlockCustomComponent {
             nameId,
                   entity,
                   player)
+                }
             }
         }
         player.playSound("atomic.console.click")

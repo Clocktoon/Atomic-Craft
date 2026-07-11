@@ -1,4 +1,15 @@
 import { system, world, } from "@minecraft/server";
+/*Heavily inspired by gameza_src's chunk loader system and Coolbep's, credit goes to them
+gameza's code: https://github.com/gamezaSRC/ChunkLoader
+link to gameza's github: https://github.com/gamezaSRC
+discord: gameza_src
+website that Coolbep's code is on: https://bedrock-resources.vercel.app/ (can't link the exact thing)
+ */
+system.run(() => {
+    if (typeof world.getDynamicProperty("logs") !== "boolean") {
+        world.setDynamicProperty("logs", false);
+    }
+});
 function nameMaker(x, z, dimension) {
     return `NK_${x},${z},${dimension.id}`;
 }
@@ -68,14 +79,17 @@ class ChunkTicker {
         //TODO: MAKE THE LOCATION STUFF AND JUST ALL THE CODE WORK
         //Figure out how to have the location work, does it need to be moved to a different class? Look at chunkLoader.js for help please
         if (this.#tickingarea.hasTickingArea(this.#name)) {
-            world.sendMessage("ticking area " + this.#name + " is loaded");
+            if (world.getDynamicProperty("logs") === true)
+                world.sendMessage("ticking area " + this.#name + " is loaded");
         }
         try {
             await this.#tickingarea.createTickingArea(this.#name, options);
-            world.sendMessage("the §3ticking area " + this.#name + " has been created");
+            if (world.getDynamicProperty("logs") === true)
+                world.sendMessage("the §3ticking area " + this.#name + " has been created");
         }
         catch (err) {
-            world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`);
+            if (world.getDynamicProperty("logs") === true)
+                world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`);
             throw err;
         }
         system.runInterval(() => {
@@ -97,7 +111,8 @@ class ChunkTicker {
             throw new Error(`TickingArea ${this.#name} not found after creation`);
         }
         else {
-            world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
+            if (world.getDynamicProperty("logs") === true)
+                world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
         }
         return tickingArea;
     }

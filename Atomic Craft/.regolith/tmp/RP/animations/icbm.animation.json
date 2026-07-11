@@ -13,7 +13,7 @@
 			"animation_length": 22.6667,
 			"bones": {
 				"bone": {
-					"rotation": ["-v.current_pitch", "-v.current_yaw", 0]
+					"rotation": ["v.current_pitch", "v.current_yaw", 0]
 				}
 			},
 			"sound_effects": {

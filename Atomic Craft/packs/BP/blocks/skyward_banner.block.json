@@ -22,7 +22,7 @@
           "texture": "atomic_skyward"
         }
       },
-      "minecraft:display_name": "tile.atomic:crsuag_banner.name",
+      "minecraft:display_name": "tile.atomic:skyward_banner.name",
       "minecraft:collision_box": {
         "origin": [-7, 0, 4.5],
         "size": [14, 16, 3]

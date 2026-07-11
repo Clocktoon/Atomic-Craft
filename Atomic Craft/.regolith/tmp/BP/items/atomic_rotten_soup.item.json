@@ -9,7 +9,7 @@
     },
     "components": {
       "minecraft:display_name": {
-        "value": "item.atomic:rotten_soup"
+        "value": "item.atomic:rotten_soup.name"
       },
         "minecraft:use_animation": "eat",
         "minecraft:use_modifiers": {

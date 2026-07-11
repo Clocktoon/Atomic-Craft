@@ -13,7 +13,9 @@
             "minecraft:entity_placer": {
                 "entity": "atomic:himar"
             },
-            "minecraft:hand_equipped": true
+            "minecraft:display_name": {
+                "value": "item.atomic:himar_item.name"
+            }
         }
     }
 }

@@ -9,11 +9,18 @@ function initializeMissile(missile, targetPos) {
     const range = Math.sqrt(dx * dx + dz * dz);
     const apexHeight = Math.max(100, Math.min(100, range * 0.4));
     missile.setDynamicProperty("waypoint", 0);
+    missile.setDynamicProperty("climbing", true);
+    missile.setDynamicProperty("liftOffX", launch.x);
+    missile.setDynamicProperty("liftOffY", launch.y);
+    missile.setDynamicProperty("liftOffZ", launch.z);
     const yaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
     missile.setDynamicProperty("yaw", yaw);
-    missile.setDynamicProperty("pitch", -80);
+    missile.setDynamicProperty("pitch", -45);
+    missile.setProperty("atomic:yaw", yaw);
+    missile.setProperty("atomic:pitch", -45);
+    missile.setRotation({ x: -45, y: yaw });
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 0.90, 0.75, 0.65, 0.30];
+    const heights = [0.40, 0.75, 0.90, 0.75, 0.65, 0.20];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -43,7 +50,7 @@ function getGuidePoint(missile, target) {
     return target.location;
 }
 //THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
-function updateMissile(missile, target, payload) {
+function updateMissile(missile, target, payload, name) {
     if (!missile.isValid || !target.isValid) {
         return payload;
     }
@@ -53,8 +60,48 @@ function updateMissile(missile, target, payload) {
         return null;
     }
     const active = waypoint >= 6 ? payload : missile;
-    const guidePoint = waypoint >= 6 ? target.location : getGuidePoint(missile, target);
     const pos = active.location;
+    const climbing = missile.getDynamicProperty("climbing") ?? true;
+    if (climbing && waypoint === 0) {
+        const liftPoint = {
+            x: missile.getDynamicProperty("liftOffX"),
+            y: missile.getDynamicProperty("liftOffY") + 80,
+            z: missile.getDynamicProperty("liftOffZ"),
+        };
+        const dx = liftPoint.x - pos.x;
+        const dy = liftPoint.y - pos.y;
+        const dz = liftPoint.z - pos.z;
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (dist < 10) {
+            missile.setDynamicProperty("climbing", false);
+        }
+        else {
+            const yaw = missile.getDynamicProperty("yaw");
+            const pitch = -90;
+            missile.setDynamicProperty("yaw", yaw);
+            missile.setDynamicProperty("pitch", pitch);
+            missile.setProperty("atomic:yaw", yaw);
+            missile.setProperty("atomic:pitch", pitch);
+            missile.setRotation({ x: pitch, y: yaw });
+            const yawRad = (yaw * Math.PI) / 180;
+            const pitchRad = (pitch * Math.PI) / 180;
+            const vx = -Math.sin(yawRad) * Math.cos(pitchRad);
+            const vy = -Math.sin(pitchRad);
+            const vz = Math.cos(yawRad) * Math.cos(pitchRad);
+            const speed = 1.2;
+            const loc = missile.location;
+            missile.teleport({
+                x: loc.x + vx * speed,
+                y: loc.y + vy * speed,
+                z: loc.z + vz * speed,
+            }, {
+                dimension: missile.dimension,
+                keepVelocity: false,
+            });
+            return payload;
+        }
+    }
+    const guidePoint = waypoint >= 6 ? target.location : getGuidePoint(missile, target);
     const targetDx = target.location.x - pos.x;
     const targetDy = target.location.y - pos.y;
     const targetDz = target.location.z - pos.z;
@@ -93,6 +140,7 @@ function updateMissile(missile, target, payload) {
         newPayLoad.setDynamicProperty("pitch", pitch);
         newPayLoad.setProperty("atomic:yaw", yaw);
         newPayLoad.setProperty("atomic:pitch", pitch);
+        newPayLoad.setRotation({ x: pitch, y: yaw });
         system.runTimeout(() => {
             missile.remove();
         }, 40);
@@ -100,10 +148,15 @@ function updateMissile(missile, target, payload) {
     }
     //Just marking it so it's easier to find
     const horizontal = Math.sqrt(dx * dx + dz * dz);
-    const desiredYaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
-    const desiredPitch = -((Math.atan2(dy, horizontal) * 180) / Math.PI);
     let yaw = active.getDynamicProperty("yaw");
     let pitch = active.getDynamicProperty("pitch");
+    let desiredYaw = -((Math.atan2(dx, dz) * 180) / Math.PI);
+    let desiredPitch = -((Math.atan2(dy, horizontal) * 180) / Math.PI);
+    // soften the pitch near the apex where horizontal distance gets tiny
+    if (horizontal < 2) {
+        desiredPitch = Math.max(-70, Math.min(70, desiredPitch));
+        desiredPitch = pitch + Math.sign(desiredPitch - pitch) * Math.min(6, Math.abs(desiredPitch - pitch));
+    }
     const yawRate = 8;
     let pitchRate;
     if (waypoint <= 1) {
@@ -136,6 +189,10 @@ function updateMissile(missile, target, payload) {
     else {
         speed = 1.6;
     }
+    active.setRotation({
+        x: pitch,
+        y: yaw,
+    });
     const loc = active.location;
     active.teleport({
         x: loc.x + vx * speed,
@@ -146,30 +203,27 @@ function updateMissile(missile, target, payload) {
         keepVelocity: false,
     });
     try {
-        active.setRotation({
-            x: pitch,
-            y: yaw,
-        });
         const rot = active.getRotation();
         active.nameTag = `Wanted:
-  ${Math.round(yaw)}
-  ${Math.round(pitch)}
-  
-  Actual:
-  ${Math.round(rot.y)}
-  ${Math.round(rot.x)}`;
+    ${Math.round(yaw)}
+    ${Math.round(pitch)}
+    
+    Actual:
+    ${Math.round(rot.y)}
+    ${Math.round(rot.x)}`;
     }
     catch (e) {
         console.warn(`Missile error: ${e}`);
     }
-    if (targetDistance < 5) {
+    if (targetDistance < 10) {
         active.triggerEvent("atomic:exposi");
         target.dimension.spawnParticle("atomic:explosioncloud", { x: target.location.x, y: target.location.y - 6, z: target.location.z });
+        world.tickingAreaManager.removeTickingArea(name);
         target.remove();
     }
     return payload;
 }
-function travelSystem(x, y, z, name, entity, player) {
+export function btravelSystem(x, y, z, name, entity, player) {
     const launchPos = entity.location;
     const dx = x - launchPos.x;
     const dy = y - launchPos.y;
@@ -210,7 +264,7 @@ function travelSystem(x, y, z, name, entity, player) {
                 system.clearRun(missileLoop);
                 return;
             }
-            payload = updateMissile(entity, target, payload);
+            payload = updateMissile(entity, target, payload, name);
         }, 1);
     });
 }
@@ -247,6 +301,16 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
         });
         const form = new CustomForm(player, "Missile Control Panel");
         form
+            .dropdown("Mode", cordMode, [
+            {
+                label: "Launch now mode",
+                value: 0,
+            },
+            {
+                label: "Save coordinates for later mode",
+                value: 1,
+            },
+        ])
             .textField("X", xOb)
             .textField("Z", zOb)
             .closeButton()
@@ -265,7 +329,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                     player.onScreenDisplay.setActionBar(`${time}`);
                     entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
                 }
-                if (time < 4) {
+                if (time < 4 && time >= 0) {
                     player.onScreenDisplay.setActionBar(`§4${time}`);
                     entity.dimension.spawnParticle("atomic:ballistic_smoke", entity.location);
                 }
@@ -273,7 +337,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             }, 20);
             system.runTimeout(() => {
                 if (y)
-                    travelSystem(x, y, z, nameId, entity, player);
+                    btravelSystem(x, y, z, nameId, entity, player);
             }, 200);
             form.close();
         }, { visible: launchBool })
@@ -310,7 +374,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             }, 20);
             system.runTimeout(() => {
                 if (location.y)
-                    travelSystem(location.x, location.y, location.z, nameId, entity, player);
+                    btravelSystem(location.x, location.y, location.z, nameId, entity, player);
             }, 200);
             form.close();
         }, { visible: useSaved })

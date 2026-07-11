@@ -11,8 +11,9 @@ const Dev = {
         }
         if (entity.isSneaking) {
             const allTickingAreas = world.tickingAreaManager.getAllTickingAreas();
-            const tickingList = allTickingAreas.forEach(s => s.identifier);
-            entity.onScreenDisplay.setActionBar(`ticking areas: ${tickingList}`);
+            for (const ticking of allTickingAreas) {
+                entity.sendMessage(`${ticking.identifier}`);
+            }
         }
         if (!entity.isOnGround) {
             const players = world.getAllPlayers();
