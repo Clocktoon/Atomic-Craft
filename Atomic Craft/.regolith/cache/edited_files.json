@@ -226,6 +226,7 @@
 			"particles/explosioncustom.particle.json",
 			"particles/explosioncustom2.particle.json",
 			"particles/explosiondebris.particle.json",
+			"particles/explosionoutsmoke.particle.json",
 			"particles/explosionshockwave.particle.json",
 			"particles/gadget.particle.json",
 			"particles/gadgetash.particle.json",

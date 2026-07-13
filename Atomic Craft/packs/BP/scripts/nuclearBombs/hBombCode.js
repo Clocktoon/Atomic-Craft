@@ -100,10 +100,6 @@ class Fus {
                             y: block.location.y - 26,
                             z: block.location.z,
                         });
-                        block.dimension.createExplosion(block.location, 20, {
-                            causesFire: true,
-                            allowUnderwater: false,
-                        });
                         // Crater code
                         function* createCrater(location, dimensionId, block, radius, maxDepth) {
                             const dim = world.getDimension(dimensionId);

@@ -128,10 +128,7 @@ class OnClick implements BlockCustomComponent {
               y: block.location.y - 20,
               z: block.location.z,
             });
-            block.dimension.createExplosion(block.location, 15, {
-              causesFire: true,
-              allowUnderwater: false,
-            });
+           
             // Crater code
             const randomMath = Math.floor(Math.random() * 20)
             system.runJob((function* () {

@@ -8,7 +8,7 @@ const Dev = {
       const entity = event.source
       
       if(!entity.isSneaking) {
-      new ChunkTicker(entity.dimension, "null").unloadall
+        world.tickingAreaManager.removeAllTickingAreas()
       entity.onScreenDisplay.setActionBar("All pack chunks unloaded")
       }
       if(entity.isSneaking) {

@@ -1,4 +1,29 @@
 import { system, world } from "@minecraft/server";
+function spawnExplosionSmoke(dimension, center, magnitude) {
+    const explosionRadius = Math.cbrt(magnitude) * 1.5;
+    const waves = Math.ceil(magnitude / 5);
+    for (let wave = 0; wave < waves; wave++) {
+        system.runTimeout(() => {
+            const particlesThisWave = Math.floor(magnitude * 0.4);
+            for (let i = 0; i < particlesThisWave; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * explosionRadius * (1 + wave * 0.5);
+                const random = Math.random() * 3;
+                dimension.spawnParticle("atomic:explosion_out_smoke", {
+                    x: center.x + Math.cos(angle) * distance,
+                    y: center.y + Math.random() * explosionRadius,
+                    z: center.z + Math.sin(angle) * distance,
+                });
+                dimension.spawnParticle("atomic:explosioncustom2", {
+                    x: center.x + Math.random() * 1,
+                    y: center.y,
+                    z: center.z + Math.random() * 1
+                });
+            }
+            console.warn("Explosion particles spawned");
+        }, wave * 5);
+    }
+}
 /**
  * Gets the center of the explosion
  * @param blocks
@@ -77,24 +102,28 @@ function playExplosionAudio(dimension, center, magnitude) {
 world.beforeEvents.explosion.subscribe((event) => {
     system.run(() => {
         const blocks = event.getImpactedBlocks();
+        const source = event.source;
+        const blockCount = blocks.length;
+        const mag = blockCount / 15;
+        const soundMag = mag - 10;
         const center = getApproxExplosionCenter(blocks);
         const dim = event.dimension;
         if (world.getDynamicProperty("explosionEffect") === false)
             return;
         if (center) {
-            if (event.source?.typeId === "atomic:enhanced_mob") {
-                dim.spawnParticle("atomic:explosioncloud", { x: center.x, y: center.y - 3, z: center.z });
-                playExplosionAudio(dim, center, 70);
-                for (const block of blocks) {
-                    const random = Math.floor(Math.random() * 10);
-                    if (random === 1 && block.typeId !== "minecraft:air") {
-                        block.setType("minecraft:magma");
-                    }
-                }
+            if (source?.typeId === "atomic:payload_entity") {
+                playExplosionAudio(dim, center, soundMag);
+                event.dimension.spawnParticle("atomic:explosioncloud", center);
                 return;
             }
-            playExplosionAudio(dim, center, 30);
-            dim.spawnParticle("atomic:explosioncustom2", center);
+            if (source?.typeId === "atomic:enhanced_mob") {
+                dim.spawnParticle("atomic:explosioncloud", { x: center.x, y: center.y - 3, z: center.z });
+                playExplosionAudio(dim, center, 70);
+                return;
+            }
+            playExplosionAudio(dim, center, soundMag);
+            spawnExplosionSmoke(event.dimension, center, mag);
+            console.warn("Explosion went off");
         }
     });
 });

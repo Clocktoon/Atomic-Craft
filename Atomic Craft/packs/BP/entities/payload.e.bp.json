@@ -38,7 +38,11 @@
           "fire_affected_by_griefing": false,
           "fuse_lit": true,
           "max_resistance": 0,
-          "power": 16
+          "power": 8,
+          "fuse_length": [
+            -1,
+            2
+          ]
         }
       },
       "atomic:offf": {
@@ -61,7 +65,7 @@
     },
     "components": {
       "minecraft:type_family": {
-        "family": ["tmissile"]
+        "family": ["bmissile"]
       },
       "minecraft:health": {
         "value": 100

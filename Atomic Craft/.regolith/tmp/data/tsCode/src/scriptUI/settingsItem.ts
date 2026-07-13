@@ -3,6 +3,14 @@ import {
   system,
   ItemCustomComponent,
   ItemComponentUseEvent,
+  CustomCommandRegistry,
+  CommandPermissionLevel,
+  StartupEvent,
+  CustomCommand,
+  CustomCommandOrigin,
+  CustomCommandResult,
+  CustomCommandStatus,
+  ItemStack
 } from "@minecraft/server";
 import {
   CustomForm,
@@ -291,3 +299,42 @@ system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     new RadiSettings(),
   );
 });
+
+system.beforeEvents.startup.subscribe((init: StartupEvent) => {
+  function settingsItem(origin: CustomCommandOrigin, dimensionId: string): CustomCommandResult {
+      const entity = origin.sourceEntity
+      if(!entity) 
+        return {
+      status: CustomCommandStatus.Failure
+    }
+
+    system.run(() => {
+      const inventory = entity.getComponent('inventory')
+              
+          if(inventory) {
+              const container = inventory.container
+              const settingsItem = new ItemStack("atomic:atomic_settings", 1)
+            
+              if(!container.contains(settingsItem)) {
+                  if(container.emptySlotsCount > 0) {
+                    container.addItem(settingsItem) 
+                  }
+                  else {
+                    entity.dimension.spawnEntity(settingsItem.typeId, entity.location)
+                  }
+              } 
+          }
+    });
+
+      return {
+        status: CustomCommandStatus.Success,
+        message: "Settings item given!"
+      }
+  }
+  const settingsItemCommand: CustomCommand = {
+    name: "atomic:settingsitem",
+    description: "Gives settings item",
+    permissionLevel: CommandPermissionLevel.Admin,   
+  }
+  init.customCommandRegistry.registerCommand(settingsItemCommand, settingsItem)
+})

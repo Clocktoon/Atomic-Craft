@@ -34,10 +34,6 @@
 			"entry": "main.js"
 		}
 	],
-
-	"capabilities": [
-		"pbr"
-	],
 	"dependencies": [
 		{
 			"module_name": "@minecraft/server",

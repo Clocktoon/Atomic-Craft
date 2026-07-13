@@ -298,6 +298,7 @@ ${Math.round(rot.x)}`;
     }
     if (active.getProperty(`atomic:nuke`) === true || targetDistance < 10) {
         active.addEffect("invisibility", 2000000, { showParticles: false });
+        target.addEffect("invisibility", 2000000, { showParticles: false });
         if (active.getProperty("atomic:nuclearphase") === false) {
             system.runJob(nuclearExplosion(player, active, target));
             console.warn("Nuclear explosion via ICBM went off");

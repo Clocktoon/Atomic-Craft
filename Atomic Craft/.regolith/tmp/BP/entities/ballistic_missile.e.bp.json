@@ -49,7 +49,7 @@
           "fire_affected_by_griefing": false,
           "fuse_lit": true,
           "max_resistance": 0,
-          "power": 16
+          "power": 3
         }
       },
       "atomic:offf": {

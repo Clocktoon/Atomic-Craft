@@ -1,12 +1,11 @@
 import { world, system } from "@minecraft/server";
-import { ChunkTicker } from "./chunkLoaders/ticking/chunkTickerClass";
 /**@type {import("@minecraft/server").ItemCustomComponent} */
 const Dev = {
     onUse(event) {
         const item = event.itemStack;
         const entity = event.source;
         if (!entity.isSneaking) {
-            new ChunkTicker(entity.dimension, "null").unloadall;
+            world.tickingAreaManager.removeAllTickingAreas();
             entity.onScreenDisplay.setActionBar("All pack chunks unloaded");
         }
         if (entity.isSneaking) {

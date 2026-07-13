@@ -294,11 +294,10 @@ if (horizontal < 2) {
       console.warn(`Missile error: ${e}`);
     }
 
+    
 
   if (targetDistance < 10) {
     active.triggerEvent("atomic:exposi");
-    target.dimension.spawnParticle("atomic:explosioncloud", 
-      {x: target.location.x, y: target.location.y - 6, z: target.location.z})
 
     world.tickingAreaManager.removeTickingArea(name)
     target.remove();

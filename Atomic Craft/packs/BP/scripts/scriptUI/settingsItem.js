@@ -1,4 +1,4 @@
-import { world, system, } from "@minecraft/server";
+import { world, system, CommandPermissionLevel, CustomCommandStatus, ItemStack } from "@minecraft/server";
 import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
 // @lantern-links-items ["atomic:atomic_settings"]
 class RadiSettings {
@@ -253,5 +253,39 @@ Thank you to people from the BOA discord for all their help as well with coding 
 }
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
     itemComponentRegistry.registerCustomComponent("atomic:settings_comp", new RadiSettings());
+});
+system.beforeEvents.startup.subscribe((init) => {
+    function settingsItem(origin, dimensionId) {
+        const entity = origin.sourceEntity;
+        if (!entity)
+            return {
+                status: CustomCommandStatus.Failure
+            };
+        system.run(() => {
+            const inventory = entity.getComponent('inventory');
+            if (inventory) {
+                const container = inventory.container;
+                const settingsItem = new ItemStack("atomic:atomic_settings", 1);
+                if (!container.contains(settingsItem)) {
+                    if (container.emptySlotsCount > 0) {
+                        container.addItem(settingsItem);
+                    }
+                    else {
+                        entity.dimension.spawnEntity(settingsItem.typeId, entity.location);
+                    }
+                }
+            }
+        });
+        return {
+            status: CustomCommandStatus.Success,
+            message: "Settings item given!"
+        };
+    }
+    const settingsItemCommand = {
+        name: "atomic:settingsitem",
+        description: "Gives settings item",
+        permissionLevel: CommandPermissionLevel.Admin,
+    };
+    init.customCommandRegistry.registerCommand(settingsItemCommand, settingsItem);
 });
 //# sourceMappingURL=settingsItem.js.map
