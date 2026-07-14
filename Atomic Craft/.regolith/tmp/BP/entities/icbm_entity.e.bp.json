@@ -74,7 +74,7 @@
     },
     "components": {
       "minecraft:type_family": {
-        "family": ["tmissile","intermissile"]
+        "family": ["tmissile","intermissile", "bogmissile"]
       },
       "minecraft:health": {
         "value": 100

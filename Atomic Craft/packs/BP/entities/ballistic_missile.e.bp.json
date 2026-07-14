@@ -72,7 +72,7 @@
     },
     "components": {
       "minecraft:type_family": {
-        "family": ["bmissile"]
+        "family": ["bmissile", "bogmissile"]
       },
       "minecraft:health": {
         "value": 100

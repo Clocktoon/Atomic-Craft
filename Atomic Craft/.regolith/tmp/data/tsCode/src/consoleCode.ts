@@ -29,7 +29,7 @@ class ConsoleCode implements BlockCustomComponent {
 
 
        const entities = block.dimension.getEntities({
-            families: ["intermissile","bmissile"],
+            families: ["bogmissile"],
             location: block.location,
             minDistance: 1,
             maxDistance: 30
@@ -38,11 +38,13 @@ class ConsoleCode implements BlockCustomComponent {
 
     }, 1)
 
+    "bmissile"
+
     form.label(missileString)
     .divider()
     .button("Launch missiles", () => {
         const entities = block.dimension.getEntities({
-            families: ["intermissile"],
+            families: ["bogmissile"],
             location: block.location,
             minDistance: 1,
             maxDistance: 30

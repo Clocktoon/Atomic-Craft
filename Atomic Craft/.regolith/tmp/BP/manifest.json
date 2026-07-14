@@ -16,9 +16,9 @@
 	"header": {
 		"name": "Bombs of Glory",
 		"description": "pack.description",
-		"min_engine_version": [1,26,10],
+		"min_engine_version": [1,26,30],
 		"uuid": "081bbb30-42ce-438e-a98e-42f1cdf10512",
-		"version": [1,0,0]
+		"version": [2,0,0]
 	},
 	"modules": [
 		{
@@ -46,7 +46,7 @@
 		{
 			"uuid": "1fb0a806-aaf1-458a-8694-d397e28cbb4e",
 			"version": [
-			1,
+			2,
 			0,
 			0
 		]

@@ -18,18 +18,19 @@ class ConsoleCode {
         const form = new CustomForm(player, "Missile launch console");
         const inter = system.runInterval(() => {
             const entities = block.dimension.getEntities({
-                families: ["intermissile", "bmissile"],
+                families: ["bogmissile"],
                 location: block.location,
                 minDistance: 1,
                 maxDistance: 30
             });
             missileString.setData(`Missiles under control in 30 block radius: ${entities.length}`);
         }, 1);
+        "bmissile";
         form.label(missileString)
             .divider()
             .button("Launch missiles", () => {
             const entities = block.dimension.getEntities({
-                families: ["intermissile"],
+                families: ["bogmissile"],
                 location: block.location,
                 minDistance: 1,
                 maxDistance: 30
