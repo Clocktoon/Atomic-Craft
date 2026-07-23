@@ -1,112 +1,59 @@
-import { world, system, Dimension, } from "@minecraft/server";
+import { world, system, Entity, Dimension } from "@minecraft/server";
 
-// Radiation effect script
+/**
+ * Radiation effects system - applies effects based on radiation level
+ * Works with mobRadiationZones.ts which tracks radiation_level as dynamic property
+ */
+export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
 
-//TODO:Add DynamicProperty system that has levels of radiation for player
+        if (!entity.isValid) return;
 
+        const radiationLevel = entity.getDynamicProperty("atomic:radiation_dose") as number || 0;
+        if (radiationLevel === 0) return;
 
+        // radiation intensity (0-10 scale)
+        const shouldHaveWeakness = radiationLevel >= 2;
+        const shouldHaveNausea = radiationLevel >= 3;
+        const shouldHaveFatigue = radiationLevel >= 5;
+        const shouldHaveSlowness = radiationLevel >= 5;
+        const shouldHavePoison = radiationLevel >= 7;
+        const shouldHaveBlindness = radiationLevel >= 8;
 
-const runny = system.runInterval( () => {
-
-
-    /**
-     * Function to apply the radiation effect to players
-     */
-    function radiationPlayer() {
-       const players = world.getAllPlayers()
-       for(const player of players) {
-        const getRadi = player.getDynamicProperty("radiation")
-        if(getRadi == undefined) {
-            console.warn(player.name + " has no radiation")
+        // Apply effects
+        if (shouldHaveWeakness) {
+          entity.addEffect("weakness", 20000000, { amplifier: 1, showParticles: false });
+        } else {
+          entity.removeEffect("weakness");
         }
-        else if(typeof getRadi === "number" && getRadi >= 2) {
 
+        if (shouldHaveNausea) {
+          entity.addEffect("nausea", 20000000, { amplifier: 1, showParticles: false });
+        } else {
+          entity.removeEffect("nausea");
         }
 
-       }
-       
-    }
-
-    const dimensionIds = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];
-    for (const dimId of dimensionIds) {
-    const dimension = world.getDimension(dimId)
-    const entities = dimension.getEntities({ tags: ["atomic:rad_effect"] })
-
-    for (const entity of entities) {
-        
-        if(!entity.isValid)
-            return;
-
-
-        // if(entity.typeId == "minecraft:player") {
-        //     entity.runCommand("title @s actionbar §cYou feel off...")
-        // }
-
-       const sys1 = system.runTimeout(() => {
-            if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
-                for(const effect of entity.getEffects()) {
-                entity.removeEffect(effect.typeId)
-            }
-            system.clearRun(sys1)
-            }
-            entity.addEffect("weakness", 20000000, { amplifier: 1, showParticles: false });
-            entity.applyDamage(2);
-        }, 4800);
-
-       const sys2 = system.runTimeout(() => {
-            system.runInterval( () => {
-                if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
-                for(const effect of entity.getEffects()) {
-                entity.removeEffect(effect.typeId)
-            }
-            system.clearRun(sys2)
-            }
-            entity.addEffect("nausea", 20000000, { amplifier: 1, showParticles: false });
-        }, )
-        }, 8400);
-
-        const sys3 = system.runTimeout(() => {
-            system.runInterval( () => {
-                if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
-                for(const effect of entity.getEffects()) {
-                entity.removeEffect(effect.typeId)
-            }
-            system.clearRun(sys3)
-            }
-            entity.addEffect("mining_fatigue", 20000000, { amplifier: 2, showParticles: false });
-            entity.addEffect("slowness", 20000000, { amplifier: 1, showParticles: false})
-        }, 20)
-        }, 15600);
-
-
-       const sys4 = system.runTimeout(() => {
-            if(entity.isValid && !entity.hasTag("atomic:rad_effect")) {
-                for(const effect of entity.getEffects()) {
-                entity.removeEffect(effect.typeId)
-            }
-            system.clearRun(sys4);
-            }
-            entity.addEffect("poison", 20000000, { amplifier: 1, showParticles: false });
-            entity.addEffect("blindness", 20000000, {amplifier: 1, showParticles: false} );
-        }, 19200);
-
-
-        //Backup for getting rid of the effect (hopefully q-q)
-        if(entity.isValid && !entity.hasTag("atomic:rad_effect"))
-        {
-            for(const effect of entity.getEffects()) {
-                entity.removeEffect(effect.typeId)
-            }
-            entity.addEffect("regeneration", 10, {
-                showParticles: false
-            })
-            system.clearRun(sys1)
-            system.clearRun(sys2)
-            system.clearRun(sys3)
-            system.clearRun(sys4)
+        if (shouldHaveFatigue) {
+          entity.addEffect("mining_fatigue", 20000000, { amplifier: 2, showParticles: false });
+        } else {
+          entity.removeEffect("mining_fatigue");
         }
-        
-    }
-};
 
-}, 600)
+        if (shouldHaveSlowness) {
+          entity.addEffect("slowness", 20000000, { amplifier: 1, showParticles: false });
+        } else {
+          entity.removeEffect("slowness");
+        }
+
+        if (shouldHavePoison) {
+          entity.addEffect("poison", 20000000, { amplifier: 1, showParticles: false });
+        } else {
+          entity.removeEffect("poison");
+        }
+
+        if (shouldHaveBlindness) {
+          entity.addEffect("blindness", 20000000, { amplifier: 1, showParticles: false });
+        } else {
+          entity.removeEffect("blindness");
+        }
+    
+}

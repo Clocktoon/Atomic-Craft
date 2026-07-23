@@ -141,7 +141,7 @@ function initializeMissile(missile, targetPos) {
     missile.setProperty("atomic:pitch", -80);
     missile.setRotation({ x: -80, y: yaw });
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.3];
+    const heights = [0.60, 0.75, 0.85, 0.75, 0.55, 0.3];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -155,6 +155,7 @@ function moveTowardAngle(current, target, maxTurn) {
     while (diff < -180)
         diff += 360;
     if (Math.abs(diff) <= maxTurn) {
+        3;
         return target;
     }
     return current + Math.sign(diff) * maxTurn;

@@ -1,0 +1,24 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.geig.third_person": {
+			"animation_length": 0.125,
+			"bones": {
+				"bone": {
+					"rotation": [112.2697, -1.5019, -162.5625],
+					"position": [-1, 21, -3]
+				}
+			}
+		},
+		"animation.geig.first_person": {
+			"loop": true,
+			"animation_length": 1.0417,
+			"bones": {
+				"bone": {
+					"rotation": [0, -52.5, -155],
+					"position": [0, 28, -3]
+				}
+			}
+		}
+	}
+}

@@ -7,8 +7,8 @@ import {world, system, ItemComponentConsumeEvent} from "@minecraft/server"
 function Rotten (ev: ItemComponentConsumeEvent) {
         const source = ev.source
 
-        if(source.hasTag("atomic:rad_effect") == true) {
-            source.removeTag("atomic:rad_effect")
+        if(source.getDynamicProperty("atomic:radiation_level") as number > 0) {
+            source.setDynamicProperty("atomic:radiation_level", 0)
             source.runCommand("title @s actionbar §2 You feel better")
             source.removeEffect("weakness")
             source.removeEffect("nausea")

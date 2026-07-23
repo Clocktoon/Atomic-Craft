@@ -217,7 +217,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
   missile.setRotation({ x: -80, y: yaw });
 
   const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-  const heights = [0.25, 0.75, 0.85, 0.75, 0.55, 0.3];
+  const heights = [0.60, 0.75, 0.85, 0.75, 0.55, 0.3];
 
   for (let i = 0; i < 6; i++) {
     missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
@@ -234,7 +234,7 @@ function moveTowardAngle(current: number, target: number, maxTurn: number) {
   while (diff > 180) diff -= 360;
   while (diff < -180) diff += 360;
 
-  if (Math.abs(diff) <= maxTurn) {
+  if (Math.abs(diff) <= maxTurn) {3
     return target;
   }
 

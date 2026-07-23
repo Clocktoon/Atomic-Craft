@@ -20,7 +20,7 @@ function initializeMissile(missile, targetPos) {
     missile.setProperty("atomic:pitch", -45);
     missile.setRotation({ x: -45, y: yaw });
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.40, 0.75, 0.90, 0.75, 0.65, 0.20];
+    const heights = [0.60, 0.75, 0.90, 0.75, 0.65, 0.20];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -65,7 +65,7 @@ function updateMissile(missile, target, payload, name) {
     if (climbing && waypoint === 0) {
         const liftPoint = {
             x: missile.getDynamicProperty("liftOffX"),
-            y: missile.getDynamicProperty("liftOffY") + 80,
+            y: missile.getDynamicProperty("liftOffY") + 60,
             z: missile.getDynamicProperty("liftOffZ"),
         };
         const dx = liftPoint.x - pos.x;
@@ -181,13 +181,13 @@ function updateMissile(missile, target, payload, name) {
     const vz = Math.cos(yawRad) * Math.cos(pitchRad);
     let speed;
     if (waypoint <= 1) {
-        speed = 0.4;
+        speed = 0.8;
     }
     else if (waypoint <= 5) {
-        speed = 0.9;
+        speed = 1.5;
     }
     else {
-        speed = 1.6;
+        speed = 1.9;
     }
     active.setRotation({
         x: pitch,

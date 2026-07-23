@@ -9,6 +9,14 @@
         },
         "components": {
             "minecraft:collision_box": true,
+            "minecraft:tick": {
+                "interval_range": [20,20],
+                "looping": true
+            },
+            "atomic:radiation": {
+                "strength": 3,
+                "radius": 10
+            },
             "minecraft:selection_box": true,
             "minecraft:geometry": "minecraft:geometry.full_block",
             "minecraft:material_instances": {

@@ -43,7 +43,7 @@ function initializeMissile(missile: Entity, targetPos: Vector3) {
   missile.setRotation({ x: -45, y: yaw });
 
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.40, 0.75, 0.90, 0.75, 0.65, 0.20];
+    const heights = [0.60, 0.75, 0.90, 0.75, 0.65, 0.20];
 
   for (let i = 0; i < 6; i++) {
     missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
@@ -103,7 +103,7 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null, 
     if (climbing && waypoint === 0) {
       const liftPoint = {
         x: missile.getDynamicProperty("liftOffX") as number,
-        y: missile.getDynamicProperty("liftOffY") as number + 80,
+        y: missile.getDynamicProperty("liftOffY") as number + 60,
         z: missile.getDynamicProperty("liftOffZ") as number,
       };
 
@@ -254,11 +254,11 @@ if (horizontal < 2) {
     let speed;
   
     if (waypoint <= 1) {
-      speed = 0.4;
+      speed = 0.8;
     } else if (waypoint <= 5) {
-      speed = 0.9;
+      speed = 1.5;
     } else {
-      speed = 1.6;
+      speed = 1.9;
     }
   
     active.setRotation({

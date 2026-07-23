@@ -2,6 +2,7 @@
 import { system, world, } from "@minecraft/server";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
+import { updateChunkRadiation } from "../chunkLoaders/chunkMorphs";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
@@ -80,6 +81,14 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
             const nameId = `NK_${x},${z},${dimension.id}`;
             const distanceFromCenter = Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
             currentPhase = distanceFromCenter > change ? 1 : 2;
+            const centerRad = change - 10;
+            let radLevel;
+            if (currentPhase === 1) {
+                radLevel = 10;
+            }
+            if (currentPhase === 2) {
+                radLevel = 3;
+            }
             let tickingArea = null;
             const bounds = chunkBoundsFromBlock(x, z, 0, 255);
             tickingArea = await new ChunkTicker(dimension, nameId)
@@ -100,6 +109,8 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
                 }
                 const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase, miny ?? undefined, maxy ?? undefined);
                 await fillGeneratorSequential(generator, 50);
+                if (radLevel)
+                    updateChunkRadiation(x, z, radLevel);
                 if (world.getDynamicProperty("logs") === true)
                     world.sendMessage(`Ticking area filled: ${nameId}`);
                 world.tickingAreaManager.removeTickingArea(tickingArea);

@@ -8,6 +8,17 @@
 				"sounds/nukesound"
 			]
 		},
+		"atomic.geig": {
+			"sounds": [
+				"sounds/geig",
+				"sounds/geig2",
+				"sounds/geig3",
+				"sounds/geig4",
+				"sounds/geig5",
+				"sounds/geig6"
+			],
+			"subtitle": "subtitles.geig.click.name"
+		},
 		"atomic.siren": {
 			"sounds": [
 				"sounds/fullsiren"
@@ -15,14 +26,14 @@
 			"category": "block"
 		},
 		"atomic.beep": {
-			"subtitle": "subtitles.block.beeping",
+			"subtitle": "subtitles.block.beeping.name",
 			"sounds": [
 				"sounds/beepingsound"
 			],
 			"category": "block"
 		},
 		"atomic.explosions": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions3",
@@ -34,72 +45,75 @@
 			]
 		},
 		"atomic.explosionone": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions1"
 			]
 		},
 		"atomic.explosiontwo": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions2"
 			]
 		},
 		"atomic.explosionthree": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions3"
 			]
 		},
 		"atomic.explosionfour": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions4"
 			]
 		},
 		"atomic.explosionfive": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions5"
 			]
 		},
 		"atomic.explosionsix": {
-			"subtitle": "subtitles.ambient.explosionatomic",
+			"subtitle": "subtitles.ambient.explosionatomic.name",
 			"category": "ui",
 			"sounds": [
 				"sounds/explosions6"
 			]
 		},
 		"atomic.plane": {
-			"subtitle": "subtitles.plane.fly",
+			"subtitle": "subtitles.plane.fly.name",
 			"category": "ambient",
 			"sounds": [
 				"sounds/plane_sound"
 			]
 		},
 		"atomic.plane.missile": {
-			"subtitle": "subtitles.plane.missile",
+			"subtitle": "subtitles.plane.missile.name",
 			"sounds": [
 				"sounds/missile_plane_sound"
 			]
 		},
 		"atomic.mortar.shoot": {
+			"subtitle": "subtitles.hurt.mortar.name",
 			"sounds": [
 				"sounds/mortarshotsound"
 			]
 		},
 		"atomic.console.click": {
+			"subtitle": "subtitles.block.console.name",
 			"sounds": [
 				"sounds/consoleclick"
 			],
 			"category": "ui"
 		},
 		"atomic.missile.launch": {
+			"subtitle": "subtitles.ambient.missile.name",
 			"sounds": [
 				"sounds/missilelaunch"
 			]

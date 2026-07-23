@@ -2,10 +2,7 @@
     "format_version": "1.21.100",
     "minecraft:item": {
         "description": {
-            "identifier": "atomic:siren_spawn",
-            "menu_category": {
-                "category": "items"
-            }
+            "identifier": "atomic:siren_spawn"
         },
         "components": {
             "minecraft:icon": "atomic_siren_spawn",

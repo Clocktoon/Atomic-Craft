@@ -147,6 +147,9 @@ world.beforeEvents.explosion.subscribe((event) => {
     return;
   
   if (center) {
+    if(source?.typeId === "atomic:missile") {
+      return;
+    }
     if(source?.typeId === "atomic:payload_entity") {
     playExplosionAudio(dim, center, soundMag)
     event.dimension.spawnParticle("atomic:explosioncloud", 

@@ -36,6 +36,8 @@ import("./radiationSystem/cureSystem")
 import("./devItem.js")
 import("./nuclearBombs/redstoneHelpers")
 import("./nuclearBombs/gadget")
+import("./geigerCount")
+import("./radiationSystem/radiationManger")
 world.afterEvents.worldLoad.subscribe(() => {
   
   if(typeof world.getDynamicProperty("powerful") !== "boolean") {
@@ -65,14 +67,18 @@ world.afterEvents.worldLoad.subscribe(() => {
     //import("./itempickups.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
-    //import("./setLore.js")
 
 }
 )
 
 world.afterEvents.playerSpawn.subscribe((event) => {
   const player = event.player
+
+  import("./setLore") //Fits here :]
+
+  
   const inventory = player.getComponent('inventory')
+  
   
   if(event.initialSpawn) {
     if(inventory) {

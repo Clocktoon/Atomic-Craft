@@ -2,6 +2,9 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_geiger_item": {
+			"textures": "textures/items/geiger_item"
+		},
 		"atomic_nethernuim": {
 			"textures": "textures/items/nethernuim"
 		},
