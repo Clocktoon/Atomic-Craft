@@ -71,13 +71,10 @@ class ChunkTicker {
      * @returns {Promise<void>}
      * @throws Error if the ticking area manager is full
      */
-    async load(locationVec, nuclear = false, options, queue) {
+    async load(locationVec, nuclear = false, options) {
         if (!this.#tickingarea.hasCapacity(options)) {
-            queue.push(options);
             throw new Error("Ticking area manager became full");
         }
-        //TODO: MAKE THE LOCATION STUFF AND JUST ALL THE CODE WORK
-        //Figure out how to have the location work, does it need to be moved to a different class? Look at chunkLoader.js for help please
         if (this.#tickingarea.hasTickingArea(this.#name)) {
             if (world.getDynamicProperty("logs") === true)
                 world.sendMessage("ticking area " + this.#name + " is loaded");
@@ -92,27 +89,12 @@ class ChunkTicker {
                 world.sendMessage(`ticking area creation §cfailed§r, name ${this.#name}`);
             throw err;
         }
-        system.runInterval(() => {
-            queue = queue.filter(async (are) => {
-                const tickingOptions = are;
-                if (world.tickingAreaManager.hasCapacity(tickingOptions)) {
-                    const namdeGen = nameMaker(tickingOptions.from.x, tickingOptions.to.z, tickingOptions.dimension);
-                    const nameUse = `${namdeGen}`;
-                    const ticking = await world.tickingAreaManager.createTickingArea(nameUse, tickingOptions);
-                    return ticking;
-                }
-            });
-        });
-        //WIP, will probably need changing, please look over
-        //Look into using this https://stirante.com/script/server/2.7.0/classes/TickingAreaManager.html#getalltickingareas
-        const key = `NK_${locationVec.x}${locationVec.z}${options.dimension.id}`;
         const tickingArea = this.#tickingarea.getTickingArea(this.#name);
         if (!tickingArea) {
             throw new Error(`TickingArea ${this.#name} not found after creation`);
         }
-        else {
-            if (world.getDynamicProperty("logs") === true)
-                world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
+        else if (world.getDynamicProperty("logs") === true) {
+            world.sendMessage(`§lTickingArea ${this.#name} created, bbox=${JSON.stringify(tickingArea.boundingBox)}`);
         }
         return tickingArea;
     }

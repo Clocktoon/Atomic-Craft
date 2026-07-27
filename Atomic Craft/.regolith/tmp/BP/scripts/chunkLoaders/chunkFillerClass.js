@@ -269,7 +269,7 @@ class ChunkFiller {
                             if (woodBlock.typeId.includes("planks")) {
                                 woodBlock.setType("atomic:radiation_plank");
                             }
-                            if (woodBlock.typeId.includes("slabs")) {
+                            if (woodBlock.typeId.includes("slab")) {
                                 woodBlock.setType("atomic:radiation_slab");
                             }
                         }
@@ -336,9 +336,9 @@ class ChunkFiller {
                                 block.setType("minecraft:fire");
                                 yield;
                             }
-                        }
-                        else {
-                            block.setType("minecraft:fire");
+                            else {
+                                block.setType("minecraft:fire");
+                            }
                         }
                     }
                 }

@@ -28,7 +28,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((event) => {
             dimension: entity.dimension,
             from: { x: loc.x - 10, y: loc.y, z: loc.z - 10 },
             to: { x: loc.x + 10, y: loc.y, z: loc.z + 10 },
-        }, queue);
+        });
         const block = entity.dimension.getBlockFromRay(loc, { x: 0, y: -1, z: 0 }, {
             maxDistance: 100, includeLiquidBlocks: false
         })?.block;

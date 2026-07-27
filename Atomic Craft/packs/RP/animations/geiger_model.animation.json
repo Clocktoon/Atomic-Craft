@@ -2,7 +2,8 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.geig.third_person": {
-			"animation_length": 0.125,
+			"loop": true,
+			"animation_length": 1.0833,
 			"bones": {
 				"bone": {
 					"rotation": [112.2697, -1.5019, -162.5625],

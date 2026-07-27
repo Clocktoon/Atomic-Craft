@@ -340,7 +340,7 @@ class ChunkFiller {
               if(woodBlock.typeId.includes("planks")) {
               woodBlock.setType("atomic:radiation_plank")
             }
-            if(woodBlock.typeId.includes("slabs")) {
+            if(woodBlock.typeId.includes("slab")) {
               woodBlock.setType("atomic:radiation_slab")
             }
             }
@@ -417,15 +417,13 @@ class ChunkFiller {
          if(block) {
           
             if(randomMath <= 5) {
-              if(world.getDynamicProperty("powerful") === true) {
-              block.setType("minecraft:fire");
-              yield
-            }
-          }
-          else
-          {
-            block.setType("minecraft:fire")
-          }
+  if(world.getDynamicProperty("powerful") === true) {
+    block.setType("minecraft:fire");
+    yield;
+  } else {
+    block.setType("minecraft:fire");
+  }
+}
          }
         }
 

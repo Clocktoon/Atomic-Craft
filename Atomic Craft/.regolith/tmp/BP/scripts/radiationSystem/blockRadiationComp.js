@@ -1,6 +1,6 @@
 //TODO: General comp that can be used by any block that has radiation
 import { BlockVolume } from "@minecraft/server";
-import { RadiationRegistry, radioactiveTypes } from "../geigerCount";
+import { scanNearbyRadiation } from "./radiationScanBlocks";
 // interface Options {
 //     strength: number;
 //     radius: number
@@ -50,24 +50,6 @@ export function nearbyRadiationBlocks(entity) {
         y: entity.location.y + 10,
         z: z + 5,
     };
-    const blocks = entity.dimension.getBlocks(new BlockVolume(from, to), {
-        includeTypes: radioactiveTypes
-    });
-    let exposure = 0;
-    for (const location of blocks.getBlockLocationIterator()) {
-        const block = entity.dimension.getBlock(location);
-        if (!block)
-            continue;
-        const blockRadiation = RadiationRegistry.get(block.typeId);
-        if (blockRadiation === undefined)
-            continue;
-        const dx = block.location.x - entity.location.x;
-        const dy = block.location.y - entity.location.y;
-        const dz = block.location.z - entity.location.z;
-        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        const contribution = blockRadiation / (distance + 1);
-        exposure += contribution;
-    }
-    return exposure;
+    return scanNearbyRadiation(entity.dimension, entity.location, new BlockVolume(from, to));
 }
 //# sourceMappingURL=blockRadiationComp.js.map

@@ -32,7 +32,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                     from: { x: x - 20, y: 0, z: z - 20 },
                     to: { x: x + 20, y: 0, z: z + 20 },
                     dimension: target.dimension,
-                }, tickingQueue);
+                });
                 const missile = entity.dimension.spawnEntity("atomic:himar_missile", {
                     x: entity.location.x,
                     y: entity.location.y + 10,

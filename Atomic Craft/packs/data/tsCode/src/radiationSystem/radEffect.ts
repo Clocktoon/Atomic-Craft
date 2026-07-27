@@ -1,59 +1,47 @@
-import { world, system, Entity, Dimension } from "@minecraft/server";
+import { Entity, Dimension } from "@minecraft/server";
 
 /**
- * Radiation effects system - applies effects based on radiation level
- * Works with mobRadiationZones.ts which tracks radiation_level as dynamic property
+ * Radiation effects system - single source of truth for dose -> effect mapping.
+ * Dose lives on "atomic:radiation_dose", written by radiationManger.ts.
  */
 export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
+    if (!entity.isValid) return;
 
-        if (!entity.isValid) return;
+    const dose = entity.getDynamicProperty("atomic:radiation_dose") as number ?? 0;
 
-        const radiationLevel = entity.getDynamicProperty("atomic:radiation_dose") as number || 0;
-        if (radiationLevel === 0) return;
+    // Fully recovered - strip everything and bail
+    if (dose < 5) {
+        entity.removeEffect("nausea");
+        entity.removeEffect("weakness");
+        entity.removeEffect("mining_fatigue");
+        entity.removeEffect("slowness");
+        entity.removeEffect("poison");
+        entity.removeEffect("blindness");
+        return;
+    }
 
-        // radiation intensity (0-10 scale)
-        const shouldHaveWeakness = radiationLevel >= 2;
-        const shouldHaveNausea = radiationLevel >= 3;
-        const shouldHaveFatigue = radiationLevel >= 5;
-        const shouldHaveSlowness = radiationLevel >= 5;
-        const shouldHavePoison = radiationLevel >= 7;
-        const shouldHaveBlindness = radiationLevel >= 8;
+    applyOrRemove(entity, "nausea", dose >= 5, 0);
+    applyOrRemove(entity, "weakness", dose >= 25, 0);
+    applyOrRemove(entity, "mining_fatigue", dose >= 50, 1);
+    applyOrRemove(entity, "slowness", dose >= 75, 0);
+    applyOrRemove(entity, "poison", dose >= 75, 0);
+    applyOrRemove(entity, "blindness", dose >= 150, 0);
 
-        // Apply effects
-        if (shouldHaveWeakness) {
-          entity.addEffect("weakness", 20000000, { amplifier: 1, showParticles: false });
-        } else {
-          entity.removeEffect("weakness");
-        }
+    // Escalating damage the deeper into radiation sickness - else-if so it
+    // doesn't stack (old code applied 1+2+4=7 dmg/tick once dose hit 400)
+    if (dose >= 400) {
+        entity.applyDamage(4);
+    } else if (dose >= 200) {
+        entity.applyDamage(2);
+    } else if (dose >= 150) {
+        entity.applyDamage(1);
+    }
+}
 
-        if (shouldHaveNausea) {
-          entity.addEffect("nausea", 20000000, { amplifier: 1, showParticles: false });
-        } else {
-          entity.removeEffect("nausea");
-        }
-
-        if (shouldHaveFatigue) {
-          entity.addEffect("mining_fatigue", 20000000, { amplifier: 2, showParticles: false });
-        } else {
-          entity.removeEffect("mining_fatigue");
-        }
-
-        if (shouldHaveSlowness) {
-          entity.addEffect("slowness", 20000000, { amplifier: 1, showParticles: false });
-        } else {
-          entity.removeEffect("slowness");
-        }
-
-        if (shouldHavePoison) {
-          entity.addEffect("poison", 20000000, { amplifier: 1, showParticles: false });
-        } else {
-          entity.removeEffect("poison");
-        }
-
-        if (shouldHaveBlindness) {
-          entity.addEffect("blindness", 20000000, { amplifier: 1, showParticles: false });
-        } else {
-          entity.removeEffect("blindness");
-        }
-    
+function applyOrRemove(entity: Entity, effect: string, should: boolean, amplifier: number) {
+    if (should) {
+        entity.addEffect(effect, 60, { amplifier, showParticles: false });
+    } else {
+        entity.removeEffect(effect);
+    }
 }

@@ -12,6 +12,25 @@ system.run(() => {
         world.setDynamicProperty("logs", false);
     }
 });
+async function loadTickingAreaWithRetry(dimension, nameId, location, bounds, maxAttempts = 10, retryDelayTicks = 20) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            return await new ChunkTicker(dimension, nameId).load(location, true, {
+                dimension,
+                from: bounds.from,
+                to: bounds.to,
+            });
+        }
+        catch (err) {
+            if (world.getDynamicProperty("logs") === true)
+                world.sendMessage(`§eTicking area ${nameId} attempt ${attempt}/${maxAttempts} failed: ${err}`);
+            if (attempt === maxAttempts)
+                return null;
+            await new Promise((resolve) => system.runTimeout(() => resolve(), retryDelayTicks));
+        }
+    }
+    return null;
+}
 //TODO: Figure out how to make filler know when to switch to far out block effects
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
@@ -68,7 +87,6 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
     const startz = location.z - size;
     const endz = location.z + size;
     let chunkCount = 0;
-    let tickingAreaQueue = [];
     //loops go silly
     for (let x = startx; x <= endx; x += 16) {
         for (let z = startz; z <= endz; z += 16) {
@@ -83,20 +101,14 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
             currentPhase = distanceFromCenter > change ? 1 : 2;
             const centerRad = change - 10;
             let radLevel;
-            if (currentPhase === 1) {
+            if (currentPhase === 2) {
                 radLevel = 10;
             }
-            if (currentPhase === 2) {
+            if (currentPhase === 1) {
                 radLevel = 3;
             }
-            let tickingArea = null;
             const bounds = chunkBoundsFromBlock(x, z, 0, 255);
-            tickingArea = await new ChunkTicker(dimension, nameId)
-                .load({ x: x + 8, y: 64, z: z + 8 }, true, {
-                dimension: dimension,
-                from: bounds.from,
-                to: bounds.to,
-            }, tickingAreaQueue);
+            const tickingArea = await loadTickingAreaWithRetry(dimension, nameId, { x: x + 8, y: 64, z: z + 8 }, bounds);
             // waits until it's fully loaded, then fill
             if (tickingArea) {
                 while (!tickingArea.isFullyLoaded) {
@@ -110,7 +122,7 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
                 const generator = globalChunkFiller.request(tickingArea, blocky, `${nameId}_loader`, currentPhase, miny ?? undefined, maxy ?? undefined);
                 await fillGeneratorSequential(generator, 50);
                 if (radLevel)
-                    updateChunkRadiation(x, z, radLevel);
+                    updateChunkRadiation(Math.floor(x / 16), Math.floor(z / 16), radLevel);
                 if (world.getDynamicProperty("logs") === true)
                     world.sendMessage(`Ticking area filled: ${nameId}`);
                 world.tickingAreaManager.removeTickingArea(tickingArea);

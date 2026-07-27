@@ -1,5 +1,5 @@
 import { world, system, BlockVolume, EquipmentSlot } from "@minecraft/server";
-import { RadiationRegistry, radioactiveTypes } from "./geigerCount";
+import { RadiationRegistry, radioactiveTypes } from "./radiationSystem/radiationRegistery";
 import { getChunkRadiation } from "./chunkLoaders/chunkMorphs";
 system.runInterval(() => {
     for (const player of world.getPlayers()) {
