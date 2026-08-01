@@ -82,7 +82,7 @@ system.runInterval(() => {
       const intensity = Math.min(total / 10, 1);
       player.playSound("atomic.geig", {
         pitch: 0.8 + intensity * 1.5,
-        volume: 0.3 + intensity * 0.4,
+        volume: 0.6 + intensity * 0.4,
       });
     }
   }

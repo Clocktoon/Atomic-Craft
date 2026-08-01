@@ -1,5 +1,7 @@
 import { world } from "@minecraft/server";
 export function* createCrater(location, dimensionId, block, radius, maxDepth) {
+    if (!world.gameRules.tntExplodes)
+        return;
     const dim = world.getDimension(dimensionId);
     const cx = Math.floor(location.x);
     const cy = Math.floor(location.y + 10);
@@ -20,6 +22,8 @@ export function* createCrater(location, dimensionId, block, radius, maxDepth) {
             const z = cz + dz;
             for (let dy = 0; dy <= depth; dy++) {
                 const y = cy - dy;
+                if (dim.getBlock({ x: x, y: y, z: z })?.typeId === "minecraft:bedrock")
+                    continue;
                 dim.setBlockType({ x: x, y: y, z: z }, block);
                 yield;
             }

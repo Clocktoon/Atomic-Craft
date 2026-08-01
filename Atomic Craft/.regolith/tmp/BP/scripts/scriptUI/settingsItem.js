@@ -173,6 +173,8 @@ Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loade
 
 Concept for chunk filling system by Conmaster
 
+Updated textures for several items by Clean38 (Massive thank you on this one)
+
 Thank you to people from the BOA discord for all their help as well with coding issues`)
             .button("Back", () => {
             credits.close();

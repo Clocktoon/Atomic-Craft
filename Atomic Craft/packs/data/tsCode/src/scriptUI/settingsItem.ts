@@ -28,6 +28,7 @@ class RadiSettings implements ItemCustomComponent {
       clientWritable: true,
     });
     const logsBool = new ObservableBoolean(false, { clientWritable: true });
+    const radiWaitTime = new ObservableNumber(20, {clientWritable: true});
 
     //in case pages in different sections are ever needed
     // const page = new ObservableNumber(0, { clientWritable: true})
@@ -35,6 +36,7 @@ class RadiSettings implements ItemCustomComponent {
     const currentPower = world.getDynamicProperty("powerful");
     const exEffect = world.getDynamicProperty("explosionEffect");
     const logsOn = world.getDynamicProperty("logs");
+    const radiTime = world.getDynamicProperty("atomic:raditime")
 
     if (typeof currentPower === "boolean") {
       yielding.setData(currentPower);
@@ -54,6 +56,12 @@ class RadiSettings implements ItemCustomComponent {
     } else {
       world.setDynamicProperty("logs", false);
       logsBool.setData(false);
+    }
+    if (typeof radiTime === "number") {
+      radiWaitTime.setData(radiTime);
+    } else {
+      world.setDynamicProperty("atomic:raditime", 20);
+      radiWaitTime.setData(20);
     }
 
     yielding.subscribe((v: boolean) => world.setDynamicProperty("powerful", v));
@@ -203,6 +211,8 @@ Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loade
 
 Concept for chunk filling system by Conmaster
 
+Updated textures for several items by Clean38 (Massive thank you on this one)
+
 Thank you to people from the BOA discord for all their help as well with coding issues`,
       )
       .button("Back", () => {
@@ -283,6 +293,7 @@ Thank you to people from the BOA discord for all their help as well with coding 
         description:
           "Turns on or off progress messages during certain things, like nukes",
       })
+      .slider("Radiation wait tick time", radiWaitTime, 1, 60, {description: "20 ticks is one second", step: 1})
       .button("Back", () => {
         settingsScreen.close();
         system.run(() => {

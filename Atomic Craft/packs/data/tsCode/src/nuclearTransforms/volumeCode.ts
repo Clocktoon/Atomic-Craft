@@ -104,11 +104,25 @@ function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
 export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block | Entity, size: number, change: number, player?: Player, miny?: number, maxy?: number) {
+  
+  //Making sure tntexplode is on
+  await new Promise<void>((resolve, reject) => {
+    if(!world.gameRules.tntExplodes) {
+      reject()
+      return;
+    }
+    else {
+      resolve()
+    }
+  }) 
+  
   const dimension = world.getDimension(dimensionid);
   const startx = location.x - size;
   const endx = location.x + size;
   const startz = location.z - size;
   const endz = location.z + size;
+
+  
 
   let chunkCount = 0;
 
@@ -156,6 +170,7 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
           });
         }
 
+            
         const generator = globalChunkFiller.request(
           tickingArea, 
           blocky, 

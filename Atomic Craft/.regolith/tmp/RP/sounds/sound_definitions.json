@@ -10,10 +10,7 @@
 		},
 		"atomic.geig": {
 			"sounds": [
-				"sounds/geig",
 				"sounds/geig2",
-				"sounds/geig3",
-				"sounds/geig4",
 				"sounds/geig5",
 				"sounds/geig6"
 			],

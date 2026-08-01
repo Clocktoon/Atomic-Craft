@@ -8,6 +8,7 @@ import {
 import { getChunkRadiation } from "./chunkLoaders/chunkMorphs";
 import { RadiationRegistry, radioactiveTypes } from "./radiationSystem/radiationRegistery";
 import { scanNearbyRadiation } from "./radiationSystem/radiationScanBlocks";
+
 class geiger implements ItemCustomComponent {
   onUse(event: ItemComponentUseEvent) {
     const player = event.source;

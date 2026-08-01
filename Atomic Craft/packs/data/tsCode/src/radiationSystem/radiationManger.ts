@@ -3,10 +3,21 @@ import { getChunkExposure } from "./mobRadiationZones";
 import { applyRadiationEffects } from "./radEffect";
 import { nearbyRadiationBlocks } from "./blockRadiationComp";
 
+if(typeof world.getDynamicProperty("atomic:raditime") !== "number") {
+    system.run(() => {
+        world.setDynamicProperty("atomic:raditime", 10)
+    })
+}
+const timeBetween = world.getDynamicProperty("atomic:raditime")
+
 function calculateExposure(entity: Entity): number {
     let exposure = 0;
-    exposure += getChunkExposure(entity);
-    exposure += nearbyRadiationBlocks(entity);
+    try {
+        exposure += getChunkExposure(entity);
+        exposure += nearbyRadiationBlocks(entity);
+    } catch (err) {
+        console.warn(`Radiation exposure calc failed for ${entity.typeId}: ${err}`);
+    }
     return exposure;
 }
 

@@ -4,8 +4,13 @@ import { applyRadiationEffects } from "./radEffect";
 import { nearbyRadiationBlocks } from "./blockRadiationComp";
 function calculateExposure(entity) {
     let exposure = 0;
-    exposure += getChunkExposure(entity);
-    exposure += nearbyRadiationBlocks(entity);
+    try {
+        exposure += getChunkExposure(entity);
+        exposure += nearbyRadiationBlocks(entity);
+    }
+    catch (err) {
+        console.warn(`Radiation exposure calc failed for ${entity.typeId}: ${err}`);
+    }
     return exposure;
 }
 function updateDose(entity, exposure) {

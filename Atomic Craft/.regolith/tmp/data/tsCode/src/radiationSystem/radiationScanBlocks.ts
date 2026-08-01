@@ -14,7 +14,7 @@ export function scanNearbyRadiation(
 ): number {
   let exposure = 0;
 
-  const blocks = dimension.getBlocks(volume, { includeTypes: radioactiveTypes });
+  const blocks = dimension.getBlocks(volume, { includeTypes: radioactiveTypes }, true);
 
   for (const location of blocks.getBlockLocationIterator()) {
     const block = dimension.getBlock(location);

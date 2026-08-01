@@ -102,6 +102,8 @@ class Fus {
                         });
                         // Crater code
                         function* createCrater(location, dimensionId, block, radius, maxDepth) {
+                            if (!world.gameRules.tntExplodes)
+                                return;
                             const dim = world.getDimension(dimensionId);
                             const cx = Math.floor(location.x);
                             const cy = Math.floor(location.y + 10);

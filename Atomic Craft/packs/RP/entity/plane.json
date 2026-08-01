@@ -7,7 +7,7 @@
 				"default": "entity_alphatest"
 			},
 			"textures": {
-				"default": "textures/entity/plane_tex"
+				"default": "textures/entity/northtrop"
 			},
 			"geometry": {
 				"default": "geometry.plane"
@@ -18,6 +18,9 @@
 			"spawn_egg": {
 				"base_color": "#000000",
 				"overlay_color": "#FFFFFF"
+			},
+			"particle_effects": {
+				"plane_smoke": "atomic:plane_smoke"
 			},
 			"animations": {
 				"fly": "animation.plane.fly",

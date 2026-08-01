@@ -1,4 +1,5 @@
-import { world, system } from "@minecraft/server";
+import { world, system, EasingType } from "@minecraft/server";
+
 
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
   const entity = ev.target;

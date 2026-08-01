@@ -138,6 +138,8 @@ class Fus implements BlockCustomComponent {
                 radius: number,
                 maxDepth: number,
               ) {
+                if(!world.gameRules.tntExplodes)
+                  return;
                 const dim = world.getDimension(dimensionId);
 
                 const cx = Math.floor(location.x);
