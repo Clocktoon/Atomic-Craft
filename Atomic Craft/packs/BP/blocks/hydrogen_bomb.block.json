@@ -56,7 +56,10 @@
 			},
 			"minecraft:light_dampening": 15,
 			"minecraft:light_emission": 0,
-			"atomic:hb_explode": {}
+			"atomic:hb_explode": {},
+			"atomic:redstone_nuke": {
+				"hbomb": true
+			}
 		},
 		"permutations": [
 			{

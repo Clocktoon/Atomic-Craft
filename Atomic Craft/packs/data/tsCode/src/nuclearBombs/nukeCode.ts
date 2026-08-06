@@ -37,9 +37,9 @@ class OnClick implements BlockCustomComponent {
      
       if(playerEntity)
     new MessageBox(playerEntity, "Confirm")
-    .body("Are you sure you want to activate the nuclear bomb?")
-    .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
-    .button2("No", "this will close the menu")
+    .body({translate: "nuke.menu.body.name"})
+      .button1({translate: "nuke.menu.buttonone.name"}, {translate: "nuke.menu.tooltipone.name"})
+      .button2({translate: "nuke.menu.buttontwo.name"}, {translate: "nuke.menu.tooltiptwo.name"})
     .show()
     .then((rep) => {
 

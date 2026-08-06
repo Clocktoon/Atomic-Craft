@@ -84,3 +84,22 @@ group.atomic:nucleargroup.name=Nuclear bombs
 action.interact.plane.leave.name=Leave plane by pressing :_input_key.sneak: and press :_input_key.use: to use weapons
 action.interact.himar.enter.name=Press :_input_key.sneak: to exit Himar and press :_input_key.use: to use weapons
 action.interact.mortar.fire.name=Input ammo and fire
+nuke.menu.body.name=Are you sure you want to activate the nuclear bomb?
+nuke.menu.buttonone.name=Yes
+nuke.menu.tooltipone.name=this will start the nuclear bomb, it can not be stopped
+nuke.menu.buttontwo.name=No
+nuke.menu.tooltiptwo.name=this will close the menu
+
+blas.menu.paneltitle.name=Missile Control Panel
+blas.menu.dropdownname.name=Mode
+blas.menu.dropdown.labelone.name=Launch now mode
+blas.menu.dropdown.labeltwo.name=Save coordinates for later mode
+blas.menu.cord.x.name=X
+blas.menu.cord.z.name=Z
+blas.menu.button.launch.name=Launch
+blas.menu.button.savecord.name=Save coordinates
+blas.menu.button.firesave.name=Fire at saved location
+
+blas.fail.name=Missile Fail
+blas.fail.labal.one.name=Missile is out of range as it is
+blas.fail.labal.two.name=blocks away

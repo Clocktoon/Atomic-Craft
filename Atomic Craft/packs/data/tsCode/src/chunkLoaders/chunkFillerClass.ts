@@ -121,9 +121,37 @@ class ChunkFiller {
 
       let any = false;
 
+      const volume = new BlockVolume(min, max);
+
+      const plantList = ["minecraft:dandelion",
+          "minecraft:poppy",
+          "minecraft:blue_orchid",
+          "minecraft:allium",
+          "minecraft:azure_bluet",
+          "minecraft:red_tulip",
+          "minecraft:orange_tulip",
+          "minecraft:white_tulip",
+          "minecraft:pink_tulip",
+          "minecraft:oxeye_daisy",
+          "minecraft:cornflower",
+          "minecraft:lily_of_the_valley",
+          "minecraft:torchflower",
+          "minecraft:wither_rose",
+          "minecraft:sunflower",
+          "minecraft:lilac",
+          "minecraft:rose_bush",
+          "minecraft:peony",
+          "minecraft:pitcher_plant",
+          "minecraft:closed_eyeblossom",
+          "minecraft:open_eyeblossom",
+          "minecraft:golden_dandelion"]
+
+      const plants = request.area.dimension.getBlocks(volume, {
+        includeTypes: plantList
+      })
+
       //Phase 2
       if (phase == 2) {
-        const volume = new BlockVolume(min, max);
         const blockList = request.area.dimension.getBlocks(
           volume,
           {
@@ -226,6 +254,23 @@ class ChunkFiller {
           },
           true,
         );
+
+        for(const loc of plants.getBlockLocationIterator()) {
+            any = true
+            const plant = request.area.dimension.getBlock(loc)
+
+            if(!plant)
+              continue;
+
+            if(world.getDynamicProperty("powerful") === true) {
+              plant.setType("minecraft:air");
+              yield
+            }
+            else {
+              plant.setType("minecraft:air")
+            }
+
+        }
 
         request.area.dimension.fillBlocks(volume,"atomic:radiation_block", {
           blockFilter: {
@@ -340,7 +385,7 @@ class ChunkFiller {
               if(woodBlock.typeId.includes("planks")) {
               woodBlock.setType("atomic:radiation_plank")
             }
-            if(woodBlock.typeId.includes("slab")) {
+            if(woodBlock.typeId.includes("slabs")) {
               woodBlock.setType("atomic:radiation_slab")
             }
             }
@@ -350,7 +395,6 @@ class ChunkFiller {
       }
       //Phase 1
       if (phase == 1) {
-        const volume = new BlockVolume(min, max);
         const getGrass = request.area.dimension.getBlocks(volume, {
           includeTypes: [
             "minecraft:grass_block",
@@ -409,6 +453,23 @@ class ChunkFiller {
             ]
           }
         );
+
+        for(const loc of plants.getBlockLocationIterator()) {
+            any = true
+            const plant = request.area.dimension.getBlock(loc)
+
+            if(!plant)
+              continue;
+
+            if(world.getDynamicProperty("powerful") === true) {
+              plant.setType("minecraft:air");
+              yield
+            }
+            else {
+              plant.setType("minecraft:air")
+            }
+
+        }
 
         for(const loc of blockWood.getBlockLocationIterator()) {
          const block = request.area.dimension.getBlock(loc)

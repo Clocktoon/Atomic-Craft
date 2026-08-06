@@ -242,73 +242,71 @@ class RedNuclear implements BlockCustomComponent {
     const random = `${randomMath}`;
       
           const px = block.location.x;
-          const pz = block.location.z;
-          const py = block.y;
-      
-          //Ticking area for the stuff close to the explosion
-          world.tickingAreaManager
-            .createTickingArea("nukearea", {
-              from: { x: px - 60, y: 0, z: pz - 60 },
-              to: { x: px + 60, y: 0, z: pz + 60 },
-              dimension: block.dimension,
-            })
-            .then(() => {
-              block.dimension.playSound("atomic.beep", block.location);
-      
-              system.runTimeout(() => {
-                function* blockGen() {
-      
-                  let radius = 20;
-      
-                  //Radiation and burning of mobs
-      
-                  const players = block.dimension.getPlayers({
-                    location: block.location,
-                    minDistance: 1,
-                    maxDistance: 70,
-                  });
-      
-                  for (const eny of block.dimension.getEntities({
-                    location: block.location,
-                    minDistance: 1,
-                    maxDistance: 70,
-                  })) {
-                    eny.setOnFire(20);
-                    if (
-                      eny.runCommand(
-                        `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,
-                      ).successCount <= 0 &&
-                      eny.typeId !== "atomic:gen_entity" &&
-                      eny.typeId != "minecraft:player"
-                    ) {
-                      eny.addTag("atomic:rad_effect");
-                    }
-                  }
-      
-                  for (const playerRadi of players) {
-                      if(playerRadi.dimension.getBlockAbove(playerRadi.location)?.typeId === "minecraft:air") {
-                          playerRadi.setOnFire(10, true)
-                      }
-                   if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
-                      playerRadi.setDynamicProperty("radiation", 100);
-                   }
-                    
-                    //TODO: Make gas mask worth with players
-      
-                    playerRadi.camera.fade({
-                      fadeColor: { red: 1, blue: 1, green: 1 },
-                      fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
-                    });
-                  }
-      
-                  block.dimension.spawnParticle("atomic:gadgetparticle", {
-                    x: block.location.x,
-                    y: block.location.y - 20,
-                    z: block.location.z,
-                  });
-                  // Crater code
-                  const randomMath = Math.floor(Math.random() * 20)
-                  system.runJob((function* () {
+    const pz = block.location.z;
+    const py = block.y;
+
+    //Ticking area for the stuff close to the explosion
+    world.tickingAreaManager
+      .createTickingArea(`nukearea${random}`, {
+        from: { x: px - 70, y: 0, z: pz - 70 },
+        to: { x: px + 70, y: 0, z: pz + 70 },
+        dimension: block.dimension,
+      })
+      .then(() => {
+       
+          function* blockGen() {
+
+            let radius = 20;
+
+            //Radiation and burning of mobs
+
+            const players = block.dimension.getPlayers({
+              location: block.location,
+              minDistance: 1,
+              maxDistance: 70,
+            });
+
+            for (const eny of block.dimension.getEntities({
+              location: block.location,
+              minDistance: 1,
+              maxDistance: 70,
+            })) {
+              eny.setOnFire(20);
+              if (
+                eny.runCommand(
+                  `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,
+                ).successCount <= 0 &&
+                eny.typeId !== "atomic:gen_entity" &&
+                eny.typeId != "minecraft:player"
+              ) {
+                eny.addTag("atomic:rad_effect");
+              }
+            }
+
+            for (const playerRadi of players) {
+                if(playerRadi.dimension.getBlockAbove(playerRadi.location)?.typeId === "minecraft:air") {
+                    playerRadi.setOnFire(10, true)
+                }
+             if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
+                playerRadi.setDynamicProperty("radiation", 100);
+             }
+              
+              //TODO: Make gas mask worth with players
+
+              playerRadi.camera.fade({
+                fadeColor: { red: 1, blue: 1, green: 1 },
+                fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+              });
+            }
+
+            block.dimension.spawnParticle("atomic:gadgetparticle", {
+              x: block.location.x,
+              y: block.location.y - 20,
+              z: block.location.z,
+            });
+            // Crater code
+            const randomMath = Math.floor(Math.random() * 20)
+            system.runJob((function* () {
                 yield* createCrater(
                   block.location,
                   block.dimension.id,
@@ -316,141 +314,135 @@ class RedNuclear implements BlockCustomComponent {
                   30,
                   30,
                 );
-                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
+              world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
               })());
-                   block.dimension.createExplosion({
-                      x: block.location.x, 
-                      y: block.location.y - 21, 
-                      z: block.location.z}, 
-                      15, 
-                      {
-                    causesFire: true,
-                    allowUnderwater: false,
-                  });
-      
-                  // Sound code by MapleStar // TC (discord)
-                  function playExplosionAudio(
-                    dimension: Dimension,
-                    center: Vector3,
-                    magnitude: number,
-                  ) {
-                    if (!center) return;
-      
-                    const players = dimension.getPlayers();
-                    const explosionRadius = Math.min(
-                      Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)),
-                      60,
-                    );
-                    const maxHearingDistance = explosionRadius * 24;
-                    const shakeDistance = explosionRadius * 8;
-      
-                    players.forEach((player) => {
-                      const playerLocation = player.location;
-                      const dx = playerLocation.x - center.x;
-                      const dy = playerLocation.y - center.y;
-                      const dz = playerLocation.z - center.z;
-                      const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      
-                      if (distance > maxHearingDistance) return;
-      
-                      player.sendMessage("test test 123");
-      
-                      const maxEffectRadius = explosionRadius * 2;
-      
-                      const distanceRatio = Math.min(
-                        1,
-                        distance / maxHearingDistance,
-                      );
-                      const boomVolume = Math.max(
-                        0.2,
-                        2.5 * (1 - distanceRatio * 0.8),
-                      );
-                      const boomPitch =
-                        0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
-      
-                      const delayTicks = Math.min(100, Math.floor(distance / 17));
-                      const delayMs = delayTicks * 50;
-      
-                      system.runTimeout(() => {
-                        try {
-                          player.playSound("atomic.nukesound", {
-                            volume: boomVolume,
-                            pitch: boomPitch
-                          });
-                          if (distance <= shakeDistance) {
-                            const shakeIntensity = Math.max(
-                              0.1,
-                              1 - distance / shakeDistance,
-                            );
-                            dimension.runCommand(
-                              `execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`,
-                            );
-                          }
-                        } catch (err) {
-                          player.sendMessage("error with sound and shake code");
-                        }
-                      }, delayMs);
+              
+              yield
+            
+            // Sound code by MapleStar // TC (discord)
+            function playExplosionAudio(
+              dimension: Dimension,
+              center: Vector3,
+              magnitude: number,
+            ) {
+              if (!center) return;
+
+              const players = dimension.getPlayers();
+              const explosionRadius = Math.min(
+                Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)),
+                60,
+              );
+              const maxHearingDistance = explosionRadius * 24;
+              const shakeDistance = explosionRadius * 8;
+
+              players.forEach((player) => {
+                const playerLocation = player.location;
+                const dx = playerLocation.x - center.x;
+                const dy = playerLocation.y - center.y;
+                const dz = playerLocation.z - center.z;
+                const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                if (distance > maxHearingDistance) return;
+
+               
+
+                const maxEffectRadius = explosionRadius * 2;
+
+                const distanceRatio = Math.min(
+                  1,
+                  distance / maxHearingDistance,
+                );
+                const boomVolume = Math.max(
+                  0.2,
+                  2.5 * (1 - distanceRatio * 0.8),
+                );
+                const boomPitch =
+                  0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
+
+                const delayTicks = Math.min(100, Math.floor(distance / 17));
+                const delayMs = delayTicks * 50;
+
+                system.runTimeout(() => {
+                  try {
+                    player.playSound("atomic.nukesound", {
+                      volume: boomVolume,
+                      pitch: boomPitch
                     });
+                    if (distance <= shakeDistance) {
+                      const shakeIntensity = Math.max(
+                        0.1,
+                        1 - distance / shakeDistance,
+                      );
+                      dimension.runCommand(
+                        `execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`,
+                      );
+                    }
+                  } catch (err) {
+                    player.sendMessage("error with sound and shake code");
                   }
-                
-      
-                  //Shockwave and explosion sound
-                  playExplosionAudio(block.dimension, block.location, 120);
-                  // shockwaveBlast(
-                  //   dimension,
-                  //   block.location,
-                  //   3,
-                  //   50,
-                  //   { x: 6, z: 4 },
-                  //   1,
-                  // );
-      
-                  yield;
-                  //Gets rid of ticking area and starts the real nuclear explosion code
-                  
-      
-                  //Nuke Code!!!
-                  nuclearArea(
-                    block.dimension.id,
-                    block.location,
-                    block,
-                    128,
-                    40
-                  );
-      
-                  const volume = new BlockVolume(
-                    {
-                      x: block.location.x - 20,
-                      y: block.location.y - 20,
-                      z: block.location.z - 20,
-                    },
-                    {
-                      x: block.location.x + 20,
-                      y: block.location.y + 20,
-                      z: block.location.z + 20,
-                    },
-                  );
-      
-                  // LATER UPDATE TO BE ADDED YOU GET IT
-                  // aftermath(
-                  //   dimension.id,
-                  //   radius,
-                  //   volume,
-                  //   Math.floor(Math.random() * 4),
-                  // );
-                }
-      
-                system.runJob(blockGen());
-              }, 400);
-            });
+                }, delayMs);
+              });
+            }
+            const playdi = block.dimension;
+
+            //Shockwave and explosion sound
+            playExplosionAudio(playdi, block.location, 120);
+            // shockwaveBlast(
+            //   dimension,
+            //   block.location,
+            //   3,
+            //   50,
+            //   { x: 6, z: 4 },
+            //   1,
+            // );
+
+            yield;
+            //Gets rid of ticking area and starts the real nuclear explosion code
+
+            //Nuke Code!!!
+            nuclearArea(
+              block.dimension.id,
+              block.location,
+              block,
+              112,
+              40,
+            //   40,
+            //   40
+            );
+
+            const volume = new BlockVolume(
+              {
+                x: block.location.x - 20,
+                y: block.location.y - 20,
+                z: block.location.z - 20,
+              },
+              {
+                x: block.location.x + 20,
+                y: block.location.y + 20,
+                z: block.location.z + 20,
+              },
+            );
+
+            // GOING TO BE ADDED IN A LATER UPDATE
+            // aftermath(
+            //   dimension.id,
+            //   radius,
+            //   volume,
+            //   Math.floor(Math.random() * 4),
+            // );
+          }
+
+          system.runJob(blockGen());
+      });
     }
     if(params.hbomb == true) {
       const randomMath = makeRandomId();
     const random = `${randomMath}`;
       const px = block.location.x;
-      const pz = block.location.z;
-      const py = block.y;
+    const pz = block.location.z;
+    const py = block.y;
 
+      //Ticking area for the stuff close to the explosion
       world.tickingAreaManager
         .createTickingArea(`nukearea${random}`, {
           from: { x: px - 71, y: py - 70, z: pz - 71 },
@@ -458,10 +450,7 @@ class RedNuclear implements BlockCustomComponent {
           dimension: block.dimension,
         })
         .then(() => {
-        
-          block.dimension.playSound("atomic.beep", block.location);
-
-          system.runTimeout(() => {
+         
             function* blockGen() {
               let radius = 30;
 
@@ -514,10 +503,7 @@ class RedNuclear implements BlockCustomComponent {
                 y: block.location.y - 26,
                 z: block.location.z,
               });
-              block.dimension.createExplosion(block.location, 20, {
-                causesFire: true,
-                allowUnderwater: false,
-              });
+              
               // Crater code
               function* createCrater(
                 location: Vector3,
@@ -526,6 +512,8 @@ class RedNuclear implements BlockCustomComponent {
                 radius: number,
                 maxDepth: number,
               ) {
+                if(!world.gameRules.tntExplodes)
+                  return;
                 const dim = world.getDimension(dimensionId);
 
                 const cx = Math.floor(location.x);
@@ -631,10 +619,11 @@ class RedNuclear implements BlockCustomComponent {
                   }, delayMs);
                 });
               }
-      
+
+              const playdi = block.dimension;
 
               //Shockwave and explosion sound
-              playExplosionAudio(block.dimension, block.location, 400);
+              playExplosionAudio(playdi, block.location, 400);
 
               // shockwaveBlast(
               //   dimension,
@@ -651,7 +640,7 @@ class RedNuclear implements BlockCustomComponent {
                 block.location,
                 block,
                 352,
-                208
+                208,
               );
 
               const volume = new BlockVolume(
@@ -677,7 +666,6 @@ class RedNuclear implements BlockCustomComponent {
             }
 
             system.runJob(blockGen());
-          }, 400);
         });
     }
   }
