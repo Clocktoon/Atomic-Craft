@@ -4,6 +4,12 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"atomic_void_bomb": {
+			"textures": "textures/blocks/void_bomb"
+		},
+		"atomic_void_bomb_top": {
+			"textures": "textures/blocks/void_bomb_top"
+		},
 		"atomic_crsuag": {
 			"textures": "textures/blocks/villager_banner"
 		},

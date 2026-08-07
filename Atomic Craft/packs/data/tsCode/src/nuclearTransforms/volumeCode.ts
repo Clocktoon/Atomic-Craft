@@ -25,7 +25,7 @@ system.run(() => {
   }
 })
 
-async function loadTickingAreaWithRetry(
+export async function loadTickingAreaWithRetry(
   dimension: Dimension,
   nameId: string,
   location: Vector3,
@@ -86,7 +86,7 @@ async function fillGeneratorSequential(generator: Generator<void, void, unknown>
   });
 }
 
-function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
+export function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255) {
   const chunkX = Math.floor(x / 16) * 16;
   const chunkZ = Math.floor(z / 16) * 16;
   return {

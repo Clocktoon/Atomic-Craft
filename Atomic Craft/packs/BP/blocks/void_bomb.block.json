@@ -1,0 +1,49 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:block": {
+        "description": {
+            "identifier": "atomic:void_bomb",
+            "menu_category": {
+                "category": "items"
+            }
+        },
+        "components": {
+            "minecraft:collision_box": true,
+            "minecraft:geometry": "geometry.void_bomb",
+            "minecraft:material_instances": {
+                "up": {
+                    "texture": "atomic_void_bomb_top",
+                    "render_method": "opaque"
+                },
+                "down": {
+                    "texture": "atomic_void_bomb_top",
+                    "render_method": "opaque"
+                },
+                "north": {
+                    "texture": "atomic_void_bomb",
+                    "render_method": "opaque"
+                },
+                "south": {
+                    "texture": "atomic_void_bomb",
+                    "render_method": "opaque"
+                },
+                "east": {
+                    "texture": "atomic_void_bomb",
+                    "render_method": "opaque"
+                },
+                "west": {
+                    "texture": "atomic_void_bomb",
+                    "render_method": "opaque"
+                }
+            },
+            "minecraft:selection_box": true,
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 3
+            },
+            "minecraft:light_dampening": 15,
+            "minecraft:tags": [
+                "minecraft:is_pickaxe_item_destructible"
+            ]
+        }
+    }
+}
