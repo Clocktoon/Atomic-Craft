@@ -17,13 +17,12 @@
                 "item": "minecraft:iron_ingot"
             },
             "A": {
-                "item": "atomic:enhanced_tnt",
-                "data": 6
+                "item": "atomic:circuit_board"
             }
         },
         "unlock": [
             {
-                "item": "atomic:enhanced_tnt"
+                "item": "atomic:circuit_board"
             },
             {
                 "item": "minecraft:iron_ingot"
@@ -31,7 +30,7 @@
         ],
         "result": {
             "count": 1,
-            "data": 6,
+            "data": 0,
             "item": "atomic:tablet"
         }
     }

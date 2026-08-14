@@ -14,7 +14,7 @@
                 }
             },
             "minecraft:display_name": {
-                "value": "item.atomic:atomic:geiger_item.name"
+                "value": "item.atomic:geiger_item.name"
             },
             "minecraft:max_stack_size": 1,
             "atomic:geiger": {},

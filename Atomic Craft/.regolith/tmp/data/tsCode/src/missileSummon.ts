@@ -1,10 +1,15 @@
-import { system } from "@minecraft/server"
+import { system, ItemCustomComponent, ItemComponentUseEvent } from "@minecraft/server"
 
 /** @type {import("@minecraft/server").ItemCustomComponent} */
-const Remote = {
-    onUse(event) {
+class MissileSummon implements ItemCustomComponent {
+    
+    onUse(event: ItemComponentUseEvent) {
         const player = event.source
         const blockhit = player.getBlockFromViewDirection()
+        
+        if(!blockhit)
+            return;
+
         const block = blockhit.block
 
         const location = {
@@ -22,6 +27,7 @@ const Remote = {
     }
 }
 
+
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
-    itemComponentRegistry.registerCustomComponent("atomic:remote", Remote)
+    itemComponentRegistry.registerCustomComponent("atomic:missile_summon", new MissileSummon)
 })

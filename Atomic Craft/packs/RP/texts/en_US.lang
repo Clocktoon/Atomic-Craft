@@ -6,7 +6,7 @@ tile.atomic:uranium_ore.name=Uranium ore
 item.atomic:raw_uranium.name=Raw uranium
 tile.atomic:atom_bomb.name=Atomic bomb
 item.atomic:grenade.name=Grenade
-item.atomic:uranium_cooked.name=Cooked uranium
+item.atomic:uranium_cooked.name=Uranium billet
 item.atomic:core.name=Atomic Core
 tile.atomic:radiation_block.name=Radiation Block
 tile.atomic:burned_log.name=Burned Log
@@ -19,7 +19,7 @@ entity.atomic:missile.name=Missile
 item.atomic:missile_button.name=Missile Button
 entity.atomic:siren.name=Siren
 item.atomic:siren_spawn.name=Siren
-item.atomic:tablet.name=Remote Missile Tablet
+item.atomic:tablet.name=Detonator Tablet
 tile.atomic:uranium_deepslate.name=Deepslate uranium ore
 tile.atomic:landmine.name=Landmine
 item.atomic:gas_mask.name=Gas Mask
@@ -68,7 +68,10 @@ item.atomic:blass.name=Ballistic missile
 item.atomic:himar_item.name=Himar
 item.atomic:thermo_core.name=Thermo Nuclear Core
 item.atomic:atomic_settings.name=Atomic Manage Item
-item.atomic:atomic:geiger_item.name=Geiger counter
+item.atomic:geiger_item.name=Geiger Counter
+tile.atomic:void_bomb.name=Void Bomb
+tile.atomic:copper_enricher.name=Ore Enrichement Device
+item.atomic:circuit_board.name=Circuit Board
 
 item.atomic:mortar_ammo.name=Mortar Ammo
 
@@ -103,3 +106,51 @@ blas.menu.button.firesave.name=Fire at saved location
 blas.fail.name=Missile Fail
 blas.fail.labal.one.name=Missile is out of range as it is
 blas.fail.labal.two.name=blocks away
+
+manage.menu.title.name=Bombs of glory manage
+manage.menu.button.settings.name=Settings
+manage.menu.button.wiki.name=Wiki
+manage.menu.button.credits.name=Credits
+
+atomic.back.button.name=Back
+atomic.picksection.name=Pick section
+
+atomic.wiki.title.name=Bombs of glory wiki
+atomic.wiki.button.uranium.name=Uranium
+atomic.wiki.button.bombs.name=Bombs and Nuclear details
+atomic.wiki.button.steel.name=Steel
+
+uranium.pageone.name=Uranium is the main ore of this addon, it's used to make all of the nuclear bombs. It can be found from the Y cords -47 to 62, with more heavy amounts in the middle of the non negative cords. Uranium has a green look, making it somewhat like emeralds. Uranium can also be gotten from the uranium vita, a new mob that spawns in dark areas, being the living weird version of uranium itself. The raw uranium can be cooked in a furnace to make its cooked form, which is the item that is actually useful. Once you reach the nether, you can combine cooked uranium with quartz to make nethernuim, more on that in the useage section
+uranium.pagetwo.name=The main useage of uranium is making nuclear bombs, uranium is used in both versions of the nuclear bomb cores, the first atomic core used for the first two nuke tiers is made via putting iron around cooked uranium, while the thermonuclear is made using nethernium around the first atomic core. Uranium can also be used to make enhanced tnt, which is a more powerful version of normal tnt, which is used later on for missiles and other things.
+uranium.title.name=Uranium
+uranium.section.name=Section
+uranium.section.one.name=Ore block info
+uranium.section.two.name=Ore usage
+
+bombs.pageone.name=Bombs of glory has many types of bombs, the recipes for each can be unlocked via getting ores and gunpowder in most cases, below is a list of each and some basic info on them. Grenade: Can be thrown, explodes after a few seconds on the ground. Enhanced tnt: A more powerful version of normal tnt made with uranium, explodes a pretty big area. Mortar: A type of cannon that fires a bomb at a nearby location, it requires ammo to fire, click on it with ammo to shoot. Plane bombs: A plane entity can be made. The plane can drop down a bomb that explodes the ground below it. Himar missiles: A himar can be made, this entity fires out missiles that head to a set location via UI, missile explodes on impact. Missile button + Remote missile: Fires down a missile at a location by rather holding down on for the button, or looking at a block for the remote. Ballistic missiles: Made with iron blocks, enhanced tnt and an observer, these are the none nuclear form of ballistic missiles, they sit in place until given cords and fired, at which point they head towards the target location and explode on impact. ICBM: These are made via steel blocks and an atomic bomb + an observer, they sit in place until given cords to head to, in which case they fire off towards the cords, once hitting target they cause a nuclear explosion. Nuclear bombs: Each of the nuclear bombs work roughly the same, they will create a crater, and will change the area around it in a scaling size. The first one, the gadget is made with iron, the second one is made with netherite, and last one with steel.
+bombs.pagetwo.name=Nuclear explosions will turn the area around it into a toxic place, the ground becomes dangerous to walk on and it becomes a bad idea to try and live there, in a future update radiation will also be added thus making these places truly dangerous forever. The effects of death from these blocks can be avoided by wearing a gas mask, craft one to save yourself from the pain!
+bombs.title.name=Bombs and Nuclear
+bombs.section.name=Section
+bombs.section.one.name=List of bombs and basic info
+bombs.section.two.name=Nuclear details
+
+steel.pageone.name=Steel is made via putting 2 netherite scrap, and 4 iron ingots in a crafting table
+steel.pagetwo.name=Steel ingots are used to make several bomb types, such as missiles. Get a ton of it as you'll likely need a lot of it, for instance the ballistic missiles need steel blocks to be made
+steel.title.name=Steel Ore
+steel.section.name=Section
+steel.section.one.name=How to get steel
+steel.section.two.name=Steel useage
+
+atomic.credits.title.name=Credits
+atomic.credits.text.name=Sound + shockwave system by MapleStar, Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loader systems, Concept for chunk filling system by Conmaster, Updated textures for several items by Clean38 (Massive thank you on this one), new plane model and fat man (gun) by sh8lt8yb8lt8y, Thank you to people from the BOA discord for all their help as well with coding issues
+
+atomicsettings.title.name=Bombs of glory settings
+atomicsettings.label.name=Use this to change the settings of the world
+atomicsettings.slow.name=Slower mode
+atomicsettings.slow.des.name=Turning this off will probably crash your game with the bigger nukes
+atomicsettings.explosion.name=Explosion effects
+atomicsettings.explosion.des.name=Turns off general explosion effects (ex. booms after any explosion goes off), does not count for nuclear bombs or nuclear missiles
+atomicsettings.log.name=Log messages
+atomicsettings.log.des.name=Turns on or off progress messages during certain things, like nukes
+
+atomic.chunksdone.name=Current chunks done

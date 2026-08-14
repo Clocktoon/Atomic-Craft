@@ -1,6 +1,6 @@
 import { world, system, BlockVolume, EquipmentSlot } from "@minecraft/server";
 import { RadiationRegistry, radioactiveTypes } from "./radiationSystem/radiationRegistery";
-import { getChunkRadiation } from "./chunkLoaders/chunkMorphs";
+import { getChunkRadiation } from "./radiationSystem/chunkMorphs";
 import { scanNearbyRadiation } from "./radiationSystem/radiationScanBlocks";
 
 system.runInterval(() => {

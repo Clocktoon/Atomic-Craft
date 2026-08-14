@@ -1,6 +1,4 @@
 export const RadiationRegistry = new Map([
-    ["atomic:uranium_ore", 2],
-    ["atomic:uranium_deepslate", 3],
     ["atomic:radiation_block", 4],
     ["atomic:radiation_diamond_block", 5],
     ["atomic:radiation_plank", 1],

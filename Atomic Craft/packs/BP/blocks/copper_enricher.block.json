@@ -1,0 +1,72 @@
+{
+  "format_version": "1.26.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "atomic:copper_enricher",
+      "menu_category": {
+        "category": "items"
+      },
+      "states": {
+        "atomic:enrich_on": [false, true]
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.copper_enricher",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "atomic_copper_enricher_side",
+          "render_method": "alpha_test"
+        },
+        "north": {
+          "texture": "atomic_copper_enricher_north_off",
+          "render_method": "alpha_test"
+        },
+        "up": {
+          "texture": "atomic_copper_enricher_top",
+          "render_method": "alpha_test"
+        },
+        "down": {
+          "texture": "atomic_copper_enricher_down",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:collision_box": true,
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2
+      },
+      "minecraft:selection_box": true,
+      "minecraft:redstone_conductivity": {
+        "redstone_conductor": true
+      },
+      "minecraft:redstone_consumer": {
+        "min_power": 1,
+        "propagates_power": true
+      }
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('atomic:enrich_on')",
+        "components": {
+          "minecraft:material_instances": {
+            "*": {
+              "texture": "atomic_copper_enricher_side",
+              "render_method": "alpha_test"
+            },
+            "north": {
+              "texture": "atomic_copper_enricher_north_on",
+              "render_method": "alpha_test"
+            },
+            "up": {
+              "texture": "atomic_copper_enricher_top",
+              "render_method": "alpha_test"
+            },
+            "down": {
+              "texture": "atomic_copper_enricher_down",
+              "render_method": "alpha_test"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

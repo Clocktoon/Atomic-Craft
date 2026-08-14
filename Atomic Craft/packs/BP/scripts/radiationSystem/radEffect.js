@@ -6,7 +6,7 @@ export function applyRadiationEffects(entity, dimension) {
     if (!entity.isValid)
         return;
     const dose = entity.getDynamicProperty("atomic:radiation_dose") ?? 0;
-    // Fully recovered - strip everything and bail
+    // Fully recovered
     if (dose < 5) {
         entity.removeEffect("nausea");
         entity.removeEffect("weakness");
@@ -22,8 +22,8 @@ export function applyRadiationEffects(entity, dimension) {
     applyOrRemove(entity, "slowness", dose >= 75, 0);
     applyOrRemove(entity, "poison", dose >= 75, 0);
     applyOrRemove(entity, "blindness", dose >= 150, 0);
-    // Escalating damage the deeper into radiation sickness - else-if so it
-    // doesn't stack (old code applied 1+2+4=7 dmg/tick once dose hit 400)
+    applyOrRemove(entity, "wither", dose >= 1000, 3);
+    // Escalating damage if deeper into radiation sickness
     if (dose >= 400) {
         entity.applyDamage(4);
     }
@@ -32,6 +32,14 @@ export function applyRadiationEffects(entity, dimension) {
     }
     else if (dose >= 150) {
         entity.applyDamage(1);
+    }
+    //Other effects :P
+    if (dose >= 160 && entity.typeId === "minecraft:cow") {
+        const location = entity.getBlockStandingOn()?.location;
+        if (location) {
+            entity.remove();
+            dimension.spawnEntity("minecraft:mooshroom", { x: location.x, y: location.y + 1, z: location.z });
+        }
     }
 }
 function applyOrRemove(entity, effect, should, amplifier) {

@@ -1,5 +1,5 @@
-import { system, BlockVolume, } from "@minecraft/server";
-import { getChunkRadiation } from "./chunkLoaders/chunkMorphs";
+import { system, BlockVolume, EntityComponentTypes, } from "@minecraft/server";
+import { getChunkRadiation } from "./radiationSystem/chunkMorphs";
 import { RadiationRegistry } from "./radiationSystem/radiationRegistery";
 import { scanNearbyRadiation } from "./radiationSystem/radiationScanBlocks";
 class geiger {
@@ -35,11 +35,13 @@ class geiger {
                 }
             }
         }
+        const protection = player.getComponent(EntityComponentTypes.Equippable)?.totalArmor;
         const playerRad = player.getDynamicProperty("atomic:radiation_dose") ? player.getDynamicProperty("atomic:radiation_dose") : 0;
         player.sendMessage(`§gRadiation levels:
         Current chunk radiation: ${chunkRadiation},
         Blocks total radiation levels: ${blockRadLevels},
         Current standing on block level: ${currentBlock},
+        Player armor radiation protection: ${protection}
         Player radiation: ${playerRad}
         `);
     }

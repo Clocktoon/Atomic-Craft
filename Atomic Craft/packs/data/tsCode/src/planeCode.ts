@@ -1,16 +1,20 @@
-import { world, system, EasingType } from "@minecraft/server";
+import { world, system, EasingType, EntityComponentTypes } from "@minecraft/server";
 
 
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
   const entity = ev.target;
   const player = ev.player;
 
-  if (entity.typeId === "atomic:plane" && !entity.isOnGround) {
+  const riders = entity.getComponent(EntityComponentTypes.Rideable)?.getRiders() ?? []
+  const hasPlayer = riders.some(r => r.typeId === "minecraft:player")
+
+  if (entity.typeId === "atomic:plane" && hasPlayer) {
     const size = {
       x: entity.location.x,
       y: entity.location.y - 3,
       z: entity.location.z,
     };
+    
     const test = entity.dimension.spawnEntity("atomic:plane_bomb", size);
     test;
     test.dimension.playSound("atomic.plane.missile", test.location);

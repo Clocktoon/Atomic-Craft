@@ -230,7 +230,8 @@ export function btravelSystem(x, y, z, name, entity, player) {
     const maxDistance = 3000;
     const launchDistance = Math.sqrt(dx * dx + dy * dy + dz * dz);
     if (launchDistance > maxDistance) {
-        new CustomForm(player, "Missile Fail")
+        new CustomForm(player, { translate: "blas.fail.name" })
+            //Couldn't make it so this one uses a localization string cause of the needed math and distance parts
             .label(`Missile is out of range as it is ${Math.round(launchDistance)} blocks away, max distance is ${maxDistance} blocks`)
             .closeButton()
             .show();
@@ -298,23 +299,23 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                 }
             }
         });
-        const form = new CustomForm(player, "Missile Control Panel");
+        const form = new CustomForm(player, { translate: "blas.menu.paneltitle.name" });
         form
-            .dropdown("Mode", cordMode, [
+            .dropdown({ translate: "blas.menu.dropdownname.name" }, cordMode, [
             {
-                label: "Launch now mode",
+                label: { translate: "blas.menu.dropdown.labelone.name" },
                 value: 0,
             },
             {
-                label: "Save coordinates for later mode",
+                label: { translate: "blas.menu.dropdown.labeltwo.name" },
                 value: 1,
             },
         ])
-            .textField("X", xOb)
-            .textField("Z", zOb)
+            .textField({ translate: "blas.menu.cord.x.name" }, xOb)
+            .textField({ translate: "blas.menu.cord.z.name" }, zOb)
             .closeButton()
             .divider()
-            .button("Launch", () => {
+            .button({ translate: "blas.menu.button.launch.name" }, () => {
             let x = Number(xOb.getData());
             let z = Number(zOb.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
@@ -340,7 +341,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             }, 200);
             form.close();
         }, { visible: launchBool })
-            .button("Save coordinates", () => {
+            .button({ translate: "blas.menu.button.savecord.name" }, () => {
             let x = Number(xOb.getData());
             let z = Number(zOb.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
@@ -353,7 +354,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                 world.sendMessage("AHHHHHHHHHHHHH CONSOLE BROKE");
             }
         }, { visible: saveCordBool })
-            .button("Fire at saved location", () => {
+            .button({ translate: "blas.menu.button.firesave.name" }, () => {
             const location = entity.getDynamicProperty("missileCord");
             const nameId = `hate${location.x}${location.y}${location.z}`;
             let time = 10;

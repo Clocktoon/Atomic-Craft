@@ -2,6 +2,12 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_circut_board": {
+			"textures": "textures/items/circuit_board"
+		},
+		"atomic_uranium_ingot_unenriched": {
+			"textures": "textures/items/uranium_ingot"
+		},
 		"atomic_geiger_item": {
 			"textures": "textures/items/geiger_item"
 		},
@@ -24,7 +30,7 @@
 			"textures": "textures/items/uraniumver2"
 		},
 		"atomic_uranium_cooked": {
-			"textures": "textures/items/uranium_cooked"
+			"textures": "textures/items/uranium_billet"
 		},
 		"atomic_core": {
 			"textures": "textures/items/core_texture"

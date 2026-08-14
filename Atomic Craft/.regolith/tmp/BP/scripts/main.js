@@ -32,6 +32,7 @@ import("./nuclearBombs/redstoneHelpers");
 import("./nuclearBombs/gadget");
 import("./geigerCount");
 import("./radiationSystem/radiationManger");
+import("./nuclearBombs/voidBomb");
 world.afterEvents.worldLoad.subscribe(() => {
     if (typeof world.getDynamicProperty("powerful") !== "boolean") {
         world.setDynamicProperty("powerful", true);
@@ -57,6 +58,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./aftermath.js");
     import("./nuclearTransforms/shockwave.js");
     import("./mortar");
+    import("./radiationSystem/oreBreakageRelease");
     //import("./itempickups.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")

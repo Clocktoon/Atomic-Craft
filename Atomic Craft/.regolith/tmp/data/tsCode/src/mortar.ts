@@ -23,7 +23,6 @@ world.afterEvents.playerInteractWithEntity.subscribe((event) => {
     let z = headster.z + view.z * 20
     x += random
     y += random
-    z += random
     const loc = {
       x: Math.floor(x),
       y: Math.floor(y),

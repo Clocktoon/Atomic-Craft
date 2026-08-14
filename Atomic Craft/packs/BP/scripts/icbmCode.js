@@ -117,7 +117,7 @@ function* nuclearExplosion(playerEntity, entity, target) {
             //Gets rid of ticking area and starts the real nuclear explosion code
             console.warn("Pre nuclear ICBM, aka explosion audio, done");
             //Nuke Code!!!
-            nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, playerEntity).then(() => {
+            nuclearArea(entity.dimension.id, entity.location, entity, 224, 70, 160, playerEntity).then(() => {
                 entity.remove();
                 target.remove();
                 console.warn("Nuclear code for ICBM done");
@@ -456,23 +456,23 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                 }
             }
         });
-        const form = new CustomForm(player, "Missile Control Panel");
+        const form = new CustomForm(player, { translate: "blas.menu.paneltitle.name" });
         form
-            .dropdown("Mode", cordMode, [
+            .dropdown({ translate: "blas.menu.dropdownname.name" }, cordMode, [
             {
-                label: "Launch now mode",
+                label: { translate: "blas.menu.dropdown.labelone.name" },
                 value: 0,
             },
             {
-                label: "Save coordinates for later mode",
+                label: { translate: "blas.menu.dropdown.labeltwo.name" },
                 value: 1,
             },
         ])
-            .textField("X", xOb)
-            .textField("Z", zOb)
+            .textField({ translate: "blas.menu.cord.x.name" }, xOb)
+            .textField({ translate: "blas.menu.cord.z.name" }, zOb)
             .closeButton()
             .divider()
-            .button("Launch", () => {
+            .button({ translate: "blas.menu.button.launch.name" }, () => {
             let x = Number(xOb.getData());
             let z = Number(zOb.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
@@ -498,7 +498,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             }, 200);
             form.close();
         }, { visible: launchBool })
-            .button("Save coordinates", () => {
+            .button({ translate: "blas.menu.button.savecord.name" }, () => {
             let x = Number(xOb.getData());
             let z = Number(zOb.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
@@ -511,7 +511,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                 world.sendMessage("AHHHHHHHHHHHHH CONSOLE BROKE");
             }
         }, { visible: saveCordBool })
-            .button("Fire at saved location", () => {
+            .button({ translate: "blas.menu.button.firesave.name" }, () => {
             const location = entity.getDynamicProperty("missileCord");
             const nameId = `hate${location.x}${location.y}${location.z}`;
             let time = 10;

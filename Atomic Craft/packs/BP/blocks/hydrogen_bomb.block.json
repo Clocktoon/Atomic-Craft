@@ -57,6 +57,10 @@
 			"minecraft:light_dampening": 15,
 			"minecraft:light_emission": 0,
 			"atomic:hb_explode": {},
+			"minecraft:redstone_consumer": {
+				"min_power": 1,
+				"propagates_power": false
+			},
 			"atomic:redstone_nuke": {
 				"hbomb": true
 			}

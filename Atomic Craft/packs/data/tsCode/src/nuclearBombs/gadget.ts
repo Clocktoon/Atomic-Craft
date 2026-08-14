@@ -7,6 +7,8 @@ import {
   Dimension,
   Vector3,
   EquipmentSlot,
+  Player,
+  Block
 } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
@@ -18,23 +20,19 @@ function makeRandomId() {
   //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
   return `${Date.now()}+${Math.random()}`;
 }
-class OnClickGadget implements BlockCustomComponent {
-  constructor() {
-    this.onPlayerInteract = this.onPlayerInteract.bind(this);
-  }
 
-  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+export function gadgetCode(block: Block, playerEntity: Player, dimension: Dimension, doMenu: boolean) {
     const randomMath = makeRandomId();
     const random = `${randomMath}`;
     
-    const block = event.block;
-    const playerEntity = event.player;
-    const playerMain = playerEntity;
-    const dimension = event.dimension;
-  
     
-     
-      if(playerEntity)
+    const playerMain = playerEntity;
+  
+    if(doMenu) {
+
+      if(!playerEntity)
+        return;
+      
     new MessageBox(playerEntity, "Confirm")
     .body({translate: "nuke.menu.body.name"})
       .button1({translate: "nuke.menu.buttonone.name"}, {translate: "nuke.menu.tooltipone.name"})
@@ -49,6 +47,7 @@ class OnClickGadget implements BlockCustomComponent {
     }).catch(e => {
       playerEntity?.sendMessage(`${e}`)
     });
+  }
 
     function nuclearBomb(): void {
     if (!playerMain) return;
@@ -233,6 +232,7 @@ class OnClickGadget implements BlockCustomComponent {
               block,
               112,
               40,
+              50,
               playerEntity
             //   40,
             //   40
@@ -264,6 +264,17 @@ class OnClickGadget implements BlockCustomComponent {
         }, 400);
       });
     }
+}
+class OnClickGadget implements BlockCustomComponent {
+  constructor() {
+    this.onPlayerInteract = this.onPlayerInteract.bind(this);
+  }
+
+  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+    if(!event.player)
+      return;
+
+      gadgetCode(event.block,event.player, event.dimension, true)
   }
 }
 

@@ -20,8 +20,7 @@
 				"item": "minecraft:tnt"
 			},
 			"W": {
-				"item": "atomic:uranium_cooked",
-				"data": 4
+				"item": "atomic:uranium_cooked"
 			}
 		},
 		"unlock": [
@@ -35,7 +34,7 @@
 		"result": {
 			"count": 1,
 			"item": "atomic:enhanced_tnt",
-			"data": 4
+			"data": 1
 		}
 	}
 }

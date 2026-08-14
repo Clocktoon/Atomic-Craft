@@ -1,8 +1,10 @@
-import { world, system } from "@minecraft/server";
+import { world, system, EntityComponentTypes } from "@minecraft/server";
 world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
     const entity = ev.target;
     const player = ev.player;
-    if (entity.typeId === "atomic:plane" && !entity.isOnGround) {
+    const riders = entity.getComponent(EntityComponentTypes.Rideable)?.getRiders() ?? [];
+    const hasPlayer = riders.some(r => r.typeId === "minecraft:player");
+    if (entity.typeId === "atomic:plane" && hasPlayer) {
         const size = {
             x: entity.location.x,
             y: entity.location.y - 3,

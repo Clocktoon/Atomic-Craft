@@ -1,5 +1,5 @@
 {
-	"format_version": "1.20.80",
+	"format_version": "1.26.40",
 	"render_controllers": {
 		"controller.render.uranium_vita": {
 			"geometry": "Geometry.default",

@@ -1,4 +1,4 @@
-import { world, system } from "@minecraft/server";
+import { world, system, EquipmentSlot } from "@minecraft/server";
 import { getChunkExposure } from "./mobRadiationZones";
 import { applyRadiationEffects } from "./radEffect";
 import { nearbyRadiationBlocks } from "./blockRadiationComp";
@@ -13,6 +13,11 @@ function calculateExposure(entity) {
     }
     return exposure;
 }
+export function addRadiationDose(entity, amount) {
+    let dose = entity.getDynamicProperty("atomic:radiation_dose") ?? 0;
+    dose += amount;
+    entity.setDynamicProperty("atomic:radiation_dose", dose);
+}
 function updateDose(entity, exposure) {
     let dose = entity.getDynamicProperty("atomic:radiation_dose") ?? 0;
     dose += exposure * 0.2;
@@ -23,7 +28,13 @@ function updateDose(entity, exposure) {
 }
 system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
-        const exposure = calculateExposure(player);
+        const equip = player.getComponent("minecraft:equippable");
+        if (equip?.getEquipment(EquipmentSlot.Head)?.typeId === "atomic:gas_mask")
+            continue;
+        let exposure = calculateExposure(player);
+        if (equip) {
+            exposure - equip.totalArmor;
+        }
         player.setDynamicProperty("atomic:radiation_exposure", exposure);
         updateDose(player, exposure);
         applyRadiationEffects(player, player.dimension);

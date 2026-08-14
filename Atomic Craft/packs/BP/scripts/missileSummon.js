@@ -1,17 +1,28 @@
 import { system } from "@minecraft/server";
 /** @type {import("@minecraft/server").ItemCustomComponent} */
-const MissileSummon = {
-    onCompleteUse(event) {
+class MissileSummon {
+    onUse(event) {
         const player = event.source;
+        const blockhit = player.getBlockFromViewDirection();
+        if (!blockhit)
+            return;
+        const block = blockhit.block;
         const location = {
-            x: player.location.x,
-            y: player.location.y + 20,
-            z: player.location.z
+            x: block.location.x,
+            y: block.location.y + 35,
+            z: block.location.z
         };
-        player.dimension.spawnEntity("atomic:missile", location);
+        try {
+            if (blockhit) {
+                block.dimension.spawnEntity("atomic:missile", location);
+            }
+        }
+        catch {
+            player.runCommand("title @s actionbar Look at a nearby block");
+        }
     }
-};
+}
 system.beforeEvents.startup.subscribe(({ itemComponentRegistry }) => {
-    itemComponentRegistry.registerCustomComponent("atomic:missile_summon", MissileSummon);
+    itemComponentRegistry.registerCustomComponent("atomic:missile_summon", new MissileSummon);
 });
 //# sourceMappingURL=missileSummon.js.map

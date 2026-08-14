@@ -182,6 +182,7 @@ function* nuclearExplosion(
           entity,
           224,
           70,
+          160,
           playerEntity,
         ).then(() => {
           entity.remove();

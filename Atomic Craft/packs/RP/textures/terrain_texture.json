@@ -4,6 +4,21 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"atomic_copper_enricher_top": {
+			"textures": "textures/blocks/copper_enricher_top"
+		},
+		"atomic_copper_enricher_down": {
+			"textures": "textures/blocks/copper_enricher_down"
+		},
+		"atomic_copper_enricher_side": {
+			"textures": "textures/blocks/copper_enricher_side"
+		},
+		"atomic_copper_enricher_north_off": {
+			"textures": "textures/blocks/copper_enricher_north_off"
+		},
+		"atomic_copper_enricher_north_on": {
+			"textures": "textures/blocks/copper_enricher_north_on"
+		},
 		"atomic_void_bomb": {
 			"textures": "textures/blocks/void_bomb"
 		},

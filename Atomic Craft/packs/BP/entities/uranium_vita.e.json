@@ -59,7 +59,6 @@
       "minecraft:loot": { "table": "loot_tables/vita_loot.json" },
       "minecraft:collision_box": { "height": 1, "width": 1 },
       "minecraft:behavior.hurt_by_target": {
-        "alert_same_type": true,
         "priority": 3
       }
     },

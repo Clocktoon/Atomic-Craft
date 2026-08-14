@@ -1,4 +1,4 @@
-import { getChunkRadiation } from "../chunkLoaders/chunkMorphs";
+import { getChunkRadiation } from "./chunkMorphs";
 function getChunkCoords(x, z) {
     return {
         chunkX: Math.floor(x / 16),

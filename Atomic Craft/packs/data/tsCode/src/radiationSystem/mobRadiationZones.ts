@@ -1,5 +1,5 @@
 import { world, system, Entity } from "@minecraft/server";
-import { getChunkRadiation } from "../chunkLoaders/chunkMorphs";
+import { getChunkRadiation } from "./chunkMorphs";
 
 
 function getChunkCoords(x: number, z: number): { chunkX: number; chunkZ: number } {

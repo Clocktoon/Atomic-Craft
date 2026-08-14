@@ -208,7 +208,8 @@ class RedNuclear implements BlockCustomComponent {
               block.location,
               block,
               272,
-              70
+              70,
+              100
             );
 
             const volume = new BlockVolume(
@@ -406,6 +407,7 @@ class RedNuclear implements BlockCustomComponent {
               block,
               112,
               40,
+              50
             //   40,
             //   40
             );
@@ -641,6 +643,7 @@ class RedNuclear implements BlockCustomComponent {
                 block,
                 352,
                 208,
+                250
               );
 
               const volume = new BlockVolume(

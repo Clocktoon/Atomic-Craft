@@ -4,6 +4,7 @@ import {
   BlockVolume,
   BlockCustomComponent,
   BlockComponentPlayerInteractEvent,
+  Player,
   Dimension,
   Vector3,
   Block,
@@ -17,34 +18,31 @@ function makeRandomId() {
   return `${Date.now()}+${Math.random()}`;
 }
 
-class Fus implements BlockCustomComponent {
-  constructor() {
-    this.onPlayerInteract = this.onPlayerInteract.bind(this);
-  }
-
-  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+export function hBombFusion(block: Block, playerEntity: Player, dimension: Dimension, doMenu: boolean) {
     const randomMath = makeRandomId();
     const random = `${randomMath}`;
-
-    const block = event.block;
-    const playerEntity = event.player;
     const playerMain = playerEntity;
-    const dimension = event.dimension;
+    
+    if(doMenu) {
 
-    if (!playerMain) return;
+      if(!playerEntity)
+        return;
+      
     new MessageBox(playerEntity, "Confirm")
-      .body("Are you sure you want to activate the nuclear bomb?")
-      .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
-      .button2("No", "this will close the menu")
-      .show()
-      .then((rep) => {
-        if (rep.selection === 1) {
-          nuclearBomb();
-        }
-      })
-      .catch((e) => {
-        playerEntity?.sendMessage(`${e}`);
-      });
+    .body({translate: "nuke.menu.body.name"})
+      .button1({translate: "nuke.menu.buttonone.name"}, {translate: "nuke.menu.tooltipone.name"})
+      .button2({translate: "nuke.menu.buttontwo.name"}, {translate: "nuke.menu.tooltiptwo.name"})
+    .show()
+    .then((rep) => {
+
+      if(rep.selection === 1) {
+      nuclearBomb()
+      }
+
+    }).catch(e => {
+      playerEntity?.sendMessage(`${e}`)
+    });
+  }
 
     const px = block.location.x;
     const pz = block.location.z;
@@ -143,7 +141,7 @@ class Fus implements BlockCustomComponent {
                 const dim = world.getDimension(dimensionId);
 
                 const cx = Math.floor(location.x);
-                const cy = Math.floor(location.y + 10);
+                const cy = Math.floor(location.y + 60);
                 const cz = Math.floor(location.z);
 
                 const r = Math.max(1, Math.ceil(radius));
@@ -267,6 +265,7 @@ class Fus implements BlockCustomComponent {
                 block,
                 352,
                 208,
+                250,
                 playerEntity,
               );
 
@@ -296,6 +295,18 @@ class Fus implements BlockCustomComponent {
           }, 400);
         });
     }
+}
+
+class Fus implements BlockCustomComponent {
+  constructor() {
+    this.onPlayerInteract = this.onPlayerInteract.bind(this);
+  }
+
+  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+    if(!event.player)
+      return;
+
+    hBombFusion(event.block,event.player,event.dimension, true)
   }
 }
 

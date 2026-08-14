@@ -325,7 +325,8 @@ export function btravelSystem(
   const launchDistance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
   if (launchDistance > maxDistance) {
-    new CustomForm(player, "Missile Fail")
+    new CustomForm(player, {translate: "blas.fail.name"})
+    //Couldn't make it so this one uses a localization string cause of the needed math and distance parts
       .label(
         `Missile is out of range as it is ${Math.round(
           launchDistance,
@@ -409,24 +410,24 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             }
           }
         });
-    const form = new CustomForm(player, "Missile Control Panel");
+    const form = new CustomForm(player, {translate: "blas.menu.paneltitle.name"});
         form
-          .dropdown("Mode", cordMode, [
+          .dropdown({translate: "blas.menu.dropdownname.name"}, cordMode, [
             {
-              label: "Launch now mode",
+              label: {translate: "blas.menu.dropdown.labelone.name"},
               value: 0,
             },
             {
-              label: "Save coordinates for later mode",
+              label: {translate: "blas.menu.dropdown.labeltwo.name"},
               value: 1,
             },
           ])
-          .textField("X", xOb)
-          .textField("Z", zOb)
+          .textField({translate: "blas.menu.cord.x.name"}, xOb)
+          .textField({translate: "blas.menu.cord.z.name"}, zOb)
           .closeButton()
           .divider()
           .button(
-            "Launch",
+            {translate: "blas.menu.button.launch.name"},
             () => {
               let x = Number(xOb.getData());
               let z = Number(zOb.getData());
@@ -463,7 +464,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
           )
     
           .button(
-            "Save coordinates",
+            {translate: "blas.menu.button.savecord.name"},
             () => {
               let x = Number(xOb.getData());
               let z = Number(zOb.getData());
@@ -479,7 +480,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             { visible: saveCordBool },
           )
           .button(
-            "Fire at saved location",
+            {translate: "blas.menu.button.firesave.name"},
             () => {
               const location: Vector3 = entity.getDynamicProperty(
                 "missileCord",

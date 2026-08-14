@@ -3,7 +3,7 @@ import { world, system } from "@minecraft/server";
 const Rotten = {
     onConsume(ev) {
         const source = ev.source;
-        if (source.hasTag("atomic:rad_effect") == true) {
+        if (source.getDynamicProperty("atomic:radiation_dose" > 5)) {
             source.removeTag("atomic:rad_effect");
             source.runCommand("title @s actionbar §2 You feel better");
             source.removeEffect("weakness");

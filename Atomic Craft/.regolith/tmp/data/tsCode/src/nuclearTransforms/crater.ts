@@ -13,7 +13,7 @@ export function* createCrater(
   const dim = world.getDimension(dimensionId);
 
   const cx = Math.floor(location.x);
-  const cy = Math.floor(location.y + 10);
+  const cy = Math.floor(location.y + 40);
   const cz = Math.floor(location.z);
 
   const r = Math.max(1, Math.ceil(radius));

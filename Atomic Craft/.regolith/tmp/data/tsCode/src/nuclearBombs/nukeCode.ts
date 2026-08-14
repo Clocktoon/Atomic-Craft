@@ -7,6 +7,8 @@ import {
   Dimension,
   Vector3,
   EquipmentSlot,
+  Block,
+  Player
 } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { shockwaveBlast } from "../nuclearTransforms/shockwave.js";
@@ -19,27 +21,21 @@ function makeRandomId() {
   return `${Date.now()}+${Math.random()}`;
 }
 
-class OnClick implements BlockCustomComponent {
-  constructor() {
-    this.onPlayerInteract = this.onPlayerInteract.bind(this);
-  }
+export function nuclearBombFisson(block: Block, playerEntity: Player, dimension: Dimension, doMenu: boolean) {
+  const randomMath = makeRandomId();
+  const random = `${randomMath}`;
 
-  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
-    const randomMath = makeRandomId();
-    const random = `${randomMath}`;
-
-    const block = event.block;
-    const playerEntity = event.player;
-    const playerMain = playerEntity;
-    const dimension = event.dimension;
+  const playerMain = playerEntity;
   
-    
-     
-      if(playerEntity)
+   if(doMenu) {
+
+      if(!playerEntity)
+        return;
+      
     new MessageBox(playerEntity, "Confirm")
-    .body("Are you sure you want to activate the nuclear bomb?")
-    .button1("Yes", "this will start the nuclear bomb, it can not be stopped")
-    .button2("No", "this will close the menu")
+    .body({translate: "nuke.menu.body.name"})
+      .button1({translate: "nuke.menu.buttonone.name"}, {translate: "nuke.menu.tooltipone.name"})
+      .button2({translate: "nuke.menu.buttontwo.name"}, {translate: "nuke.menu.tooltiptwo.name"})
     .show()
     .then((rep) => {
 
@@ -50,6 +46,7 @@ class OnClick implements BlockCustomComponent {
     }).catch(e => {
       playerEntity?.sendMessage(`${e}`)
     });
+  }
 
     function nuclearBomb(): void {
     if (!playerMain) return;
@@ -230,6 +227,7 @@ class OnClick implements BlockCustomComponent {
               block,
               224,
               70,
+              100,
               playerEntity,
             );
 
@@ -259,6 +257,18 @@ class OnClick implements BlockCustomComponent {
         }, 400);
       });
     }
+}
+
+class OnClick implements BlockCustomComponent {
+  constructor() {
+    this.onPlayerInteract = this.onPlayerInteract.bind(this);
+  }
+
+  onPlayerInteract(event: BlockComponentPlayerInteractEvent): void {
+    if(!event.player)
+        return;
+
+    nuclearBombFisson(event.block,event.player,event.dimension, true)
   }
 }
 

@@ -14,7 +14,7 @@ import {
 import { loadChunk } from "../chunkLoaders/chunky";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
-import { updateChunkRadiation } from "../chunkLoaders/chunkMorphs";
+import { updateChunkRadiation } from "../radiationSystem/chunkMorphs";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
@@ -103,7 +103,7 @@ export function chunkBoundsFromBlock(x: number, z: number, minY = 0, maxY = 255)
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block | Entity, size: number, change: number, player?: Player, miny?: number, maxy?: number) {
+export async function nuclearArea(dimensionid: string, location: Vector3, blocky: Block | Entity, size: number, change: number, radiationAmount: number, player?: Player, miny?: number, maxy?: number) {
   
   //Making sure tntexplode is on
   await new Promise<void>((resolve, reject) => {
@@ -131,7 +131,7 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
     for (let z = startz; z <= endz; z += 16) {
       if(player) {
       if(player.isValid) {
-        player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`)
+        player.onScreenDisplay.setActionBar([{translate: "atomic.chunksdone.name"}, {text: `${chunkCount}`}])
       }
     }
 
@@ -144,10 +144,10 @@ export async function nuclearArea(dimensionid: string, location: Vector3, blocky
 
       let radLevel;
       if(currentPhase === 2) {
-        radLevel = 10
+        radLevel = radiationAmount
       }
       if(currentPhase === 1) {
-        radLevel = 3
+        radLevel = radiationAmount / 5
       }
       
       const bounds = chunkBoundsFromBlock(x, z, 0, 255);

@@ -2,7 +2,7 @@
 import { system, world, } from "@minecraft/server";
 import { globalChunkFiller } from "../chunkLoaders/chunkFillerClass";
 import { ChunkTicker } from "../chunkLoaders/ticking/chunkTickerClass";
-import { updateChunkRadiation } from "../chunkLoaders/chunkMorphs";
+import { updateChunkRadiation } from "../radiationSystem/chunkMorphs";
 /* Inspired by gameza_src's chunk loader system, credit goes to them
 gameza's code: https://github.com/gamezaSRC/ChunkLoader
 link to gameza's github: https://github.com/gamezaSRC
@@ -12,7 +12,7 @@ system.run(() => {
         world.setDynamicProperty("logs", false);
     }
 });
-async function loadTickingAreaWithRetry(dimension, nameId, location, bounds, maxAttempts = 10, retryDelayTicks = 20) {
+export async function loadTickingAreaWithRetry(dimension, nameId, location, bounds, maxAttempts = 10, retryDelayTicks = 20) {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
             return await new ChunkTicker(dimension, nameId).load(location, true, {
@@ -63,7 +63,7 @@ async function fillGeneratorSequential(generator, ticks) {
         }, 1);
     });
 }
-function chunkBoundsFromBlock(x, z, minY = 0, maxY = 255) {
+export function chunkBoundsFromBlock(x, z, minY = 0, maxY = 255) {
     const chunkX = Math.floor(x / 16) * 16;
     const chunkZ = Math.floor(z / 16) * 16;
     return {
@@ -80,7 +80,7 @@ function chunkBoundsFromBlock(x, z, minY = 0, maxY = 255) {
  * @param {number} size Size of the nuclear area
  * @param {number} change Number of blocks out for when to change to lower scale damage
  */
-export async function nuclearArea(dimensionid, location, blocky, size, change, player, miny, maxy) {
+export async function nuclearArea(dimensionid, location, blocky, size, change, radiationAmount, player, miny, maxy) {
     //Making sure tntexplode is on
     await new Promise((resolve, reject) => {
         if (!world.gameRules.tntExplodes) {
@@ -102,7 +102,7 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
         for (let z = startz; z <= endz; z += 16) {
             if (player) {
                 if (player.isValid) {
-                    player.onScreenDisplay.setActionBar(`Current chunks done ${chunkCount}`);
+                    player.onScreenDisplay.setActionBar([{ translate: "atomic.chunksdone.name" }, { text: `${chunkCount}` }]);
                 }
             }
             let currentPhase = 2;
@@ -112,10 +112,10 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, p
             const centerRad = change - 10;
             let radLevel;
             if (currentPhase === 2) {
-                radLevel = 10;
+                radLevel = radiationAmount;
             }
             if (currentPhase === 1) {
-                radLevel = 3;
+                radLevel = radiationAmount / 5;
             }
             const bounds = chunkBoundsFromBlock(x, z, 0, 255);
             const tickingArea = await loadTickingAreaWithRetry(dimension, nameId, { x: x + 8, y: 64, z: z + 8 }, bounds);
