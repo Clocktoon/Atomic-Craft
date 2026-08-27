@@ -1,0 +1,41 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:void_bomb"
+        },
+        "key": {
+            "E": {
+                "item": "minecraft:end_stone"
+            },
+            "D": {
+                "item": "minecraft:dragon_egg"
+            },
+            "T": {
+                "item": "minecraft:tnt"
+            }
+        },
+        "tags": ["atomic:mech"],
+        "unlock": [
+            {
+                "item": "minecraft:end_stone"
+            },
+            {
+                "item": "minecraft:dragon_egg"
+            },
+            {
+                "item": "minecraft:tnt"
+            }
+        ],
+        "pattern": [
+            "ETE",
+            "TDT",
+            "ETE"
+        ],
+        "result": {
+            "item": "atomic:void_bomb",
+            "count": 5,
+            "data": 0
+        }
+}
+}

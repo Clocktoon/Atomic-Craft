@@ -4,8 +4,8 @@
         "description": {"identifier": "atomic:core_recipe"},
         "tags": ["crafting_table"],
         "pattern": ["###", "#P#", "###"],
-        "key": {"P": {"item": "atomic:uranium_cooked"}, "#": {"item": "minecraft:iron_ingot"}},
-        "unlock": [{"item": "atomic:uranium_cooked"}, {"item": "minecraft:iron_ingot"}],
+        "key": {"P": {"item": "atomic:uranium_mid"}, "#": {"item": "minecraft:iron_ingot"}},
+        "unlock": [{"item": "atomic:uranium_mid"}, {"item": "minecraft:iron_ingot"}],
         "result": {"item": "atomic:core"}
     }
 }

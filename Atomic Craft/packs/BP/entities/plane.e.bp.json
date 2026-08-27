@@ -50,7 +50,7 @@
                 "seats": {
                     "position": [
                         0,
-                        0.63,
+                        0.24,
                         0
                     ]
                 },
@@ -81,7 +81,12 @@
             },
             "minecraft:loot": {
                 "table": "loot_tables/plane_loot.json"
-            }
+            },
+            "minecraft:inventory": {
+                  "container_type": "horse",
+                  "inventory_size": 10,
+                  "private": false
+                }
         },
         "events": {
             "atomic:grounded": {

@@ -25,9 +25,10 @@ class Remote {
         if (ev.source.isSneaking) {
             player.sendMessage("1");
             if (this.nukeList.includes(block.typeId) && item.getDynamicProperty("in_use") === false) {
-                const location = item.setDynamicProperty("location", block.location);
+                item.setDynamicProperty("location", block.location);
+                const location = item.getDynamicProperty("location");
                 item.setDynamicProperty("in_use", true);
-                item.setLore(["Location at", `${JSON.stringify(location)}`]);
+                item.setLore([{ translate: "atomic.remotelore.name" }, `${JSON.stringify(location)}`]);
                 player.sendMessage("item type id is: " + item.typeId);
                 const itemSlot = inv.container.find(item.clone());
                 player.sendMessage("2" + " and also ItemSlot output: " + itemSlot);
@@ -42,14 +43,14 @@ class Remote {
                 }
             }
             if (!this.nukeList.includes(block.typeId) && typeof item.getDynamicProperty("location") !== "undefined") {
-                item.setDynamicProperty("location", undefined);
+                item.setDynamicProperty("location", false);
                 item.setLore(undefined);
                 for (let slot = 0; slot < inv.inventorySize; slot++) {
                     const itemStack = inv.container.getItem(slot);
                     if (itemStack) {
                         if (itemStack.typeId === "atomic:tablet") {
                             inv.container.setItem(slot, item.clone());
-                            world.sendMessage("Should have worked");
+                            world.sendMessage("Restarted and got rid of location");
                         }
                     }
                 }
@@ -67,8 +68,9 @@ class Remote {
         source.sendMessage("OnUse still running");
         if (typeof item.getDynamicProperty("in_use") === "undefined")
             item.setDynamicProperty("in_use", false);
-        if (item.getDynamicProperty("in_use") === false || typeof item.getDynamicProperty("location") === "undefined")
+        if (item.getDynamicProperty("in_use") === false || typeof item.getDynamicProperty("location") === "undefined") {
             return;
+        }
         const location = item.getDynamicProperty("location");
         if (source.typeId !== "minecraft:player")
             return;
@@ -87,12 +89,13 @@ class Remote {
             }
         }).then(() => {
             const block = source.dimension.getBlock(location);
-            world.tickingAreaManager.removeTickingArea(`remote_${random}`);
-            if (!block)
+            if (!block) {
+                world.tickingAreaManager.removeTickingArea(`remote_${random}`);
                 return;
+            }
             if (block.typeId === "atomic:atom_bomb") {
                 nuclearBombFisson(block, source, block.dimension, false);
-                item.setDynamicProperty("location", undefined);
+                item.setDynamicProperty("location", false);
                 item.setLore(undefined);
                 const inv = source.getComponent(EntityComponentTypes.Inventory);
                 if (inv === undefined || inv.container === undefined) {
@@ -103,14 +106,14 @@ class Remote {
                     if (itemStack) {
                         if (itemStack.typeId === "atomic:tablet") {
                             inv.container.setItem(slot, item.clone());
-                            world.sendMessage("Should have worked");
+                            world.sendMessage("Should have explosion");
                         }
                     }
                 }
             }
             if (block.typeId === "atomic:hydrogen_bomb") {
                 hBombFusion(block, source, block.dimension, false);
-                item.setDynamicProperty("location", undefined);
+                item.setDynamicProperty("location", false);
                 item.setLore(undefined);
                 const inv = source.getComponent(EntityComponentTypes.Inventory);
                 if (inv === undefined || inv.container === undefined) {
@@ -121,14 +124,14 @@ class Remote {
                     if (itemStack) {
                         if (itemStack.typeId === "atomic:tablet") {
                             inv.container.setItem(slot, item.clone());
-                            world.sendMessage("Should have worked");
+                            world.sendMessage("Should have explosion");
                         }
                     }
                 }
             }
             if (block.typeId === "atomic:gadget_bomb") {
                 gadgetCode(block, source, block.dimension, false);
-                item.setDynamicProperty("location", undefined);
+                item.setDynamicProperty("location", false);
                 item.setLore(undefined);
                 const inv = source.getComponent(EntityComponentTypes.Inventory);
                 if (inv === undefined || inv.container === undefined) {
@@ -139,11 +142,12 @@ class Remote {
                     if (itemStack) {
                         if (itemStack.typeId === "atomic:tablet") {
                             inv.container.setItem(slot, item.clone());
-                            world.sendMessage("Should have worked");
+                            world.sendMessage("Should have explosion");
                         }
                     }
                 }
             }
+            world.tickingAreaManager.removeTickingArea(`remote_${random}`);
         });
     }
 }

@@ -6,8 +6,8 @@ world.afterEvents.playerBreakBlock.subscribe((event) => {
     const block = event.brokenBlockPermutation.type.id
     const dimension = event.dimension
 
-    if(block === "atomic:uranium_block" || block === "atomic:uranium_deepslate") {
-        const players = world.getPlayers({location: event.block.location, minDistance: 1, maxDistance: 5})
+    if(block === "atomic:uranium_ore" || block === "atomic:uranium_deepslate") {
+        const players = dimension.getPlayers({location: event.block.location, minDistance: 1, maxDistance: 5})
 
         dimension.spawnParticle("atomic:radiation_gas", event.block.location)
 

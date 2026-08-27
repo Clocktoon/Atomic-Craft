@@ -11,7 +11,7 @@
 		"events": {
 			"mushroom": {
 				"particle_effect": {
-					"effect": "atomic:mushroomcloud",
+					"effect": "atomic:capcloud",
 					"type": "emitter"
 				}
 			},

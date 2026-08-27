@@ -7,7 +7,7 @@ export function applyRadiationEffects(entity, dimension) {
         return;
     const dose = entity.getDynamicProperty("atomic:radiation_dose") ?? 0;
     // Fully recovered
-    if (dose < 5) {
+    if (dose < 10) {
         entity.removeEffect("nausea");
         entity.removeEffect("weakness");
         entity.removeEffect("mining_fatigue");
@@ -16,13 +16,13 @@ export function applyRadiationEffects(entity, dimension) {
         entity.removeEffect("blindness");
         return;
     }
-    applyOrRemove(entity, "nausea", dose >= 5, 0);
+    applyOrRemove(entity, "nausea", dose >= 10, 0);
     applyOrRemove(entity, "weakness", dose >= 25, 0);
     applyOrRemove(entity, "mining_fatigue", dose >= 50, 1);
     applyOrRemove(entity, "slowness", dose >= 75, 0);
     applyOrRemove(entity, "poison", dose >= 75, 0);
     applyOrRemove(entity, "blindness", dose >= 150, 0);
-    applyOrRemove(entity, "wither", dose >= 1000, 3);
+    applyOrRemove(entity, "wither", dose >= 500, 3);
     // Escalating damage if deeper into radiation sickness
     if (dose >= 400) {
         entity.applyDamage(4);

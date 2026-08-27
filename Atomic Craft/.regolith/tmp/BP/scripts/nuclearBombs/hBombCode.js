@@ -1,6 +1,9 @@
-import { system, world, BlockVolume, } from "@minecraft/server";
+import { system, world, BlockVolume, EquipmentSlot, } from "@minecraft/server";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
+import { getBlastResistance } from "../generated/blastResistance.js";
+import { addRadiationDose } from "../radiationSystem/radiationManger.js";
+import { distance, directionTo } from "./gadget.js";
 function makeRandomId() {
     //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
     return `${Date.now()}+${Math.random()}`;
@@ -25,10 +28,13 @@ export function hBombFusion(block, playerEntity, dimension, doMenu) {
             playerEntity?.sendMessage(`${e}`);
         });
     }
-    const px = block.location.x;
-    const pz = block.location.z;
-    const py = block.y;
+    if (!doMenu) {
+        nuclearBomb();
+    }
     function nuclearBomb() {
+        const px = block.location.x;
+        const pz = block.location.z;
+        const py = block.location.y;
         //Ticking area for the stuff close to the explosion
         world.tickingAreaManager
             .createTickingArea(`nukearea${random}`, {
@@ -54,40 +60,71 @@ export function hBombFusion(block, playerEntity, dimension, doMenu) {
             system.runTimeout(() => {
                 function* blockGen() {
                     let radius = 30;
-                    //Radiation and burning of mobs
-                    const players = block.dimension.getPlayers({
+                    //Dead mobs
+                    const deadZoneArea = block.dimension.getEntities({
                         location: block.location,
                         minDistance: 1,
                         maxDistance: 100,
                     });
-                    for (const eny of block.dimension.getEntities({
-                        location: block.location,
-                        minDistance: 1,
-                        maxDistance: 100,
-                    })) {
-                        if (eny.typeId !== "minecraft:player") {
-                            eny.kill();
-                        }
+                    for (const die of deadZoneArea) {
+                        die.kill();
                     }
+                    //Radiation and burning of mobs
+                    const players = block.dimension.getPlayers({
+                        location: block.location,
+                        minDistance: 101,
+                        maxDistance: 200,
+                    });
                     for (const eny of block.dimension.getEntities({
                         location: block.location,
                         minDistance: 101,
                         maxDistance: 200,
                     })) {
-                        eny.setOnFire(20);
-                        if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
-                            eny.typeId !== "atomic:gen_entity" &&
-                            eny.typeId != "minecraft:player") {
-                            eny.addTag("atomic:rad_effect");
+                        if (eny.typeId === "atomic:plane")
+                            continue;
+                        const dist = distance(block.location, eny.location);
+                        const hit = dimension.getBlockFromRay(eny.location, directionTo(block.location, eny.location), { maxDistance: dist });
+                        if (hit) {
+                            const shielding = getBlastResistance(hit.block);
+                            if (shielding >= 1200) {
+                                continue;
+                            }
+                            else {
+                                const resistance = shielding * 2;
+                                addRadiationDose(eny, 40 - resistance);
+                            }
+                        }
+                        else {
+                            eny.setOnFire(20);
+                            addRadiationDose(eny, 150);
                         }
                     }
                     for (const playerRadi of players) {
-                        playerRadi.setDynamicProperty("radiation", 100);
-                        //TODO: Make gas mask worth with players
-                        playerRadi.camera.fade({
-                            fadeColor: { red: 1, blue: 1, green: 1 },
-                            fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
-                        });
+                        const dist = distance(block.location, playerRadi.location);
+                        const hit = dimension.getBlockFromRay(playerRadi.location, directionTo(block.location, playerRadi.location), { maxDistance: dist });
+                        if (hit) {
+                            const shielding = getBlastResistance(hit.block);
+                            if (shielding >= 1200) {
+                                continue;
+                            }
+                            else {
+                                const resistance = shielding * 2;
+                                addRadiationDose(playerRadi, 40 - resistance);
+                            }
+                        }
+                        else {
+                            playerRadi.camera.fade({
+                                fadeColor: { red: 1, blue: 1, green: 1 },
+                                fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+                            });
+                            playerRadi.setOnFire(20);
+                            if (playerRadi
+                                .getComponent("minecraft:equippable")
+                                ?.getEquipment(EquipmentSlot.Head)?.typeId !==
+                                "atomic:gas_mask") {
+                                addRadiationDose(playerRadi, 150);
+                            }
+                        }
                     }
                     block.dimension.spawnParticle("atomic:nukepart2", {
                         x: block.location.x,

@@ -1,0 +1,19 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:recipe_furnace": {
+        "description": {
+            "identifier": "atomic:lead_ingot"
+        },
+        "tags": ["blast_furnace", "furnace"],
+        "input": "atomic:raw_lead",
+        "output": "atomic:lead_ingot",
+        "unlock": [
+            {
+                "item": "atomic:raw_lead"
+            },
+            {
+                "item": "atomic:lead_ingot"
+            }
+        ]
+    }
+}

@@ -42,7 +42,7 @@ system.runInterval(() => {
 
         let exposure = calculateExposure(player);
         if(equip) {
-            exposure - equip.totalArmor
+            exposure - equip.totalArmor * 5
         }
         player.setDynamicProperty("atomic:radiation_exposure", exposure);
         updateDose(player, exposure);
@@ -52,7 +52,6 @@ system.runInterval(() => {
     const dimensions = ["minecraft:overworld", "minecraft:nether", "minecraft:the_end"];
     for (const dimId of dimensions) {
         const dimension = world.getDimension(dimId);
-        // players are already handled above - don't double-dip them here
         const entities = dimension.getEntities().filter(e => e.typeId !== "minecraft:player");
 
         for (const entity of entities) {

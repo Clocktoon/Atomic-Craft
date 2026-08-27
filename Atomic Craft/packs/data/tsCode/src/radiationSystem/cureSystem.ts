@@ -24,12 +24,3 @@ function Rotten (ev: ItemComponentConsumeEvent) {
 system.beforeEvents.startup.subscribe( ({itemComponentRegistry}) => {
     itemComponentRegistry.registerCustomComponent("atomic:rotten", {onConsume: Rotten})
 })
-
-
-world.afterEvents.worldLoad.subscribe(() => {
-    world.afterEvents.entityDie.subscribe((event) => {
-        if(typeof event.deadEntity.getDynamicProperty("atomic:radiation_dose") !== "number")
-            return;
-        event.deadEntity.setDynamicProperty("atomic:radiation_dose", 0);
-    })
-})

@@ -138,7 +138,7 @@ world.beforeEvents.explosion.subscribe((event) => {
   const blocks = event.getImpactedBlocks();
   const source = event.source
   const blockCount = blocks.length
-  const mag = blockCount / 15
+  const mag = blockCount - 5 / 10
   const soundMag = mag - 10
   const center = getApproxExplosionCenter(blocks);
 
@@ -147,6 +147,9 @@ world.beforeEvents.explosion.subscribe((event) => {
     return;
   
   if (center) {
+    if(source?.typeId === "atomic:plane_bomb") {
+      return;
+    }
     if(source?.typeId === "atomic:missile") {
       return;
     }

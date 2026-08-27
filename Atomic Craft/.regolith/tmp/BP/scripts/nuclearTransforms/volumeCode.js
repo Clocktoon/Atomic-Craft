@@ -35,7 +35,7 @@ export async function loadTickingAreaWithRetry(dimension, nameId, location, boun
 /**
  * manually iterates the generator across ticks, only way to stop several of them running at once
  */
-async function fillGeneratorSequential(generator, ticks) {
+export async function fillGeneratorSequential(generator, ticks) {
     return new Promise((resolve, reject) => {
         /**
          * processes a set number of yields per tick

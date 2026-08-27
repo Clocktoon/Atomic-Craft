@@ -77,17 +77,24 @@ class RadiSettings implements ItemCustomComponent {
       if (nu === 1) {
         uranText.setData({translate: "uranium.pagetwo.name"});
       }
+      if(nu === 2) {
+        uranText.setData({translate: "uranium.pagethree.name"})
+      }
     });
     const uranium = new CustomForm(e.source, "uranium.title.name")
       .dropdown("uranium.section.name", uranDrop, [
         {
-          label: "uranium.section.one.name",
+          label: {translate: "uranium.section.one.name"},
           value: 0,
         },
         {
-          label: "uranium.section.two.name",
+          label: {translate: "uranium.section.two.name"},
           value: 1,
         },
+        {
+          label: {translate: "uranium.section.three.name"},
+          value: 2
+        }
       ])
       .label(uranText)
       .button({translate: "atomic.back.button.name"}, () => {
@@ -159,6 +166,30 @@ class RadiSettings implements ItemCustomComponent {
           wikiScreen.show();
         });
       });
+      const leadPage = new CustomForm(e.source, "lead.title.name")
+      .label({translate: "lead.text.name"})
+      .button({translate: "atomic.back.button.name"}, () => {
+        steel.close();
+        system.run(() => {
+          wikiScreen.show();
+        });
+      });
+
+      const radiationPage = new CustomForm(e.source, {translate: "radiation.title.name"})
+      .header({translate: "radiation.labal.one.name"})
+      .label({translate: "radiation.text.one.name"})
+      .spacer()
+      .header({translate: "radiation.label.two.name"})
+      .label({translate: "radiation.text.two.name"})
+      .spacer()
+      .header({translate: "radiation.label.three.name"})
+      .label({translate: "radiation.text.three.name"})
+      .button({translate: "atomic.back.button.name"}, () => {
+        steel.close();
+        system.run(() => {
+          wikiScreen.show();
+        });
+      });
 
     const credits = new CustomForm(e.source, {translate: "atomic.credits.title.name"})
       .label(
@@ -224,7 +255,19 @@ class RadiSettings implements ItemCustomComponent {
         system.run(() => {
           steel.show();
         });
-      });
+      })
+      .button({translate: "atomic.wiki.button.lead.name"}, () => {
+        wikiScreen.close();
+        system.run(() => {
+          leadPage.show()
+        });
+      })
+      .button({translate: "atomic.wiki.button.rad.name"}, () => {
+        wikiScreen.close();
+        system.run(() => {
+          radiationPage.show();
+        })
+      })
     //TODO: PAGES TO DO: 1. STEEL, 2. BUILDINGS, 3. RECIPES, 4. CREDITS
 
     //Settings menu

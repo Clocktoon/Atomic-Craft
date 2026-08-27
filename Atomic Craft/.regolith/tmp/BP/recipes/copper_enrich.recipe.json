@@ -1,0 +1,42 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "atomic:copper_enricher"
+        },
+        "key": {
+            "C": {
+                "item": "minecraft:copper_ingot"
+            },
+            "R": {
+                "item": "minecraft:redstone"
+            },
+            "B": {
+                "item": "atomic:circuit_board"
+            }
+        },
+        "pattern": [
+            "CCC",
+            "RBR",
+            "CCC"
+        ],
+        "unlock": [
+            {
+                "item": "minecraft:copper_ingot"
+            },
+            {
+                "item": "minecraft:redstone"
+            },
+            {
+                "item": "atomic:circuit_board"
+            }
+        ],
+        "tags": ["atomic:mech"],
+        "assume_symmetry": true,
+        "result": {
+            "item": "atomic:copper_enricher",
+            "data": 0,
+            "count": 1
+        }
+    }
+}

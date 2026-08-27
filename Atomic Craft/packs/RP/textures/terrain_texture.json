@@ -4,6 +4,15 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.terrain",
 	"texture_data": {
+		"atomic_deepslate_lead_ore": {
+			"textures": "textures/blocks/deepslate_lead"
+		},
+		"atomic_lead_ore": {
+			"textures": "textures/blocks/lead_ore"
+		},
+		"atomic_mech_builder": {
+			"textures": "textures/blocks/mechanical_builder_texture"
+		},
 		"atomic_copper_enricher_top": {
 			"textures": "textures/blocks/copper_enricher_top"
 		},

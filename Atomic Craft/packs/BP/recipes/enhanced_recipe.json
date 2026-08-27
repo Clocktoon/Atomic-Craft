@@ -20,12 +20,12 @@
 				"item": "minecraft:tnt"
 			},
 			"W": {
-				"item": "atomic:uranium_cooked"
+				"item": "atomic:uranium_ingot"
 			}
 		},
 		"unlock": [
 			{
-				"item": "atomic:uranium_cooked"
+				"item": "atomic:uranium_ingot"
 			},
 			{
 				"item": "minecraft:tnt"

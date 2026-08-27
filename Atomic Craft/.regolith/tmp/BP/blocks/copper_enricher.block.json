@@ -11,6 +11,7 @@
       }
     },
     "components": {
+      "atomic:enrich": {},
       "minecraft:geometry": "geometry.copper_enricher",
       "minecraft:material_instances": {
         "*": {

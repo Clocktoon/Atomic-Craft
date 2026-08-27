@@ -17,6 +17,24 @@
                         ]
                     }
                 ]
+            },
+            {
+                "category_name": "items",
+                "groups": [
+                    {
+                        "group_identifier": {
+                            "icon": "atomic:uranium_ingot",
+                            "name": "group.atomic:uraniumgroup.name"
+                        },
+                        "items": [
+                            "atomic:uranium_ingot",
+                            "atomic:uranium_low",
+                            "atomic:uranium_mid",
+                            "atomic:uranium_high",
+                            "atomic:uranium_billet"
+                        ]
+                    }
+                ]
             }
         ]
     }

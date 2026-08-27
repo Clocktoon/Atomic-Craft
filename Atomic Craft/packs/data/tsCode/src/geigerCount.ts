@@ -55,8 +55,11 @@ class geiger implements ItemCustomComponent {
             currentBlock = `${standingRad}`;
         }
     }
-}
-    const protection = player.getComponent(EntityComponentTypes.Equippable)?.totalArmor
+}   
+    const armor = player.getComponent(EntityComponentTypes.Equippable)
+    if(!armor)
+        return;
+    const protection = armor.totalArmor * 5;
     const playerRad = player.getDynamicProperty("atomic:radiation_dose") ? player.getDynamicProperty("atomic:radiation_dose") : 0
     player.sendMessage(`§gRadiation levels:
         Current chunk radiation: ${chunkRadiation},

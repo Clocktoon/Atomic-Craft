@@ -1,0 +1,22 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:item": {
+        "description": {
+            "identifier": "atomic:uranium_low",
+            "menu_category": {
+                "category": "items"
+            }
+        },
+        "components": {
+            "minecraft:icon": {
+                "textures": {
+                    "default": "atomic_low_enrich"
+                }
+            },
+            "minecraft:max_stack_size": 64,
+            "minecraft:display_name": {
+                "value": "item.atomic:uranium_low.name"
+            }
+        }
+    }
+}

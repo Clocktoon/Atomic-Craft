@@ -4,7 +4,7 @@ export function* createCrater(location, dimensionId, block, radius, maxDepth) {
         return;
     const dim = world.getDimension(dimensionId);
     const cx = Math.floor(location.x);
-    const cy = Math.floor(location.y + 40);
+    const cy = Math.floor(location.y + 30);
     const cz = Math.floor(location.z);
     const r = Math.max(1, Math.ceil(radius));
     const r2 = r * r;

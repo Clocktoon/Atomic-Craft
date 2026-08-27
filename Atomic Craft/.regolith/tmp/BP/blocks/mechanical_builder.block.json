@@ -1,0 +1,45 @@
+{
+  "format_version": "1.26.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "atomic:mechanical_builder",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.mechanical_builder",
+      "minecraft:display_name": "tile.atomic:mechanical_builder.name",
+      "minecraft:crafting_table": {
+        "crafting_tags": ["atomic:mech"]
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "atomic_mech_builder",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:destructible_by_explosion": true,
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2
+      },
+      "minecraft:light_dampening": 15,
+      "minecraft:light_emission": 2,
+      "minecraft:collision_box": [
+        {
+          "origin": [-8, 0, -8],
+          "size": [16, 6, 16]
+        },
+        {
+          "origin": [-1, 6, -1],
+          "size": [2, 8, 2]
+        }
+      ],
+      "minecraft:selection_box": {
+        "origin": [-8, 0, -8],
+        "size": [16, 14, 16]
+      },
+      "minecraft:tags": ["minecraft:is_pickaxe_item_destructible"]
+    }
+  }
+}

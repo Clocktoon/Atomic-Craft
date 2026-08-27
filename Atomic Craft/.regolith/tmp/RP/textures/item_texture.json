@@ -2,6 +2,21 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_raw_lead": {
+			"textures": "textures/items/raw_lead"
+		},
+		"atomic_lead": {
+			"textures": "textures/items/atomic_lead"
+		},
+		"atomic_low_enrich": {
+			"textures": "textures/items/uranium_low_enrichment"
+		},
+		"atomic_mid_enrich": {
+			"textures": "textures/items/uranium_mid_enrichment"
+		},
+		"atomic_high_enrich": {
+			"textures": "textures/items/uranium_high_enrichment"
+		},
 		"atomic_circut_board": {
 			"textures": "textures/items/circuit_board"
 		},
@@ -63,7 +78,7 @@
 			"textures": "textures/items/vita_spawn"
 		},
 		"atomic_plane_item": {
-			"textures": "textures/items/plane_item"
+			"textures": "textures/items/northrop_item"
 		},
 		"atomic_engine": {
 			"textures": "textures/items/engine_tex"

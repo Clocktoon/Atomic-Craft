@@ -1,0 +1,30 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "atomic:builder"
+        },
+        "tags": ["crafting_table"],
+        "ingredients": [
+            {
+                "item": "atomic:lead_ingot"
+            },
+            {
+                "item": "minecraft:redstone_block"
+            }
+        ],
+        "unlock": [
+             {
+                "item": "atomic:lead_ingot"
+            },
+            {
+                "item": "minecraft:redstone_block"
+            }
+        ],
+        "result": {
+            "item": "atomic:mechanical_builder",
+            "count": 1,
+            "data": 0
+        }
+    }
+}

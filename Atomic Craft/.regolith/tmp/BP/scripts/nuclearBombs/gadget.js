@@ -1,7 +1,25 @@
-import { system, world, BlockVolume, EquipmentSlot } from "@minecraft/server";
+import { system, world, BlockVolume, EquipmentSlot, } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
+import { getBlastResistance } from "../generated/blastResistance.js";
+import { addRadiationDose } from "../radiationSystem/radiationManger.js";
+function length(v) {
+    return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+function normalize(v) {
+    const l = length(v) || 1;
+    return { x: v.x / l, y: v.y / l, z: v.z / l };
+}
+function sub(a, b) {
+    return { x: a.x - b.x, y: a.y - b.y, z: a.z - b.z };
+}
+export function distance(a, b) {
+    return length(sub(a, b));
+}
+export function directionTo(target, from) {
+    return normalize(sub(target, from));
+}
 function makeRandomId() {
     //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
     return `${Date.now()}+${Math.random()}`;
@@ -22,9 +40,13 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
             if (rep.selection === 1) {
                 nuclearBomb();
             }
-        }).catch(e => {
+        })
+            .catch((e) => {
             playerEntity?.sendMessage(`${e}`);
         });
+    }
+    if (!doMenu) {
+        nuclearBomb();
     }
     function nuclearBomb() {
         if (!playerMain)
@@ -55,36 +77,71 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
             system.runTimeout(() => {
                 function* blockGen() {
                     let radius = 20;
+                    //Dead mobs
+                    const deadZoneArea = block.dimension.getEntities({
+                        location: block.location,
+                        minDistance: 1,
+                        maxDistance: 30,
+                    });
+                    for (const die of deadZoneArea) {
+                        die.kill();
+                    }
                     //Radiation and burning of mobs
                     const players = block.dimension.getPlayers({
                         location: block.location,
-                        minDistance: 1,
+                        minDistance: 31,
                         maxDistance: 70,
                     });
                     for (const eny of block.dimension.getEntities({
                         location: block.location,
-                        minDistance: 1,
+                        minDistance: 31,
                         maxDistance: 70,
                     })) {
-                        eny.setOnFire(20);
-                        if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
-                            eny.typeId !== "atomic:gen_entity" &&
-                            eny.typeId != "minecraft:player") {
-                            eny.addTag("atomic:rad_effect");
+                        if (eny.typeId === "atomic:plane")
+                            continue;
+                        const dist = distance(block.location, eny.location);
+                        const hit = dimension.getBlockFromRay(eny.location, directionTo(block.location, eny.location), { maxDistance: dist });
+                        if (hit) {
+                            const shielding = getBlastResistance(hit.block);
+                            if (shielding >= 1200) {
+                                continue;
+                            }
+                            else {
+                                const resistance = shielding * 2;
+                                addRadiationDose(eny, 40 - resistance);
+                            }
+                        }
+                        else {
+                            eny.setOnFire(20);
+                            addRadiationDose(eny, 150);
                         }
                     }
                     for (const playerRadi of players) {
-                        if (playerRadi.dimension.getBlockAbove(playerRadi.location)?.typeId === "minecraft:air") {
-                            playerRadi.setOnFire(10, true);
+                        const dist = distance(block.location, playerRadi.location);
+                        const hit = dimension.getBlockFromRay(playerRadi.location, directionTo(block.location, playerRadi.location), { maxDistance: dist });
+                        if (hit) {
+                            const shielding = getBlastResistance(hit.block);
+                            if (shielding >= 1200) {
+                                continue;
+                            }
+                            else {
+                                const resistance = shielding * 2;
+                                addRadiationDose(playerRadi, 40 - resistance);
+                            }
                         }
-                        if (playerRadi.getComponent("minecraft:equippable")?.getEquipment(EquipmentSlot.Head)?.typeId !== "atomic:gas_mask") {
-                            playerRadi.setDynamicProperty("radiation", 100);
+                        else {
+                            playerRadi.camera.fade({
+                                fadeColor: { red: 1, blue: 1, green: 1 },
+                                fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
+                            });
+                            playerRadi.setOnFire(20);
+                            if (playerRadi
+                                .getComponent("minecraft:equippable")
+                                ?.getEquipment(EquipmentSlot.Head)?.typeId !==
+                                "atomic:gas_mask") {
+                                addRadiationDose(playerRadi, 150);
+                            }
                         }
-                        //TODO: Make gas mask worth with players
-                        playerRadi.camera.fade({
-                            fadeColor: { red: 1, blue: 1, green: 1 },
-                            fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
-                        });
                     }
                     block.dimension.spawnParticle("atomic:gadgetparticle", {
                         x: block.location.x,
@@ -124,7 +181,7 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
                                 try {
                                     player.playSound("atomic.nukesound", {
                                         volume: boomVolume,
-                                        pitch: boomPitch
+                                        pitch: boomPitch,
                                     });
                                     if (distance <= shakeDistance) {
                                         const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
@@ -153,10 +210,7 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
                     yield;
                     //Gets rid of ticking area and starts the real nuclear explosion code
                     //Nuke Code!!!
-                    nuclearArea(block.dimension.id, block.location, block, 112, 40, 50, playerEntity
-                    //   40,
-                    //   40
-                    );
+                    nuclearArea(block.dimension.id, block.location, block, 112, 40, 50, playerEntity);
                     const volume = new BlockVolume({
                         x: block.location.x - 20,
                         y: block.location.y - 20,

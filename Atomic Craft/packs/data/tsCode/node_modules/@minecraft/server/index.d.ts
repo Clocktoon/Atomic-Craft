@@ -15,7 +15,7 @@
  * ```json
  * {
  *   "module_name": "@minecraft/server",
- *   "version": "2.8.0"
+ *   "version": "2.9.0"
  * }
  * ```
  *
@@ -2608,6 +2608,37 @@ export enum PlayerPermissionLevel {
 }
 
 /**
+ * The split screen slot of a player.
+ */
+export enum PlayerSplitScreenSlot {
+    /**
+     * @remarks
+     * The first player in the split screen session. This is the
+     * primary player.
+     *
+     */
+    First = 'First',
+    /**
+     * @remarks
+     * The fourth player in the split screen session.
+     *
+     */
+    Fourth = 'Fourth',
+    /**
+     * @remarks
+     * The second player in the split screen session.
+     *
+     */
+    Second = 'Second',
+    /**
+     * @remarks
+     * The third player in the split screen session.
+     *
+     */
+    Third = 'Third',
+}
+
+/**
  * Contains objectives and participants for the scoreboard.
  */
 export enum ScoreboardIdentityType {
@@ -4079,6 +4110,19 @@ export class Block {
      * {@link LocationInUnloadedChunkError}
      */
     getLightLevel(): number;
+    /**
+     * @remarks
+     * Returns array of all loaded block parts if this block has
+     * the 'minecraft:multi_block' trait. If it does not have the
+     * trait returns undefined
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    getParts(): Block[] | undefined;
     /**
      * @remarks
      * Returns the net redstone power of this block.
@@ -7243,6 +7287,37 @@ export class Dimension {
     readonly localizationKey: string;
     /**
      * @remarks
+     * Calculates the location of the closest biome of a particular
+     * type from the world seed. Note that
+     * calculateClosestBiomeFromSeed can be an expensive operation,
+     * so avoid using many of these calls within a particular tick.
+     * The result is derived purely from the world generation
+     * algorithm and the world seed, so the returned location may
+     * not reflect the actual current terrain if biomes have been
+     * modified after generation.
+     *
+     * @param pos
+     * Starting location to look for a biome to find.
+     * @param biomeToFind
+     * Identifier of the biome to look for.
+     * @param options
+     * Additional selection criteria for a biome search.
+     * @returns
+     * Returns a location of the biome, or undefined if a biome
+     * could not be found.
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.EngineError}
+     *
+     * {@link Error}
+     */
+    calculateClosestBiomeFromSeed(
+        pos: Vector3,
+        biomeToFind: BiomeType | string,
+        options?: BiomeSearchOptions,
+    ): Vector3 | undefined;
+    /**
+     * @remarks
      * Checks if an area contains the specified biomes. If the area
      * is partially inside world boundaries, only the area that is
      * in bounds will be searched. This operation takes longer
@@ -7498,7 +7573,11 @@ export class Dimension {
      * locations that satisfied the block filter.
      * @throws This function can throw errors.
      *
+     * {@link minecraftcommon.ArgumentOutOfBoundsError}
+     *
      * {@link Error}
+     *
+     * {@link minecraftcommon.InvalidArgumentError}
      *
      * {@link UnloadedChunksError}
      */
@@ -7756,9 +7835,11 @@ export class Dimension {
      * An error will be thrown if pitch is less than 0.01.
      * An error will be thrown if volume is less than 0.0.
      *
+     * {@link minecraftcommon.EngineError}
+     *
      * {@link minecraftcommon.PropertyOutOfBoundsError}
      */
-    playSound(soundId: string, location: Vector3, soundOptions?: WorldSoundOptions): void;
+    playSound(soundId: string, location: Vector3, soundOptions?: WorldSoundOptions): SoundInstance;
     /**
      * @remarks
      * Runs a command synchronously using the context of the
@@ -8565,6 +8646,24 @@ export class Entity {
      * {@link InvalidEntityError}
      */
     readonly location: Vector3;
+    /**
+     * @remarks
+     * Boolean which determines if the player nameplate should be
+     * depth tested for visibility.
+     *
+     * This property can't be edited in restricted-execution mode.
+     *
+     */
+    nameplateDepthTested: boolean;
+    /**
+     * @remarks
+     * Float that determines the render distance of this entity's
+     * nameplate.
+     *
+     * This property can't be edited in restricted-execution mode.
+     *
+     */
+    nameplateRenderDistance: number;
     /**
      * @remarks
      * Given name of the entity.
@@ -15764,6 +15863,7 @@ export class LootingEnchantFunction extends LootItemFunction {
 // @ts-ignore Class inheritance allowed for native defined classes
 export class LootItem extends LootPoolEntry {
     private constructor();
+    readonly conditions: LootItemCondition[];
     readonly functions: LootItemFunction[];
     /**
      * @remarks
@@ -16593,6 +16693,10 @@ export class Player extends Entity {
      * @param soundOptions
      * Additional optional options for the sound.
      * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.EngineError}
+     *
+     * {@link Error}
      * @example playMusicAndSound.ts
      * ```typescript
      * import { world, MusicOptions, WorldSoundOptions, PlayerSoundOptions, DimensionLocation } from '@minecraft/server';
@@ -16622,7 +16726,7 @@ export class Player extends Entity {
      * }
      * ```
      */
-    playSound(soundId: string, soundOptions?: PlayerSoundOptions): void;
+    playSound(soundId: string, soundOptions?: PlayerSoundOptions): SoundInstance;
     /**
      * @remarks
      * Queues an additional music track that only this particular
@@ -17139,6 +17243,81 @@ export class PlayerButtonInputAfterEventSignal {
      *
      */
     unsubscribe(callback: (arg0: PlayerButtonInputAfterEvent) => void): void;
+}
+
+/**
+ * Contains information regarding an event after a player
+ * cancels breaking a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerCancelBreakingBlockAfterEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The permutation of the block that the player cancelled
+     * breaking.
+     *
+     */
+    readonly blockPermutation: BlockPermutation;
+    /**
+     * @remarks
+     * The progress of breaking the block when the player cancelled
+     * in the exclusive range (0, 1).
+     *
+     */
+    readonly breakProgress: number;
+    /**
+     * @remarks
+     * The face of the block that was being broken.
+     *
+     */
+    readonly face: Direction;
+    /**
+     * @remarks
+     * The item stack that the player was using to break the block,
+     * or undefined if empty hand.
+     *
+     */
+    readonly heldItemStack?: ItemStack;
+    /**
+     * @remarks
+     * Player that cancelled breaking the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * Manages callbacks that are connected to when a player
+ * cancels breaking a block.
+ */
+export class PlayerCancelBreakingBlockAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when a player cancels
+     * breaking a block.
+     *
+     * This function can't be called in restricted-execution mode.
+     *
+     * This function can be called in early-execution mode.
+     *
+     */
+    subscribe(
+        callback: (arg0: PlayerCancelBreakingBlockAfterEvent) => void,
+        options?: PlayerBreakingBlockEventOptions,
+    ): (arg0: PlayerCancelBreakingBlockAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when a player cancels
+     * breaking a block.
+     *
+     * This function can't be called in restricted-execution mode.
+     *
+     * This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: PlayerCancelBreakingBlockAfterEvent) => void): void;
 }
 
 /**
@@ -18244,6 +18423,74 @@ export class PlayerSpawnAfterEventSignal {
      *
      */
     unsubscribe(callback: (arg0: PlayerSpawnAfterEvent) => void): void;
+}
+
+/**
+ * Contains information regarding an event after a player
+ * starts breaking a block.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class PlayerStartBreakingBlockAfterEvent extends BlockEvent {
+    private constructor();
+    /**
+     * @remarks
+     * The permutation of the block that the player is starting to
+     * break.
+     *
+     */
+    readonly blockPermutation: BlockPermutation;
+    /**
+     * @remarks
+     * The face of the block being broken.
+     *
+     */
+    readonly face: Direction;
+    /**
+     * @remarks
+     * The item stack that the player is using to break the block,
+     * or undefined if empty hand.
+     *
+     */
+    readonly heldItemStack?: ItemStack;
+    /**
+     * @remarks
+     * Player that started breaking the block for this event.
+     *
+     */
+    readonly player: Player;
+}
+
+/**
+ * Manages callbacks that are connected to when a player starts
+ * breaking a block.
+ */
+export class PlayerStartBreakingBlockAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when a player starts
+     * breaking a block.
+     *
+     * This function can't be called in restricted-execution mode.
+     *
+     * This function can be called in early-execution mode.
+     *
+     */
+    subscribe(
+        callback: (arg0: PlayerStartBreakingBlockAfterEvent) => void,
+        options?: PlayerBreakingBlockEventOptions,
+    ): (arg0: PlayerStartBreakingBlockAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when a player starts
+     * breaking a block.
+     *
+     * This function can't be called in restricted-execution mode.
+     *
+     * This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: PlayerStartBreakingBlockAfterEvent) => void): void;
 }
 
 /**
@@ -19905,6 +20152,27 @@ export class ShutdownEvent {
 // @ts-ignore Class inheritance allowed for native defined classes
 export class SmeltItemFunction extends LootItemFunction {
     private constructor();
+}
+
+/**
+ * Represents a handle to a sound that has been played. The
+ * handle is required to control the sound while it is playing
+ * (for example, to call `stop`, `setVolume`, `setPitch`,
+ * `fade`, or `seekTo`). Infinitely-looping sounds (started
+ * with `loop: -1`) stop automatically when the last
+ * `SoundInstance` reference is dropped; retain the handle for
+ * as long as the sound should keep playing.
+ */
+export class SoundInstance {
+    private constructor();
+    /**
+     * @remarks
+     * Stops this sound instance from playing.
+     *
+     * This function can't be called in restricted-execution mode.
+     *
+     */
+    stop(): void;
 }
 
 /**
@@ -22032,6 +22300,14 @@ export class WorldAfterEvents {
     readonly playerButtonInput: PlayerButtonInputAfterEventSignal;
     /**
      * @remarks
+     * This event fires when a player cancels breaking a block.
+     *
+     * This property can be read in early-execution mode.
+     *
+     */
+    readonly playerCancelBreakingBlock: PlayerCancelBreakingBlockAfterEventSignal;
+    /**
+     * @remarks
      * Fires when a player moved to a different dimension.
      *
      * This property can be read in early-execution mode.
@@ -22135,6 +22411,14 @@ export class WorldAfterEvents {
      *
      */
     readonly playerSpawn: PlayerSpawnAfterEventSignal;
+    /**
+     * @remarks
+     * This event fires when a player starts breaking a block.
+     *
+     * This property can be read in early-execution mode.
+     *
+     */
+    readonly playerStartBreakingBlock: PlayerStartBreakingBlockAfterEventSignal;
     /**
      * @remarks
      * This property can be read in early-execution mode.
@@ -22385,6 +22669,19 @@ export interface BiomeFilter {
     excludeTags?: string[];
     includeBiomes?: string[];
     includeTags?: string[];
+}
+
+/**
+ * Contains additional options for searches for the
+ * dimension.findNearestBiome API.
+ */
+export interface BiomeSearchOptions {
+    /**
+     * @remarks
+     * Bounding volume size to look within.
+     *
+     */
+    boundingSize?: Vector3;
 }
 
 /**
@@ -24330,6 +24627,32 @@ export interface PlayerAimAssistSettings {
      *
      */
     viewAngle?: Vector2;
+}
+
+/**
+ * An interface that is passed into {@link
+ * PlayerStartBreakingBlockAfterEventSignal.subscribe} or
+ * {@link PlayerCancelBreakingBlockAfterEventSignal.subscribe}
+ * that filters out which events are passed to the provided
+ * callback.
+ */
+export interface PlayerBreakingBlockEventOptions {
+    /**
+     * @remarks
+     * The {@link BlockFilter} that the callback should be called
+     * for. If undefined, the callback will be called for all
+     * blocks.
+     *
+     */
+    blockFilter?: BlockFilter;
+    /**
+     * @remarks
+     * The {@link EntityFilter} that the callback should be called
+     * for. If undefined, the callback will be called for all
+     * players.
+     *
+     */
+    playerFilter?: EntityFilter;
 }
 
 /**

@@ -30,7 +30,7 @@ export const BlastResistance = {
  * Blast thingy
  *
  * @export
- * @param {*} block
+ * @param {} block
  * @returns {*}
  */
 export function getBlastResistance(block) {

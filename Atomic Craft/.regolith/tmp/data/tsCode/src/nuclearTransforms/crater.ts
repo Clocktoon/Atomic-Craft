@@ -1,5 +1,6 @@
 import { Block, Vector3, world, system } from "@minecraft/server";
 
+
 export function* createCrater(
   location: Vector3,
   dimensionId: string,
@@ -13,7 +14,7 @@ export function* createCrater(
   const dim = world.getDimension(dimensionId);
 
   const cx = Math.floor(location.x);
-  const cy = Math.floor(location.y + 40);
+  const cy = Math.floor(location.y + 30);
   const cz = Math.floor(location.z);
 
   const r = Math.max(1, Math.ceil(radius));

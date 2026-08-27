@@ -9,7 +9,7 @@
          "furnace"
         ],
     "input": "atomic:raw_uranium",
-    "output": "atomic:uranium_cooked",
+    "output": "atomic:uranium_ingot",
     "unlock": [
             {
              "item": "atomic:raw_uranium" 

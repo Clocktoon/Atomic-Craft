@@ -1,0 +1,22 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:ore_feature": {
+        "description": {
+            "identifier": "atomic:lead_deepslate_feature"
+        },
+        "count": 5,
+        "replace_rules": [
+			{
+				"places_block": {
+					"name": "atomic:lead_ore",
+					"states": {}
+				},
+				"may_replace": [
+					{
+                        "name": "minecraft:deepslate"
+                    }
+				]
+			}
+		]
+    }
+}

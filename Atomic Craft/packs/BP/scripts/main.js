@@ -22,8 +22,10 @@ import("./missileSummon.js");
 import("./remoteMissile.js");
 import("./landMineCode.js");
 import("./nuclearBombs/hBombCode.js");
-import("./icbmComp.js");
-import("./consoleCode.js");
+import("./missilesCodes/icbmComp.js");
+import("./missilesCodes/consoleCode.js");
+import("./techSection/enrichment");
+import("./lead_xp");
 // import("./nonComp.js")
 import("./EatEffects.js");
 import("./radiationSystem/cureSystem");
@@ -49,8 +51,8 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./sirenCode.js");
     import("./planeCode.js");
     import("./welcomeText");
-    import("./icbmCode.js");
-    import("./ballisticCode.js");
+    import("./missilesCodes/icbmCode.js");
+    import("./missilesCodes/ballisticCode.js");
     import("./himarCode.js");
     //Will add radiation next update
     // import("./radiationSystem/radEffect.js")
@@ -65,18 +67,25 @@ world.afterEvents.worldLoad.subscribe(() => {
 });
 world.afterEvents.playerSpawn.subscribe((event) => {
     const player = event.player;
-    import("./setLore"); //Fits here :]
+    import("./itemFinding"); //Fits here :]
     const inventory = player.getComponent('inventory');
     if (event.initialSpawn) {
         if (inventory) {
             const container = inventory.container;
             const settingsItem = new ItemStack("atomic:atomic_settings", 1);
-            if (!container.contains(settingsItem)) {
-                if (container.emptySlotsCount > 0) {
-                    container.addItem(settingsItem);
+            for (let i = 0; i < inventory.inventorySize; i++) {
+                const itemLooking = container.getItem(i);
+                if (itemLooking === undefined)
+                    return;
+                if (itemLooking.typeId === "atomic:atomic_settings")
+                    return;
+            }
+            for (let i = 0; i < inventory.inventorySize; i++) {
+                if (container.getItem(i) === undefined) {
+                    container.setItem(i, settingsItem);
                 }
                 else {
-                    player.dimension.spawnEntity(settingsItem.typeId, player.location);
+                    player.dimension.spawnItem(settingsItem, player.location);
                 }
             }
         }
