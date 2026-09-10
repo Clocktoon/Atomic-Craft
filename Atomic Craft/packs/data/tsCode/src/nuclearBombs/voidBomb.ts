@@ -21,10 +21,10 @@ import { MessageBox } from "@minecraft/server-ui";
 async function voidCrater(block: Block, dimension: Dimension, maxDepth: number, maxHeight: number) {
   const location = block.location;
 
-  const startx = location.x - 200;
-  const endx = location.x + 200;
-  const startz = location.z - 200;
-  const endz = location.z + 200;
+  const startx = location.x - 100;
+  const endx = location.x + 100;
+  const startz = location.z - 100;
+  const endz = location.z + 100;
 
   //INSANEEEEEEEEEE
   for (let x = startx; x <= endx; x += 16) {

@@ -1,0 +1,93 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "atomic:anti_missile",
+            "is_spawnable": false,
+            "is_summonable": true
+        },
+        "component_groups": {
+            "atomic:openedmissile": {
+                "minecraft:variant": {
+                    "value": 1
+                }
+            }
+        },
+        "components": {
+            "minecraft:health": {
+                "value": [
+                    20,
+                    20
+                ]
+            },
+            "minecraft:variant": {
+                "value": 0
+            },
+            "minecraft:movement": {
+                "value": [
+                    0,
+                    1
+                ]
+            },
+            "minecraft:inventory": {
+                "container_type": "inventory",
+                "inventory_size": 10,
+                "can_be_siphoned_from": true
+            },
+            "minecraft:interact": {
+                "interactions": [
+                    {
+                        "on_interact": {
+                            "filters": {
+                                "test": "is_family",
+                                "subject": "other",
+                                "value": "player"
+                            }
+                        }
+                    }
+                ]
+            },
+            "minecraft:movement.basic": {
+                "max_turn": 30
+            },
+            "minecraft:navigation.walk": {
+                "avoid_damage_blocks": false,
+                "avoid_portals": false,
+                "can_jump": true,
+                "can_sink": true,
+                "can_swim": false,
+                "can_walk": true,
+                "can_walk_in_lava": false,
+                "is_amphibious": false
+            },
+            "minecraft:jump.dynamic": {
+                "regular_skip_data": {
+                    "height": 1
+                }
+            },
+            "minecraft:leashable": {
+               "can_be_cut": true
+            },
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": true
+            }
+        },
+        "events": {
+            "atomic:open_missile": {
+                "add": {
+                    "component_groups": [
+                        "atomic:openedmissile"
+                    ]
+                }
+            },
+            "atomic:close_missile": {
+                "remove": {
+                    "component_groups": [
+                        "atomic:openedmissile"
+                    ]
+                }
+            }
+        }
+    }
+}

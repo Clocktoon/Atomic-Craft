@@ -8,12 +8,35 @@
 				"texture": "textures/particle/nukeparticle"
 			}
 		},
+		"events": {
+			"uppercap": {
+				"particle_effect": {
+					"effect": "atomic:capcloud_two",
+					"type": "emitter"
+				}
+			},
+			"lowercloud": {
+				"particle_effect": {
+					"effect": "atomic:capcloud_three",
+					"type": "emitter"
+				}
+			},
+			"tip": {
+				"particle_effect": {
+					"effect": "atomic:capcloud_tip",
+					"type": "emitter"
+				}
+			}
+		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
 				"num_particles": 70
 			},
 			"minecraft:emitter_lifetime_looping": {
 				"active_time": 160
+			},
+			"minecraft:emitter_lifetime_events": {
+				"creation_event": ["uppercap", "lowercloud", "tip"]
 			},
 			"minecraft:emitter_shape_point": {
 				"direction": [0, 0.18, 0]
@@ -23,10 +46,10 @@
 			},
 			"minecraft:particle_initial_speed": "math.random(0.3,0.9)",
 			"minecraft:particle_motion_parametric": {
-				"relative_position": ["math.cos(variable.particle_random_1 * 360) * math.sqrt(variable.particle_random_2) * 14", "(32 + 8 * math.sqrt(1 - variable.particle_random_2) + variable.particle_random_3 * 2) * math.sin((variable.particle_age / variable.particle_lifetime) * 90)", "math.sin(variable.particle_random_1 * 360) * math.sqrt(variable.particle_random_2) * 14"]
+				"relative_position": ["math.cos(variable.particle_random_1 * 360) * math.sqrt(variable.particle_random_2) * 14", "math.min(variable.particle_age * 1, 28)", "math.sin(variable.particle_random_1 * 360) * math.sqrt(variable.particle_random_2) * 14"]
 			},
 			"minecraft:particle_appearance_billboard": {
-				"size": [10, 10],
+				"size": [2, 2],
 				"facing_camera_mode": "rotate_xyz",
 				"uv": {
 					"texture_width": 8,
@@ -40,8 +63,8 @@
 				"color": {
 					"interpolant": "v.particle_age / v.particle_lifetime",
 					"gradient": {
-						"0.0": "#FFFFE486",
-						"0.4": "#FFCB8C1F",
+						"0.0": "#FFFDE27F",
+						"0.4": "#FFD89623",
 						"1.0": "#FF3F3F3F"
 					}
 				}

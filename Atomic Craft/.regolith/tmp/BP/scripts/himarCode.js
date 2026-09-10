@@ -19,7 +19,6 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             let z = Number(zText.getData());
             let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
             const nameId = `NK_${x},${z},${player.dimension.id}`;
-            let tickingQueue = [];
             if (y) {
                 entity.setProperty("atomic:launching", true);
                 const target = entity.dimension.spawnEntity("atomic:hate", {

@@ -3,6 +3,7 @@ import { EquipmentSlot } from "@minecraft/server";
 import { createCrater } from "../nuclearTransforms/crater.js";
 import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { CustomForm, ObservableBoolean, ObservableNumber, ObservableString, } from "@minecraft/server-ui";
+import { addRadiationDose } from "../radiationSystem/radiationManger.js";
 const distanceUiNumber = new ObservableNumber(0);
 let fail = false;
 let stopGoing = false;
@@ -38,11 +39,12 @@ function* nuclearExplosion(playerEntity, entity, target) {
                 minDistance: 1,
                 maxDistance: 100,
             })) {
-                eny.setOnFire(64);
+                if (eny.typeId !== "atomic:hate" && eny.typeId !== "atomic:warhead")
+                    eny.setOnFire(64);
                 if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
                     eny.typeId !== "atomic:gen_entity" &&
                     eny.typeId != "minecraft:player") {
-                    eny.addTag("atomic:rad_effect");
+                    addRadiationDose(eny, 3);
                 }
             }
             for (const playerRadi of players) {
@@ -177,7 +179,7 @@ function getGuidePoint(missile, target) {
 }
 //THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
 function updateMissile(missile, target, warhead, player) {
-    if (!missile.isValid || !target.isValid) {
+    if (!target.isValid) {
         return warhead;
     }
     let waypoint = missile.getDynamicProperty("waypoint");
@@ -185,10 +187,14 @@ function updateMissile(missile, target, warhead, player) {
         console.warn("WARHEAD NOT VAILD");
         return null;
     }
-    const active = waypoint >= 6 ? warhead : missile;
+    const active = warhead?.isValid ? warhead : missile;
+    if (!active.isValid) {
+        return null;
+    }
     const guidePoint = waypoint >= 6 ? target.location : getGuidePoint(missile, target);
     const pos = active.location;
-    const climbing = missile.getDynamicProperty("climbing") ?? true;
+    const climbing = !warhead &&
+        (missile.getDynamicProperty("climbing") ?? true);
     if (climbing && waypoint === 0) {
         const liftPoint = {
             x: missile.getDynamicProperty("liftOffX"),
@@ -262,6 +268,7 @@ function updateMissile(missile, target, warhead, player) {
         });
         const yaw = missile.getDynamicProperty("yaw");
         const pitch = missile.getDynamicProperty("pitch");
+        newWarhead.setDynamicProperty("waypoint", 6);
         newWarhead.setDynamicProperty("yaw", yaw);
         newWarhead.setDynamicProperty("pitch", pitch);
         newWarhead.setProperty("atomic:yaw", yaw);
@@ -313,7 +320,7 @@ function updateMissile(missile, target, warhead, player) {
         speed = 0.9;
     }
     else {
-        speed = 1.7;
+        speed = 1.4;
     }
     active.setRotation({
         x: pitch,
@@ -523,6 +530,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             const nameId = `hate${x}${y}${z}`;
             let time = 10;
             const timer = system.runInterval(() => {
+                if (!entity.isValid) {
+                    system.clearRun(timer);
+                    return;
+                }
                 if (time < 0) {
                     system.clearRun(timer);
                 }
@@ -560,6 +571,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
             const nameId = `hate${location.x}${location.y}${location.z}`;
             let time = 10;
             const timer = system.runInterval(() => {
+                if (!entity.isValid) {
+                    system.clearRun(timer);
+                    return;
+                }
                 if (time < 0) {
                     system.clearRun(timer);
                 }

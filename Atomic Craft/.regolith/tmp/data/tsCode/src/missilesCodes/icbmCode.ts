@@ -16,6 +16,7 @@ import {
   ObservableNumber,
   ObservableString,
 } from "@minecraft/server-ui";
+import { addRadiationDose } from "../radiationSystem/radiationManger.js";
 
 const distanceUiNumber = new ObservableNumber(0);
 let fail = false;
@@ -60,7 +61,9 @@ function* nuclearExplosion(
           minDistance: 1,
           maxDistance: 100,
         })) {
-          eny.setOnFire(64);
+          if(eny.typeId !== "atomic:hate" && eny.typeId !== "atomic:warhead")
+            eny.setOnFire(64);
+        
           if (
             eny.runCommand(
               `testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`,
@@ -68,7 +71,7 @@ function* nuclearExplosion(
             eny.typeId !== "atomic:gen_entity" &&
             eny.typeId != "minecraft:player"
           ) {
-            eny.addTag("atomic:rad_effect");
+          addRadiationDose(eny, 3)
           }
         }
 
@@ -269,7 +272,7 @@ function updateMissile(
   warhead: Entity | null,
   player: Player,
 ): Entity | null {
-  if (!missile.isValid || !target.isValid) {
+  if (!target.isValid) {
     return warhead;
   }
 
@@ -280,12 +283,18 @@ function updateMissile(
     return null;
   }
 
-  const active = waypoint >= 6 ? (warhead as Entity) : missile;
+
+  const active = warhead?.isValid ? warhead : missile;
+  if (!active.isValid) {
+      return null;
+    }
+
   const guidePoint =
     waypoint >= 6 ? target.location : getGuidePoint(missile, target);
   const pos = active.location;
 
-  const climbing = (missile.getDynamicProperty("climbing") as boolean | undefined) ?? true;
+  const climbing = !warhead &&
+      ((missile.getDynamicProperty("climbing") as boolean | undefined) ?? true);
     if (climbing && waypoint === 0) {
       const liftPoint = {
         x: missile.getDynamicProperty("liftOffX") as number,
@@ -383,6 +392,7 @@ function updateMissile(
     const yaw = missile.getDynamicProperty("yaw") as number;
     const pitch = missile.getDynamicProperty("pitch") as number;
 
+    newWarhead.setDynamicProperty("waypoint", 6);
     newWarhead.setDynamicProperty("yaw", yaw);
     newWarhead.setDynamicProperty("pitch", pitch);
     newWarhead.setProperty("atomic:yaw", yaw);
@@ -443,7 +453,7 @@ function updateMissile(
   } else if (waypoint <= 5) {
     speed = 0.9;
   } else {
-    speed = 1.7;
+    speed = 1.4;
   }
 
   active.setRotation({
@@ -702,6 +712,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
           const nameId = `hate${x}${y}${z}`;
           let time = 10;
           const timer = system.runInterval(() => {
+            if(!entity.isValid) {
+                system.clearRun(timer)
+                return;
+              }
             if (time < 0) {
               system.clearRun(timer);
             }
@@ -755,6 +769,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
           const nameId = `hate${location.x}${location.y}${location.z}`;
           let time = 10;
           const timer = system.runInterval(() => {
+            if(!entity.isValid) {
+              system.clearRun(timer)
+              return;
+            }
             if (time < 0) {
               system.clearRun(timer);
             }

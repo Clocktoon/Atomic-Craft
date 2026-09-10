@@ -32,7 +32,7 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
           let y = player.dimension.getTopmostBlock({ x: x, z: z })?.location.y;
 
           const nameId = `NK_${x},${z},${player.dimension.id}`;
-          let tickingQueue: TickingAreaOptions[] = [];
+          
 
           if (y) {
             entity.setProperty("atomic:launching", true);

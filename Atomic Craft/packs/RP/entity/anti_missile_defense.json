@@ -1,0 +1,27 @@
+{
+    "format_version": "1.26.40",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "atomic:anti_missile",
+            "geometry": {
+                "default": "geometry.anti_missile_defense"
+            },
+            "render_controllers": ["controller.render.anti_missile"],
+            "animations": {
+                "idle": "animation.anti_missile_defense.idle",
+                "move": "animation.anti_missile_defense.move",
+                "con": "controller.animation.anti_missile"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "closed": "textures/entity/anti_missile_defense",
+                "open": "textures/entity/anti_missile_defense_open"
+            },
+            "scripts": {
+                "animate": ["con"]
+            }
+        }
+    }
+}

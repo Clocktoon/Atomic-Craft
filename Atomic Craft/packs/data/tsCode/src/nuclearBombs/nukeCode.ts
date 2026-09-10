@@ -170,7 +170,7 @@ export function nuclearBombFisson(block: Block, playerEntity: Player, dimension:
 
             block.dimension.spawnParticle("atomic:nukepart", {
               x: block.location.x,
-              y: block.location.y - 20,
+              y: block.location.y - 30,
               z: block.location.z,
             });
            

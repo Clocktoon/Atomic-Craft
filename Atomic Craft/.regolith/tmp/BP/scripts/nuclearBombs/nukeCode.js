@@ -129,7 +129,7 @@ export function nuclearBombFisson(block, playerEntity, dimension, doMenu) {
                     }
                     block.dimension.spawnParticle("atomic:nukepart", {
                         x: block.location.x,
-                        y: block.location.y - 20,
+                        y: block.location.y - 30,
                         z: block.location.z,
                     });
                     // Crater code

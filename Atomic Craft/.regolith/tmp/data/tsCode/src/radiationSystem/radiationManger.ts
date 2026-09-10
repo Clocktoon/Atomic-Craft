@@ -55,6 +55,10 @@ system.runInterval(() => {
         const entities = dimension.getEntities().filter(e => e.typeId !== "minecraft:player");
 
         for (const entity of entities) {
+            const family = entity.getComponent("minecraft:type_family")
+            if(family && family.hasTypeFamily("bogmissile") || entity.typeId === "atomic:hate")
+                continue;
+            
             const exposure = calculateExposure(entity);
             entity.setDynamicProperty("atomic:radiation_exposure", exposure);
             updateDose(entity, exposure);

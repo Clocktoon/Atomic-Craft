@@ -144,7 +144,15 @@ class ChunkFiller {
           "minecraft:pitcher_plant",
           "minecraft:closed_eyeblossom",
           "minecraft:open_eyeblossom",
-          "minecraft:golden_dandelion"]
+          "minecraft:golden_dandelion", 
+          "minecraft:glass",
+          "minecraft:vine",
+          "minecraft:leaf_litter",
+          "minecraft:bamboo",
+          "minecraft:short_grass",
+          "minecraft:tall_grass",
+          "minecraft:short_dry_grass",
+          "minecraft:tall_dry_grass"]
 
       const plants = request.area.dimension.getBlocks(volume, {
         includeTypes: plantList
@@ -152,6 +160,23 @@ class ChunkFiller {
 
       //Phase 2
       if (phase == 2) {
+        for(const loc of plants.getBlockLocationIterator()) {
+            any = true
+            const plant = request.area.dimension.getBlock(loc)
+
+            if(!plant)
+              continue;
+
+            if(world.getDynamicProperty("powerful") === true) {
+              plant.setType("minecraft:air");
+              yield
+            }
+            else {
+              plant.setType("minecraft:air")
+            }
+
+        }
+
         const blockList = request.area.dimension.getBlocks(
           volume,
           {
@@ -255,23 +280,7 @@ class ChunkFiller {
           true,
         );
 
-        for(const loc of plants.getBlockLocationIterator()) {
-            any = true
-            const plant = request.area.dimension.getBlock(loc)
-
-            if(!plant)
-              continue;
-
-            if(world.getDynamicProperty("powerful") === true) {
-              plant.setType("minecraft:air");
-              yield
-            }
-            else {
-              plant.setType("minecraft:air")
-            }
-
-        }
-
+        
         request.area.dimension.fillBlocks(volume,"atomic:radiation_block", {
           blockFilter: {
             excludeTypes: [

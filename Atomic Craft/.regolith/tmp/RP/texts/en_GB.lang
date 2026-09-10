@@ -195,3 +195,6 @@ atomic.void.menu.name=Do you want to activate the void bomb?
 atomic.void.menu.yes.name=Yes
 atomic.void.menu.no.name=No
 
+atomic.tablet.loreone.name=Hold :_input_key.sneak: and click nuclear bomb 
+atomic.tablet.loretwo.name=to be able to detonate it from a distance.
+atomic.tablet.lorethree.name=You must be uncrouched to detonate the nuke

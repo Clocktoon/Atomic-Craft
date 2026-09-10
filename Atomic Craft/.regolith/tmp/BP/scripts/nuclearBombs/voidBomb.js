@@ -5,10 +5,10 @@ import { MessageBox } from "@minecraft/server-ui";
 //Re used alot from nuclearArea since well it just works for the VOID part of the well.. void explosion
 async function voidCrater(block, dimension, maxDepth, maxHeight) {
     const location = block.location;
-    const startx = location.x - 200;
-    const endx = location.x + 200;
-    const startz = location.z - 200;
-    const endz = location.z + 200;
+    const startx = location.x - 100;
+    const endx = location.x + 100;
+    const startz = location.z - 100;
+    const endz = location.z + 100;
     //INSANEEEEEEEEEE
     for (let x = startx; x <= endx; x += 16) {
         for (let z = startz; z <= endz; z += 16) {

@@ -39,7 +39,7 @@ function fission(entity, dimension) {
                     eny.setOnFire(20);
                     if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
                         eny.typeId !== "atomic:gen_entity" &&
-                        eny.typeId != "minecraft:player") {
+                        eny.typeId != "minecraft:player" && eny.typeId !== "atomic:plane_bomb") {
                         eny.addTag("atomic:rad_effect");
                     }
                 }
@@ -55,7 +55,7 @@ function fission(entity, dimension) {
                 }
                 entity.dimension.spawnParticle("atomic:nukepart", {
                     x: entity.location.x,
-                    y: entity.location.y - 20,
+                    y: entity.location.y - 30,
                     z: entity.location.z,
                 });
                 // Crater code
@@ -135,6 +135,7 @@ function fission(entity, dimension) {
                 // );
             }
             system.runJob(blockGen());
+            //entity.remove()
         });
     }
     nuclearBomb();
@@ -167,7 +168,7 @@ function fusion(entity, dimension) {
                     minDistance: 1,
                     maxDistance: 100,
                 })) {
-                    if (eny.typeId !== "minecraft:player") {
+                    if (eny.typeId !== "minecraft:player" && eny.typeId !== "atomic:plane_bomb") {
                         eny.kill();
                     }
                 }
@@ -181,7 +182,7 @@ function fusion(entity, dimension) {
                     eny.setOnFire(20);
                     if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
                         eny.typeId !== "atomic:gen_entity" &&
-                        eny.typeId != "minecraft:player") {
+                        eny.typeId != "minecraft:player" && eny.typeId !== "atomic:plane_bomb") {
                         eny.addTag("atomic:rad_effect");
                     }
                 }
@@ -195,7 +196,7 @@ function fusion(entity, dimension) {
                 }
                 entity.dimension.spawnParticle("atomic:nukepart2", {
                     x: entity.location.x,
-                    y: entity.location.y - 26,
+                    y: entity.location.y - 40,
                     z: entity.location.z,
                 });
                 // Crater code
@@ -301,6 +302,7 @@ function fusion(entity, dimension) {
                 // );
             }
             system.runJob(blockGen());
+            entity.remove();
         });
     }
     nuclearBomb();
@@ -415,13 +417,16 @@ world.afterEvents.entitySpawn.subscribe((event) => {
                 if (entity.isOnGround && entity.getDynamicProperty("type") === "tnt") {
                     entity.dimension.createExplosion(entity.location, 6, { causesFire: true });
                     entity.dimension.spawnParticle("atomic:explosioncloud", entity.location);
+                    entity.remove();
                     system.clearRun(sy);
                 }
                 if (entity.isOnGround && entity.getDynamicProperty("type") === "fission") {
                     fission(entity, entity.dimension);
+                    system.clearRun(sy);
                 }
                 if (entity.isOnGround && entity.getDynamicProperty("type") === "fusion") {
                     fusion(entity, entity.dimension);
+                    system.clearRun(sy);
                 }
             }, 1);
         });

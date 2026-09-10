@@ -11,7 +11,7 @@
 		"events": {
 			"mushroom": {
 				"particle_effect": {
-					"effect": "atomic:hbombcloud",
+					"effect": "atomic:hcap",
 					"type": "emitter"
 				}
 			},
@@ -43,7 +43,11 @@
 				"active_time": 200
 			},
 			"minecraft:emitter_lifetime_events": {
-				"creation_event": ["mushroom", "ring", "smoke_ring", "second ring"]
+				"creation_event": ["mushroom", "ring"],
+				"timeline": {
+					"0.45": "smoke_ring",
+					"2.10": "second ring"
+				}
 			},
 			"minecraft:emitter_shape_disc": {
 				"offset": [0, -20, 0],

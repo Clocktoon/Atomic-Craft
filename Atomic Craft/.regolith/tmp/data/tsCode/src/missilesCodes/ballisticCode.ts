@@ -85,21 +85,26 @@ function getGuidePoint(missile: Entity, target: Entity) {
 
 //THIS IS THE IMPORTANT ONE, HAS COMMENTS TO HELP (KINDA)
 function updateMissile(missile: Entity, target: Entity, payload: Entity | null, name: string): Entity | null {
-   if (!missile.isValid || !target.isValid) {
+   if (!target.isValid) {
       return payload;
     }
-  
-    let waypoint = missile.getDynamicProperty("waypoint") as number;
+
+    const active = payload?.isValid ? payload : missile;
+    if (!active.isValid) {
+      return null;
+    }
+
+    let waypoint = active.getDynamicProperty("waypoint") as number;
   
     if (waypoint >= 6 && !payload?.isValid) {
       world.sendMessage("PAYLOAD NOT VAILD")
       return null;
     }
   
-    const active = waypoint >= 6 ? (payload as Entity) : missile;
     const pos = active.location;
 
-    const climbing = (missile.getDynamicProperty("climbing") as boolean | undefined) ?? true;
+    const climbing = !payload &&
+      ((missile.getDynamicProperty("climbing") as boolean | undefined) ?? true);
     if (climbing && waypoint === 0) {
       const liftPoint = {
         x: missile.getDynamicProperty("liftOffX") as number,
@@ -178,7 +183,7 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null, 
   
     // Advance waypoint
     if (waypoint <= 4 && dist < 15) {
-      missile.setDynamicProperty("waypoint", waypoint + 1);
+      active.setDynamicProperty("waypoint", waypoint + 1);
       return payload;
     }
   
@@ -196,14 +201,13 @@ function updateMissile(missile: Entity, target: Entity, payload: Entity | null, 
       const yaw = missile.getDynamicProperty("yaw") as number;
       const pitch = missile.getDynamicProperty("pitch") as number;
   
+      newPayLoad.setDynamicProperty("waypoint", 6);
       newPayLoad.setDynamicProperty("yaw", yaw);
       newPayLoad.setDynamicProperty("pitch", pitch);
       newPayLoad.setProperty("atomic:yaw", yaw);
       newPayLoad.setProperty("atomic:pitch", pitch);
       newPayLoad.setRotation({ x: pitch, y: yaw });
-      system.runTimeout( () => {
-        missile.remove()
-      }, 40)
+      missile.remove();
   
       return newPayLoad;
     }
@@ -258,7 +262,7 @@ if (horizontal < 2) {
     } else if (waypoint <= 5) {
       speed = 1.5;
     } else {
-      speed = 1.9;
+      speed = 1.2;
     }
   
     active.setRotation({
@@ -363,7 +367,7 @@ export function btravelSystem(
       entity.setProperty("atomic:blastoff", true)
       entity.triggerEvent("atomic:onn");
       const missileLoop = system.runInterval(() => {
-        if (!entity.isValid || !target.isValid) {
+        if ((!entity.isValid && !payload?.isValid) || !target.isValid) {
           system.clearRun(missileLoop);
 
           return;
@@ -435,6 +439,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
               const nameId = `hate${x}${y}${z}`;
               let time = 10;
               const timer = system.runInterval(() => {
+                if(!entity.isValid) {
+                  system.clearRun(timer)
+                  return;
+                }
                 if (time < 0) {
                   system.clearRun(timer);
                 }
@@ -488,6 +496,10 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
               const nameId = `hate${location.x}${location.y}${location.z}`;
               let time = 10;
               const timer = system.runInterval(() => {
+                if(!entity.isValid) {
+                  system.clearRun(timer)
+                  return;
+                }
                 if (time < 0) {
                   system.clearRun(timer);
                 }

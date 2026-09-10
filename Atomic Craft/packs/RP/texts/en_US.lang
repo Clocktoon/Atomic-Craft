@@ -166,7 +166,7 @@ radiation.label.three.name=Geiger counter
 radiation.text.three.name=The Geiger counter is an item that can be used to detect radiation in an area and how much you have, it is the main way to do it and is a must have for anyone working with radiation in this addon.
 
 atomic.credits.title.name=Credits
-atomic.credits.text.name=Sound + shockwave system by MapleStar, Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loader systems, Concept for chunk filling system by Conmaster, Updated textures for several items by Clean38 (Massive thank you on this one), new plane model and fat man (gun) by sh8lt8yb8lt8y, Thank you to people from the BOA discord for all their help as well with coding issues
+atomic.credits.text.name=Sound + shockwave system by MapleStar, Bits for ticking system inspired by code by Coolbep and gameza_src's chunk loader systems, Concept for chunk filling system by Conmaster, Updated textures for several items by Clean38 (Massive thank you on this one), new plane model, russian translations and fat man (gun) by sh8lt8yb8lt8y, Thank you to people from the BOA discord for all their help as well with coding issues
 
 atomicsettings.title.name=Bombs of glory settings
 atomicsettings.label.name=Use this to change the settings of the world
@@ -195,3 +195,10 @@ atomic.void.menu.name=Do you want to activate the void bomb?
 atomic.void.menu.yes.name=Yes
 atomic.void.menu.no.name=No
 
+atomic.tablet.loreone.name=Hold :_input_key.sneak: and click nuclear bomb 
+atomic.tablet.loretwo.name=to be able to detonate it from a distance.
+atomic.tablet.lorethree.name=You must be uncrouched to detonate the nuke
+
+
+book.page.one.name=Speech by sgt. Buck:%1Darkness.%2The darkness of war has fallen on us, and we must take the call, our enemy may seem strong, but they are weak, general Blast has ordered me to use our base to defend against the evil, to win this war we must
+book.page.two.name=tap into our own, darker natures, into the things we hide as moral normal villagefolk, but once we win, I can assure you not a single atom bomb shall have needed to be dropped, and your families will be fine, but to get that, we must fight, we must win

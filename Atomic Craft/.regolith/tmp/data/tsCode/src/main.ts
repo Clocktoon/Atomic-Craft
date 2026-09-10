@@ -69,6 +69,7 @@ world.afterEvents.worldLoad.subscribe(() => {
     import("./nuclearTransforms/shockwave.js")
     import("./mortar")
     import("./radiationSystem/oreBreakageRelease")
+    import("./antiMissile")
     //import("./itempickups.js")
     //import("./smokePart.js")
     //import("./gasMaskCode.js")
@@ -90,18 +91,29 @@ world.afterEvents.playerSpawn.subscribe((event) => {
         const container = inventory.container
         const settingsItem = new ItemStack("atomic:atomic_settings", 1)
       
-        for(let i = 0; i < inventory.inventorySize; i++) {
-          const itemLooking = container.getItem(i) 
-            if(itemLooking === undefined)
-              return;
+        // for(let i = 0; i < inventory.inventorySize; i++) {
+        //   const itemLooking = container.getItem(i) 
+        //     if(itemLooking === undefined)
+        //       return;
 
-            if(itemLooking.typeId === "atomic:atomic_settings")
-              return;
+        //     if(itemLooking.typeId === "atomic:atomic_settings")
+        //       return;
+        // }
+        if(player.getDynamicProperty("atomic:settings_item") === undefined) {
+        player.setDynamicProperty("atomic:settings_item", false);
         }
-
+        
         for(let i = 0; i < inventory.inventorySize; i++) {
+
+          if(container.getItem(i)?.typeId === "atomic:atomic_settings")
+              return;
+
+          if(player.getDynamicProperty("atomic:settings_item") === true)
+            return;
+
             if(container.getItem(i) === undefined) {
-              container.setItem(i,settingsItem)
+              container.setItem(i,settingsItem);
+              player.setDynamicProperty("atomic:settings_item", true);
             }
             else {
               player.dimension.spawnItem(settingsItem, player.location)

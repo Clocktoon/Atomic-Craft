@@ -55,6 +55,10 @@ system.runInterval(() => {
         const entities = dimension.getEntities().filter(e => e.typeId !== "minecraft:player");
 
         for (const entity of entities) {
+            const family = entity.getComponent("minecraft:type_family")
+            if(family && family.hasTypeFamily("bogmissile") || entity.typeId === "atomic:hate")
+                continue;
+            
             const exposure = calculateExposure(entity);
             entity.setDynamicProperty("atomic:radiation_exposure", exposure);
             updateDose(entity, exposure);
@@ -62,3 +66,13 @@ system.runInterval(() => {
         }
     }
 }, 20);
+
+world.afterEvents.worldLoad.subscribe(() => {
+    world.afterEvents.playerSpawn.subscribe((ev) => {
+        const player = ev.player
+
+        if(player && typeof player.getDynamicProperty("atomic:radiation_exposure") === "number") {
+            player.setDynamicProperty("atomic:radiation_exposure", undefined)
+        }
+    })
+})

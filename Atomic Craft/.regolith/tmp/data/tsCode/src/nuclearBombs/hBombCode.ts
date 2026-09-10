@@ -16,6 +16,7 @@ import { MessageBox } from "@minecraft/server-ui";
 import { getBlastResistance } from "../generated/blastResistance.js";
 import { addRadiationDose } from "../radiationSystem/radiationManger.js";
 import { distance, directionTo } from "./gadget.js";
+import { createCrater } from "../nuclearTransforms/crater.js";
 
 function makeRandomId() {
   //Taken from a free to use script by Coolbep on https://bedrock-snippets.vercel.app/
@@ -101,34 +102,34 @@ export function hBombFusion(block: Block, playerEntity: Player, dimension: Dimen
               maxDistance: 200,
             });
 
-            for (const eny of block.dimension.getEntities({
-              location: block.location,
-              minDistance: 101,
-              maxDistance: 200,
-            })) {
-              if (eny.typeId === "atomic:plane") continue;
+            // for (const eny of block.dimension.getEntities({
+            //   location: block.location,
+            //   minDistance: 101,
+            //   maxDistance: 200,
+            // })) {
+            //   if (eny.typeId === "atomic:plane") continue;
 
-              const dist = distance(block.location, eny.location);
+            //   const dist = distance(block.location, eny.location);
 
-              const hit = dimension.getBlockFromRay(
-                eny.location,
-                directionTo(block.location, eny.location),
-                { maxDistance: dist },
-              );
+            //   const hit = dimension.getBlockFromRay(
+            //     eny.location,
+            //     directionTo(block.location, eny.location),
+            //     { maxDistance: dist },
+            //   );
 
-              if (hit) {
-                const shielding = getBlastResistance(hit.block);
-                if (shielding >= 1200) {
-                  continue;
-                } else {
-                  const resistance = shielding * 2;
-                  addRadiationDose(eny, 40 - resistance);
-                }
-              } else {
-                eny.setOnFire(20);
-                addRadiationDose(eny, 150);
-              }
-            }
+            //   if (hit) {
+            //     const shielding = getBlastResistance(hit.block);
+            //     if (shielding >= 1200) {
+            //       continue;
+            //     } else {
+            //       const resistance = shielding * 2;
+            //       addRadiationDose(eny, 40 - resistance);
+            //     }
+            //   } else {
+            //     eny.setOnFire(20);
+            //     addRadiationDose(eny, 150);
+            //   }
+            // }
 
             for (const playerRadi of players) {
               const dist = distance(block.location, playerRadi.location);
@@ -166,52 +167,10 @@ export function hBombFusion(block: Block, playerEntity: Player, dimension: Dimen
 
               block.dimension.spawnParticle("atomic:nukepart2", {
                 x: block.location.x,
-                y: block.location.y - 26,
+                y: block.location.y - 50,
                 z: block.location.z,
               });
               
-              // Crater code
-              function* createCrater(
-                location: Vector3,
-                dimensionId: string,
-                block: string,
-                radius: number,
-                maxDepth: number,
-              ) {
-                if(!world.gameRules.tntExplodes)
-                  return;
-                const dim = world.getDimension(dimensionId);
-
-                const cx = Math.floor(location.x);
-                const cy = Math.floor(location.y + 60);
-                const cz = Math.floor(location.z);
-
-                const r = Math.max(1, Math.ceil(radius));
-                const r2 = r * r;
-
-                for (let dx = -r; dx <= r; dx++) {
-                  for (let dz = -r; dz <= r; dz++) {
-                    const dist2 = dx * dx + dz * dz;
-                    if (dist2 > r2) continue;
-
-                    const d = Math.sqrt(dist2);
-                    const t = d / radius;
-                    const depth = Math.floor(maxDepth * (1 - t * t));
-
-                    if (depth <= 0) continue;
-
-                    const x = cx + dx;
-                    const z = cz + dz;
-
-                    for (let dy = 0; dy <= depth; dy++) {
-                      const y = cy - dy;
-                      dim.setBlockType({ x: x, y: y, z: z }, block);
-                      yield;
-                    }
-                  }
-                }
-              }
-
               system.runJob((function* () {
                 yield* createCrater(
                   block.location,

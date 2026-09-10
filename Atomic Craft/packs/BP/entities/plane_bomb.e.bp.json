@@ -9,12 +9,25 @@
 		},
 		"component_groups": {},
 		"components": {
+			"minecraft:type_family": {
+				"family": [
+					"bogmissile"
+				]
+			},
 			"minecraft:collision_box": {
 				"height": 1,
 				"width": 1
 			},
 			"minecraft:health": {
-				"value": 1
+				"value": 10
+			},
+			"minecraft:damage_sensor": {
+				"triggers": [
+					{
+						"cause": "fall",
+						"deals_damage": "no"
+					}
+				]
 			},
 			"minecraft:physics": {
 				"has_collision": true,

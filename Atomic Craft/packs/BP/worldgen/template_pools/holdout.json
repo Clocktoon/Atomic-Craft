@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.0",
+    "format_version": "1.26.40",
     "minecraft:template_pool": {
         "description": {
             "identifier": "atomic:holdout_pool"
@@ -9,7 +9,7 @@
                 "element": {
                     "element_type": "minecraft:single_pool_element",
                     "location": "holdout/holdout",
-                    "processors": "atomic:military_proc"
+                    "processors": "atomic:holdout_proc"
                 }
             }
         ]

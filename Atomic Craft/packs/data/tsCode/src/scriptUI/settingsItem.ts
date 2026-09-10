@@ -169,7 +169,7 @@ class RadiSettings implements ItemCustomComponent {
       const leadPage = new CustomForm(e.source, "lead.title.name")
       .label({translate: "lead.text.name"})
       .button({translate: "atomic.back.button.name"}, () => {
-        steel.close();
+        leadPage.close();
         system.run(() => {
           wikiScreen.show();
         });
@@ -185,7 +185,7 @@ class RadiSettings implements ItemCustomComponent {
       .header({translate: "radiation.label.three.name"})
       .label({translate: "radiation.text.three.name"})
       .button({translate: "atomic.back.button.name"}, () => {
-        steel.close();
+        radiationPage.close();
         system.run(() => {
           wikiScreen.show();
         });

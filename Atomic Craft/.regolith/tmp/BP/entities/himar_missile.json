@@ -21,7 +21,7 @@
     },
     "components": {
       "minecraft:type_family": {
-        "family": ["himar"]
+        "family": ["himar", "bogmissile"]
       },
       "minecraft:health": {
         "value": 100
@@ -71,8 +71,8 @@
       },
       "minecraft:ignore_cannot_be_attacked": {},
       "minecraft:physics": {
-        "has_collision": false,
-        "has_gravity": false
+        "has_collision": true,
+        "has_gravity": true
       },
       "minecraft:movement": {
         "value": 5

@@ -168,7 +168,7 @@ world.beforeEvents.explosion.subscribe((event) => {
     }
 
     playExplosionAudio(dim, center, soundMag);
-    spawnExplosionSmoke(event.dimension, center, mag)
+    dim.spawnParticle("atomic:explosioncustom2", center)
     console.warn("Explosion went off")
   }
 })

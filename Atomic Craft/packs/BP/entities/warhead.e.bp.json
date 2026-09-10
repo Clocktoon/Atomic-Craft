@@ -85,7 +85,7 @@
         ]
       },
       "minecraft:type_family": {
-        "family": ["tmissile"]
+        "family": ["tmissile", "bogmissile"]
       },
       "minecraft:health": {
         "value": 1000

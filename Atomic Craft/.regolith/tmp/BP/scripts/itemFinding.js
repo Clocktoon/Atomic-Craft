@@ -24,6 +24,17 @@ system.runInterval(() => {
                         item.setLore([{ translate: "atomic.uranium_ingot.lore.name" }]);
                         inventory.setItem(i, item);
                     }
+                    if (item.typeId === "atomic:tablet") {
+                        item.setLore([{ translate: "atomic.tablet.loreone.name" },
+                            {
+                                translate: "atomic.tablet.loretwo.name"
+                            },
+                            {
+                                translate: "atomic.tablet.lorethree.name"
+                            }
+                        ]);
+                        inventory.setItem(i, item.clone());
+                    }
                 }
             }
     }
@@ -63,7 +74,7 @@ system.runInterval(() => {
         if (!cache)
             return console.warn("Geiger handheld code broke cause of cache");
         const total = chunkRadiation + cache.blockRadLevels;
-        player.onScreenDisplay.setActionBar({ translate: "atomic.geigertext.name" } + total.toFixed(2));
+        player.onScreenDisplay.setActionBar("§7☢ Radiation:" + total.toFixed(2));
         if (total > 0.1) {
             const intensity = Math.min(total / 10, 1);
             player.playSound("atomic.geig", {

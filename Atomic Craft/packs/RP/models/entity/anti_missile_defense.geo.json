@@ -1,0 +1,79 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.anti_missile_defense",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [0, 1.5, 0]
+			},
+			"bones": [
+				{
+					"name": "bone",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-13, 3, -9], "size": [26, 4, 27], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "wheels",
+					"parent": "bone",
+					"pivot": [-7, 0, -8]
+				},
+				{
+					"name": "leftwheels",
+					"parent": "wheels",
+					"pivot": [-13, 0, -8]
+				},
+				{
+					"name": "lwheel1",
+					"parent": "leftwheels",
+					"pivot": [-14, 0, -8],
+					"cubes": [
+						{"origin": [-15, 0, -9], "size": [2, 5, 5], "uv": [70, 61]}
+					]
+				},
+				{
+					"name": "lwheel2",
+					"parent": "leftwheels",
+					"pivot": [-14, 0, 14],
+					"cubes": [
+						{"origin": [-15, 0, 13], "size": [2, 5, 5], "uv": [70, 61]}
+					]
+				},
+				{
+					"name": "rightwheels",
+					"parent": "wheels",
+					"pivot": [13, 0, 6]
+				},
+				{
+					"name": "rwheel1",
+					"parent": "rightwheels",
+					"pivot": [14, 4, -7],
+					"cubes": [
+						{"origin": [13, 0, -9], "size": [2, 5, 5], "uv": [70, 31]}
+					]
+				},
+				{
+					"name": "rwheel2",
+					"parent": "rightwheels",
+					"pivot": [14, 0, 14],
+					"cubes": [
+						{"origin": [13, 0, 13], "size": [2, 5, 5], "uv": [70, 31]}
+					]
+				},
+				{
+					"name": "missileshooter",
+					"parent": "bone",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-9, 7, -2], "size": [18, 34, 17], "pivot": [0, 6, 13], "rotation": [12.5, 0, 0], "uv": [0, 31]}
+					]
+				}
+			]
+		}
+	]
+}
