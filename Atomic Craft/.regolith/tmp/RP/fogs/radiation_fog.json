@@ -1,0 +1,77 @@
+{
+  "format_version": "1.26.0",
+  "minecraft:fog_settings": {
+    "description": {
+      "identifier": "atomic:radiation_fog"
+    },
+    "distance": {
+      "air": {
+        "fog_start": 50,
+        "fog_end": 150,
+        "fog_color": "#617048",
+        "render_distance_type": "render"
+      },
+      "water": {
+        "fog_start": 30,
+        "fog_end": 100,
+        "fog_color": "#808080",
+        "render_distance_type": "render"
+      },
+      "lava": {
+        "fog_start": 20,
+        "fog_end": 120,
+        "fog_color": "#4a5130",
+        "render_distance_type": "render"
+      },
+      "lava_resistance": {
+        "fog_start": 50,
+        "fog_end": 120,
+        "fog_color": "#626b43",
+        "render_distance_type": "render"
+      },
+      "powder_snow": {
+        "fog_start": 10,
+        "fog_end": 30,
+        "fog_color": "#3f4a2d",
+        "render_distance_type": "render"
+      },
+      "weather": {
+        "fog_start": 30,
+        "fog_end": 50,
+        "fog_color": "#303821",
+        "render_distance_type": "render"
+      }
+    },
+    "volumetric": {
+      "density": {
+        "air": {
+          "max_density": 0.18,
+          "zero_density_height": 140.0,
+          "max_density_height": 55.0
+        },
+        "water": {
+          "max_density": 0.45,
+          "uniform": true
+        }
+      },
+      "media_coefficients": {
+        "air": {
+          "scattering": [0.06, 0.075, 0.035],
+          "absorption": [0.08, 0.1, 0.05]
+        },
+        "water": {
+          "scattering": [0.01811, 0.02126, 0.027953],
+          "absorption": [0.2, 0.07874, 0.083465]
+        }
+      },
+      "henyey_greenstein_g": {
+        "air": {
+          "henyey_greenstein_g": 0.45
+        },
+        "water": {
+          "henyey_greenstein_g": 0.6
+        }
+      }
+    }
+  }
+}

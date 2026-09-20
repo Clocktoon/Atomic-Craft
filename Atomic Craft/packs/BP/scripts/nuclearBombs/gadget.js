@@ -4,6 +4,7 @@ import { nuclearArea } from "../nuclearTransforms/volumeCode.js";
 import { MessageBox } from "@minecraft/server-ui";
 import { getBlastResistance } from "../generated/blastResistance.js";
 import { addRadiationDose } from "../radiationSystem/radiationManger.js";
+import { playExplosionAudio } from "./nuclearSound.js";
 function length(v) {
     return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
@@ -38,6 +39,9 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
             .show()
             .then((rep) => {
             if (rep.selection === 1) {
+                if (block.typeId === "atomic:gadget_bomb") {
+                    block.setPermutation(block.permutation.withState("atomic:activated", true));
+                }
                 nuclearBomb();
             }
         })
@@ -156,44 +160,6 @@ export function gadgetCode(block, playerEntity, dimension, doMenu) {
                     })());
                     yield;
                     // Sound code by MapleStar // TC (discord)
-                    function playExplosionAudio(dimension, center, magnitude) {
-                        if (!center)
-                            return;
-                        const players = dimension.getPlayers();
-                        const explosionRadius = Math.min(Math.max(8, Math.floor(Math.cbrt(magnitude) * 3)), 60);
-                        const maxHearingDistance = explosionRadius * 24;
-                        const shakeDistance = explosionRadius * 8;
-                        players.forEach((player) => {
-                            const playerLocation = player.location;
-                            const dx = playerLocation.x - center.x;
-                            const dy = playerLocation.y - center.y;
-                            const dz = playerLocation.z - center.z;
-                            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                            if (distance > maxHearingDistance)
-                                return;
-                            const maxEffectRadius = explosionRadius * 2;
-                            const distanceRatio = Math.min(1, distance / maxHearingDistance);
-                            const boomVolume = Math.max(0.2, 2.5 * (1 - distanceRatio * 0.8));
-                            const boomPitch = 0.8 + Math.random() * 0.2 - distanceRatio * 0.1;
-                            const delayTicks = Math.min(100, Math.floor(distance / 17));
-                            const delayMs = delayTicks * 50;
-                            system.runTimeout(() => {
-                                try {
-                                    player.playSound("atomic.nukesound", {
-                                        volume: boomVolume,
-                                        pitch: boomPitch,
-                                    });
-                                    if (distance <= shakeDistance) {
-                                        const shakeIntensity = Math.max(0.1, 1 - distance / shakeDistance);
-                                        dimension.runCommand(`execute as "${player.name}" at @s run camerashake add @s ${shakeIntensity.toFixed(2)} 1 rotational`);
-                                    }
-                                }
-                                catch (err) {
-                                    player.sendMessage("error with sound and shake code");
-                                }
-                            }, delayMs);
-                        });
-                    }
                     if (!playerMain)
                         return;
                     const playdi = playerMain.dimension;

@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.40",
+    "format_version": "1.26.50",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:siren",
@@ -31,10 +31,10 @@
                 "has_gravity": true
             },
             "minecraft:interact": {
-                "interactions": {
+                "interactions": [{
                     "interact_text": "action.interact.use",
                     "swing": false
-                }
+                }]
             }
         },
         "events": {}

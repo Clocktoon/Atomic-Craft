@@ -5,6 +5,7 @@
 export function applyRadiationEffects(entity, dimension) {
     if (!entity.isValid)
         return;
+    const player = entity;
     const dose = entity.getDynamicProperty("atomic:radiation_dose") ?? 0;
     // Fully recovered
     if (dose < 10) {
@@ -14,6 +15,10 @@ export function applyRadiationEffects(entity, dimension) {
         entity.removeEffect("slowness");
         entity.removeEffect("poison");
         entity.removeEffect("blindness");
+        if (player) {
+            if (player.fogSettings.getTags().includes("radiationfog"))
+                player.fogSettings.remove("radiationfog");
+        }
         return;
     }
     applyOrRemove(entity, "nausea", dose >= 10, 0);
@@ -24,6 +29,10 @@ export function applyRadiationEffects(entity, dimension) {
     applyOrRemove(entity, "blindness", dose >= 150, 0);
     applyOrRemove(entity, "wither", dose >= 500, 3);
     // Escalating damage if deeper into radiation sickness
+    if (dose >= 50) {
+        if (player)
+            player.fogSettings.push("atomic:radiation_fog", "radiationfog");
+    }
     if (dose >= 400) {
         entity.applyDamage(4);
     }

@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.40",
+    "format_version": "1.26.50",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:anti_missile",
@@ -30,23 +30,17 @@
                 ]
             },
             "minecraft:inventory": {
-                "container_type": "inventory",
+                "container_type": "container",
                 "inventory_size": 10,
-                "can_be_siphoned_from": true
+                "can_be_siphoned_from": true,
+                "private": false
             },
-            "minecraft:interact": {
-                "interactions": [
-                    {
-                        "on_interact": {
-                            "filters": {
-                                "test": "is_family",
-                                "subject": "other",
-                                "value": "player"
-                            }
-                        }
-                    }
-                ]
-            },
+             "minecraft:interact": {
+                    "interactions": [{
+                        "interact_text": "action.interact.use.name",
+                        "cooldown": 7
+                    }]
+                },
             "minecraft:movement.basic": {
                 "max_turn": 30
             },

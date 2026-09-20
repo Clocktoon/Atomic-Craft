@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.40",
+    "format_version": "1.26.50",
     "minecraft:block": {
         "description": {
             "identifier": "atomic:atom_bomb",
@@ -31,17 +31,7 @@
             "minecraft:destructible_by_explosion": true,
             "minecraft:light_dampening": 8,
             "minecraft:light_emission": 0,
-            "atomic:atom_bomb": {},
-            "minecraft:redstone_conductivity": {
-            "redstone_conductor": true
-            },
-        "minecraft:redstone_consumer": {
-        "min_power": 1,
-        "propagates_power": true
-        },
-        "atomic:redstone_nuke": {
-            "atom": true
-        },
+            
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 30,
                 "item_specific_speeds": [
@@ -70,9 +60,26 @@
                         "destroy_speed": 3
                     }
                 ]
-            }
+            },
+                    "minecraft:redstone_conductivity": {
+            "redstone_conductor": true
+            },
+        "minecraft:redstone_consumer": {
+        "min_power": 1,
+        "propagates_power": true
+        }
         },
         "permutations": [
+            {
+                "condition": "!q.block_state('atomic:activated')",
+                "components": {
+                    "atomic:redstone_nuke": {
+                    "atom": true
+                    },
+                    "atomic:atom_bomb": {}
+                    
+                }
+            },
             {
                 "condition": "q.block_state('minecraft:cardinal_direction') == 'north'",
                 "components": {

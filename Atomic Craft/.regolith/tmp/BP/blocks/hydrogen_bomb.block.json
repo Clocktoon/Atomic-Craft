@@ -1,5 +1,5 @@
 {
-	"format_version": "1.26.40",
+	"format_version": "1.26.50",
 	"minecraft:block": {
 		"description": {
 			"identifier": "atomic:hydrogen_bomb",
@@ -56,16 +56,21 @@
 			},
 			"minecraft:light_dampening": 15,
 			"minecraft:light_emission": 0,
-			"atomic:hb_explode": {},
 			"minecraft:redstone_consumer": {
-				"min_power": 1,
-				"propagates_power": false
-			},
-			"atomic:redstone_nuke": {
-				"hbomb": true
+					"min_power": 1,
+					"propagates_power": false
 			}
 		},
 		"permutations": [
+			{
+				"condition": "!q.block_state('atomic:activated')",
+				"components": {
+					"atomic:hb_explode": {},
+					"atomic:redstone_nuke": {
+					"hbomb": true
+					}
+				}
+			},
 			{
 				"condition": "q.block_state('minecraft:cardinal_direction') == 'north'",
 				"components": {

@@ -24,17 +24,17 @@ function fission(entity, dimension) {
             function* blockGen() {
                 let radius = 30;
                 //Radiation and burning of mobs
-                const players = entity.dimension.getPlayers({
+                const players = dimension.getPlayers({
                     location: entity.location,
                     minDistance: 1,
                     maxDistance: 100,
                 });
-                for (const eny of entity.dimension.getEntities({
+                for (const eny of dimension.getEntities({
                     location: entity.location,
                     minDistance: 1,
                     maxDistance: 100,
                 })) {
-                    if (eny.typeId === "atomic:plane")
+                    if (eny.typeId === "atomic:plane" || eny.typeId === "atomic:plane_bomb")
                         continue;
                     eny.setOnFire(20);
                     if (eny.runCommand(`testfor @s[hasitem={item=atomic:gas_mask,location=slot.armor.head}]`).successCount <= 0 &&
@@ -53,7 +53,7 @@ function fission(entity, dimension) {
                         fadeTime: { fadeInTime: 1, holdTime: 3, fadeOutTime: 1 },
                     });
                 }
-                entity.dimension.spawnParticle("atomic:nukepart", {
+                dimension.spawnParticle("atomic:nukepart", {
                     x: entity.location.x,
                     y: entity.location.y - 30,
                     z: entity.location.z,
@@ -104,7 +104,7 @@ function fission(entity, dimension) {
                     });
                 }
                 //Shockwave and explosion sound
-                playExplosionAudio(dimension, entity.location, 260);
+                playExplosionAudio(entity.dimension, entity.location, 260);
                 // shockwaveBlast(
                 //   dimension,
                 //   block.location,
@@ -158,12 +158,16 @@ function fusion(entity, dimension) {
             function* blockGen() {
                 let radius = 30;
                 //Radiation and burning of mobs
-                const players = entity.dimension.getPlayers({
+                if (!entity || !entity.isValid) {
+                    console.warn("Plane bomb invalid for HBomb explosion to keep going, line 38 in ts version");
+                    return;
+                }
+                const players = dimension.getPlayers({
                     location: entity.location,
                     minDistance: 1,
                     maxDistance: 100,
                 });
-                for (const eny of entity.dimension.getEntities({
+                for (const eny of dimension.getEntities({
                     location: entity.location,
                     minDistance: 1,
                     maxDistance: 100,
@@ -172,7 +176,7 @@ function fusion(entity, dimension) {
                         eny.kill();
                     }
                 }
-                for (const eny of entity.dimension.getEntities({
+                for (const eny of dimension.getEntities({
                     location: entity.location,
                     minDistance: 101,
                     maxDistance: 200,
@@ -229,10 +233,8 @@ function fusion(entity, dimension) {
                         }
                     }
                 }
-                system.runJob((function* () {
-                    yield* createCrater(entity.location, entity.dimension.id, "minecraft:air", 70, 70);
-                    world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
-                })());
+                yield* createCrater(entity.location, entity.dimension.id, "minecraft:air", 70, 70);
+                world.tickingAreaManager.removeTickingArea(`nukearea${random}`);
                 // Sound code by MapleStar // TC (discord)
                 function playExplosionAudio(dimension, center, magnitude) {
                     if (!center)
@@ -283,7 +285,16 @@ function fusion(entity, dimension) {
                 //   1,
                 // );
                 //Nuke Code!!!
-                nuclearArea(entity.dimension.id, entity.location, entity, 352, 208, 250);
+                void nuclearArea(entity.dimension.id, entity.location, entity, 352, 208, 250).then(() => {
+                    if (entity.isValid) {
+                        entity.remove();
+                    }
+                }).catch((error) => {
+                    console.warn(`Fusion nuclear area failed: ${error}`);
+                    if (entity.isValid) {
+                        entity.remove();
+                    }
+                });
                 const volume = new BlockVolume({
                     x: entity.location.x - 20,
                     y: entity.location.y - 20,
@@ -302,7 +313,6 @@ function fusion(entity, dimension) {
                 // );
             }
             system.runJob(blockGen());
-            entity.remove();
         });
     }
     nuclearBomb();

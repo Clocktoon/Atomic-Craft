@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.40",
+    "format_version": "1.26.50",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:plane",
@@ -21,10 +21,10 @@
                     "value": 0.09
                 },
                 "minecraft:interact": {
-                    "interactions": {
+                    "interactions": [{
                         "interact_text": "action.interact.use.name",
                         "cooldown": 7
-                    }
+                    }]
                 }
             }
         },

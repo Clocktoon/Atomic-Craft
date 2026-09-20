@@ -17,7 +17,7 @@
 				"active_time": 130
 			},
 			"minecraft:emitter_shape_disc": {
-				"offset": [1, 14, 1],
+				"offset": [1, 25, 1],
 				"radius": 18,
 				"surface_only": true,
 				"direction": [0, 0.1, 0]

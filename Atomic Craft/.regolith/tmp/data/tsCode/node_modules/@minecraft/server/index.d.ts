@@ -15,7 +15,7 @@
  * ```json
  * {
  *   "module_name": "@minecraft/server",
- *   "version": "2.9.0"
+ *   "version": "2.10.0"
  * }
  * ```
  *
@@ -46,7 +46,9 @@ export enum AimAssistTargetMode {
  * function Block.getComponent.
  */
 export enum BlockComponentTypes {
+    DynamicProperties = 'minecraft:dynamic_properties',
     FluidContainer = 'minecraft:fluid_container',
+    Instrument = 'minecraft:instrument_sound',
     /**
      * @remarks
      * Represents the inventory of a block in the world. Used with
@@ -156,8 +158,8 @@ export enum BlockVolumeIntersection {
 }
 
 /**
- * An enum of error reasons relating to using {@link
- * ItemBookComponent}.
+ * An enum of error reasons relating to using
+ * {@link ItemBookComponent}.
  */
 export enum BookErrorReason {
     /**
@@ -190,6 +192,51 @@ export enum BookErrorReason {
 export enum ButtonState {
     Pressed = 'Pressed',
     Released = 'Released',
+}
+
+/**
+ * Represents the type of shake to apply to the camera.
+ */
+export enum CameraShakeType {
+    /**
+     * @remarks
+     * A positional shake that moves the camera along its axes.
+     *
+     */
+    Positional = 'Positional',
+    /**
+     * @remarks
+     * A rotational shake that rotates the camera around its axes.
+     *
+     */
+    Rotational = 'Rotational',
+}
+
+/**
+ * An enumeration for the clone modes used when cloning blocks.
+ */
+export enum CloneMode {
+    /**
+     * @remarks
+     * Clones the blocks from the source region to the destination,
+     * leaving the source intact.
+     *
+     */
+    Copy = 0,
+    /**
+     * @remarks
+     * Clones the blocks from the source region to the destination,
+     * allowing the source and destination regions to overlap.
+     *
+     */
+    ForceCopy = 1,
+    /**
+     * @remarks
+     * Clones the blocks from the source region to the destination
+     * and replaces the source region with air.
+     *
+     */
+    Move = 2,
 }
 
 /**
@@ -229,22 +276,21 @@ export enum CommandPermissionLevel {
 }
 
 /**
- * Reasons that the {@link
- * @minecraft/server.ContainerRulesError} was thrown.
+ * Reasons that the {@link ContainerRulesError} was thrown.
  */
 export enum ContainerRulesErrorReason {
     /**
      * @remarks
-     * Thrown when trying to add item that was defined in {@link
-     * ContainerRules.bannedItems}.
+     * Thrown when trying to add item that was defined in
+     * {@link ContainerRules.bannedItems}.
      *
      */
     BannedItem = 'BannedItem',
     /**
      * @remarks
      * Thrown when trying to add item with `Storage Item` component
-     * to container with {@link
-     * ContainerRules.allowNestedStorageItems} set to false.
+     * to container with
+     * {@link ContainerRules.allowNestedStorageItems} set to false.
      *
      */
     NestedStorageItem = 'NestedStorageItem',
@@ -386,8 +432,7 @@ export enum CustomCommandParamType {
     ItemType = 'ItemType',
     /**
      * @remarks
-     * Location parameter provides a {@link
-     * @minecraft/server.Location}.
+     * Location parameter provides a vector position.
      *
      */
     Location = 'Location',
@@ -1928,8 +1973,8 @@ export enum GameRule {
 }
 
 /**
- * Describes the graphics mode of a client. Used by {@link
- * Player.graphicsMode}
+ * Describes the graphics mode of a client. Used by
+ * {@link Player.graphicsMode}
  */
 export enum GraphicsMode {
     /**
@@ -2022,8 +2067,9 @@ export enum HudVisibility {
 
 /**
  * All the different input buttons that are supported. Use with
- * {@link InputInfo.getButtonState} via {@link
- * Player.inputInfo} or {@link PlayerButtonInputAfterEvent} via
+ * {@link InputInfo.getButtonState} via
+ * {@link Player.inputInfo} or
+ * {@link PlayerButtonInputAfterEvent} via
  * {@link WorldAfterEvents.playerButtonInput}
  */
 export enum InputButton {
@@ -2079,10 +2125,10 @@ export enum InputMode {
 }
 
 /**
- * Input permission categories. Used by {@link
- * PlayerInputPermissionCategoryChangeAfterEvent} to specify
- * which category was changed and {@link
- * PlayerInputPermissions} to get or set permissions.
+ * Input permission categories. Used by
+ * {@link PlayerInputPermissionCategoryChangeAfterEvent} to
+ * specify which category was changed and
+ * {@link PlayerInputPermissions} to get or set permissions.
  */
 export enum InputPermissionCategory {
     /**
@@ -2167,6 +2213,7 @@ export enum InputPermissionCategory {
  * function ItemStack.getComponent.
  */
 export enum ItemComponentTypes {
+    BlockDynamicProperties = 'minecraft:block_actor_dynamic_properties',
     /**
      * @remarks
      * The minecraft:book component.
@@ -2832,8 +2879,7 @@ export enum StructureSaveMode {
 }
 
 /**
- * The reason that the {@link
- * @minecraft/server.TickingAreaError} was thrown.
+ * The reason that the {@link TickingAreaError} was thrown.
  */
 export enum TickingAreaErrorReason {
     /**
@@ -3025,10 +3071,14 @@ export type BlockComponentReturnType<T extends string> = T extends keyof BlockCo
     : BlockCustomComponentInstance;
 
 export type BlockComponentTypeMap = {
+    dynamic_properties: BlockDynamicPropertiesComponent;
     fluid_container: BlockFluidContainerComponent;
+    instrument_sound: BlockInstrumentComponent;
     inventory: BlockInventoryComponent;
     map_color: BlockMapColorComponent;
+    'minecraft:dynamic_properties': BlockDynamicPropertiesComponent;
     'minecraft:fluid_container': BlockFluidContainerComponent;
+    'minecraft:instrument_sound': BlockInstrumentComponent;
     'minecraft:inventory': BlockInventoryComponent;
     'minecraft:map_color': BlockMapColorComponent;
     'minecraft:movable': BlockMovableComponent;
@@ -3047,9 +3097,7 @@ export type BlockComponentTypeMap = {
 
 /**
  * Type alias used by the {@link BlockPermutation} matches and
- * resolve functions to narrow block state argument types to
- * those mapped by {@link
- * @minecraft/vanilla-data.BlockStateMapping}.
+ * resolve functions to narrow block state argument types.
  */
 export type BlockStateArg<T> = T extends `${minecraftvanilladata.MinecraftBlockTypes}`
     ? T extends keyof minecraftvanilladata.BlockStateMapping
@@ -3205,6 +3253,7 @@ export type ItemComponentReturnType<T extends string> = T extends keyof ItemComp
     : ItemCustomComponentInstance;
 
 export type ItemComponentTypeMap = {
+    block_actor_dynamic_properties: ItemBlockDynamicPropertiesComponent;
     book: ItemBookComponent;
     compostable: ItemCompostableComponent;
     cooldown: ItemCooldownComponent;
@@ -3213,6 +3262,7 @@ export type ItemComponentTypeMap = {
     enchantable: ItemEnchantableComponent;
     food: ItemFoodComponent;
     inventory: ItemInventoryComponent;
+    'minecraft:block_actor_dynamic_properties': ItemBlockDynamicPropertiesComponent;
     'minecraft:book': ItemBookComponent;
     'minecraft:compostable': ItemCompostableComponent;
     'minecraft:cooldown': ItemCooldownComponent;
@@ -3309,7 +3359,7 @@ export class AimAssistCategorySettings {
      * Optional. Default targeting priority used for block types
      * not provided to setBlockPriorities.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     defaultBlockPriority: number;
@@ -3318,7 +3368,7 @@ export class AimAssistCategorySettings {
      * Optional. Default targeting priority used for entity types
      * not provided to setEntityPriorities.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     defaultEntityPriority: number;
@@ -3376,7 +3426,7 @@ export class AimAssistCategorySettings {
      * @remarks
      * Sets the priority settings used for block targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockPriorities
      * A record mapping block Ids to their priority settings.
@@ -3387,7 +3437,7 @@ export class AimAssistCategorySettings {
      * @remarks
      * Sets the priority settings used for block targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setBlockTagPriorities(blockTagPriorities: Record<string, number>): void;
@@ -3395,7 +3445,7 @@ export class AimAssistCategorySettings {
      * @remarks
      * Sets the priority settings used for entity targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param entityPriorities
      * A record mapping entity Ids to their priority settings.
@@ -3406,7 +3456,7 @@ export class AimAssistCategorySettings {
      * @remarks
      * Sets the priority settings used for entity targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setEntityTypeFamilyPriorities(entityTypeFamilyPriorities: Record<string, number>): void;
@@ -3514,7 +3564,7 @@ export class AimAssistPresetSettings {
      * Optional. Default aim-assist category Id used for items not
      * provided to setItemSettings.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     defaultItemSettings?: string;
@@ -3522,7 +3572,7 @@ export class AimAssistPresetSettings {
      * @remarks
      * Optional. Aim-assist category Id used for an empty hand.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     handSettings?: string;
@@ -3598,7 +3648,7 @@ export class AimAssistPresetSettings {
      * Sets the list of block tags to exclude from aim assist
      * targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setExcludedBlockTagTargets(blockTagTargets?: string[]): void;
@@ -3607,7 +3657,7 @@ export class AimAssistPresetSettings {
      * Sets the list of block Ids to exclude from aim assist
      * targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setExcludedBlockTargets(blockTargets?: string[]): void;
@@ -3616,7 +3666,7 @@ export class AimAssistPresetSettings {
      * Sets the list of entity Ids to exclude from aim assist
      * targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setExcludedEntityTargets(entityTargets?: string[]): void;
@@ -3625,7 +3675,7 @@ export class AimAssistPresetSettings {
      * Sets the list of entity type families to exclude from aim
      * assist targeting.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     setExcludedEntityTypeFamilyTargets(entityTypeFamilyTargets?: string[]): void;
@@ -3633,7 +3683,7 @@ export class AimAssistPresetSettings {
      * @remarks
      * Sets the per-item aim-assist category Ids.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param itemSettings
      * A record mapping item Ids to aim-assist category Ids.
@@ -3645,7 +3695,7 @@ export class AimAssistPresetSettings {
      * Sets the list of item Ids that will target liquid blocks
      * with aim-assist when being held.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param items
      * An array of item Ids.
@@ -3677,7 +3727,7 @@ export class AimAssistRegistry {
      * @remarks
      * Adds an aim-assist category to the registry.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param category
      * The category settings used to create the new category.
@@ -3698,7 +3748,7 @@ export class AimAssistRegistry {
      * @remarks
      * Adds an aim-assist preset to the registry.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param preset
      * The preset settings used to create the new preset.
@@ -3727,7 +3777,7 @@ export class AimAssistRegistry {
      * @remarks
      * Gets the category associated with the provided Id.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * The category object if it exists, otherwise returns
@@ -3738,7 +3788,7 @@ export class AimAssistRegistry {
      * @remarks
      * Gets the preset associated with the provided Id.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param presetId
      * The Id of the preset to retrieve. Must have a namespace.
@@ -4099,7 +4149,7 @@ export class Block {
      * Returns the total brightness level of light shining on a
      * certain block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * The brightness level on the block.
@@ -4142,7 +4192,7 @@ export class Block {
      * Returns the brightness level of light shining from the sky
      * on a certain block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * The brightness level on the block.
@@ -4327,7 +4377,7 @@ export class Block {
      * Sets the block in the dimension to the state of the
      * permutation.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param permutation
      * Permutation that contains a set of property states for the
@@ -4343,7 +4393,7 @@ export class Block {
      * @remarks
      * Sets the type of block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockType
      * Identifier of the type of block to apply - for example,
@@ -4362,7 +4412,7 @@ export class Block {
      * Sets whether this block has a water logged state - for
      * example, whether stairs are submerged within water.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param isWaterlogged
      * true if the block should have water within it.
@@ -4652,7 +4702,7 @@ export class BlockComponentRegistry {
     private constructor();
     /**
      * @remarks
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -4722,7 +4772,7 @@ export class BlockContainerClosedAfterEvent extends BlockEvent {
      * @remarks
      * The source of the block container being closed.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     closeSource: ContainerAccessSource;
@@ -4739,9 +4789,9 @@ export class BlockContainerClosedAfterEventSignal {
      * Adds a callback that will be called when a block container
      * is closed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -4753,9 +4803,9 @@ export class BlockContainerClosedAfterEventSignal {
      * Removes a callback from being called when a block container
      * is closed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: BlockContainerClosedAfterEvent) => void): void;
@@ -4772,7 +4822,7 @@ export class BlockContainerOpenedAfterEvent extends BlockEvent {
      * @remarks
      * The source of the block container being opened.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     openSource: ContainerAccessSource;
@@ -4789,9 +4839,9 @@ export class BlockContainerOpenedAfterEventSignal {
      * Adds a callback that will be called when a block container
      * is opened.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -4803,9 +4853,9 @@ export class BlockContainerOpenedAfterEventSignal {
      * Removes a callback from being called when a block container
      * is opened.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: BlockContainerOpenedAfterEvent) => void): void;
@@ -4818,6 +4868,109 @@ export class BlockContainerOpenedAfterEventSignal {
 export class BlockCustomComponentInstance extends BlockComponent {
     private constructor();
     readonly customComponentParameters: CustomComponentParameters;
+}
+
+/**
+ * Represents the dynamic properties of a block in the world.
+ * Only available with block entities. Up to 1KB per content
+ * pack, per block entity in their dynamic properties storage.
+ * @example rememberPlayerInteraction.ts
+ * ```typescript
+ * import { system } from '@minecraft/server-v2';
+ *
+ * system.beforeEvents.startup.subscribe(initEvent => {
+ *   initEvent.blockComponentRegistry.registerCustomComponent('scripting_demo_pack:block_entity_onPlayerInteract', {
+ *     onPlayerInteract: e => {
+ *       if (e.player === undefined) {
+ *         return;
+ *       }
+ *
+ *       const dynamicProperties = e.block.getComponent('minecraft:dynamic_properties');
+ *       if (!dynamicProperties) {
+ *         return;
+ *       }
+ *
+ *       const lastInteractorValue = dynamicProperties.get('last_interactor');
+ *       const lastVisitor = typeof lastInteractorValue === 'string' ? lastInteractorValue : 'unknown';
+ *       const lastTick = Number(dynamicProperties.get('last_interact_tick') ?? system.currentTick);
+ *       const ticksAgo = Math.max(0, system.currentTick - lastTick);
+ *
+ *       if (lastVisitor === e.player.name) {
+ *         e.player.sendMessage("do you remember that player? I 'member, it was here " + String(ticksAgo) + ' ticks ago!');
+ *       } else {
+ *         e.player.sendMessage("oh, I don't remember that player");
+ *       }
+ *
+ *       dynamicProperties.set('last_interactor', e.player.name);
+ *       dynamicProperties.set('last_interact_tick', system.currentTick);
+ *     },
+ *   });
+ * });
+ * ```
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class BlockDynamicPropertiesComponent extends BlockComponent {
+    private constructor();
+    static readonly componentId = 'minecraft:dynamic_properties';
+    /**
+     * @remarks
+     * Returns a DynamicProperty that was stored with the provided
+     * key. Keys are unique to each content pack and cannot be used
+     * to retrieve dynamic properties set from other content packs.
+     * Returns undefined if the key was not found.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link InvalidBlockComponentError}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    get(key: string): boolean | number | string | Vector3 | undefined;
+    /**
+     * @remarks
+     * Sets a dynamic property with the provided key and value.
+     * Keys are unique to each content pack and cannot be used to
+     * set dynamic properties for other content packs. Values can
+     * be either a Number, a String or a Vector3. Setting a
+     * property with an undefined value will remove it from the
+     * storage. Storage size usage is counted towards the 1KBytes
+     * limit per content pack.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link InvalidBlockComponentError}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    set(key: string, value?: boolean | number | string | Vector3): void;
+    /**
+     * @remarks
+     * Returns the current size, in bytes, of the dynamic
+     * properties storage for this block entity. The byte count
+     * only accounts for properties set by your content pack. The
+     * 1KBytes limit is per content pack.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link InvalidBlockComponentError}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    totalByteCount(): number;
 }
 
 /**
@@ -4873,9 +5026,9 @@ export class BlockExplodeAfterEventSignal {
      * Adds a callback that will be called when an explosion
      * occurs, as it impacts individual blocks.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: BlockExplodeAfterEvent) => void): (arg0: BlockExplodeAfterEvent) => void;
@@ -4884,9 +5037,9 @@ export class BlockExplodeAfterEventSignal {
      * Removes a callback from being called when an explosion
      * occurs, as it impacts individual blocks.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: BlockExplodeAfterEvent) => void): void;
@@ -4903,7 +5056,7 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * @remarks
      * Relative fill level of the fluid container.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     fillLevel: number;
@@ -4911,7 +5064,7 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * @remarks
      * Custom color of the fluid in the container.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     fluidColor: RGBA;
@@ -4921,7 +5074,7 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * Adds a dye to the fluid. The dye color is combined with any
      * existing custom color.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -4930,7 +5083,7 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * @remarks
      * Gets the current fluid type in the container.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -4939,7 +5092,7 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * @remarks
      * Sets the current fluid type in the container.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -4949,11 +5102,62 @@ export class BlockFluidContainerComponent extends BlockComponent {
      * Sets a potion item in the container. Changes the container's
      * fluid type to potion.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
     setPotion(itemStack: ItemStack): void;
+}
+
+/**
+ * Represents the instruments a block can have assigned to it's
+ * up and down faces.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class BlockInstrumentComponent extends BlockComponent {
+    private constructor();
+    static readonly componentId = 'minecraft:instrument_sound';
+    /**
+     * @remarks
+     * A getter method to get the name of an instrument for a given
+     * valid face Direction.
+     *
+     * @param face
+     * the face Direction to get the instrument name for.
+     * @returns
+     * Returns the name of the instrument for a given valid face
+     * Direction.
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.InvalidArgumentError}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    getInstrumentName(face: Direction): string;
+    /**
+     * @remarks
+     * plays the instrument sound for a given valid face Direction
+     * at the components block location using optional
+     * WorldSoundOptions.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param face
+     * the face Direction for which instrument sound to play.
+     * @param soundOptions
+     * optional WorldSoundOptions to use when playing the
+     * insturment sound; if omitted the default values are used.
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.InvalidArgumentError}
+     *
+     * {@link LocationInUnloadedChunkError}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    playInstrumentSound(face: Direction, soundOptions?: WorldSoundOptions): void;
 }
 
 /**
@@ -5025,13 +5229,13 @@ export class BlockLocationIterator implements Iterable<Vector3> {
     private constructor();
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     [Symbol.iterator](): Iterator<Vector3>;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     next(): IteratorResult<Vector3>;
@@ -5095,8 +5299,8 @@ export class BlockMovableComponent extends BlockComponent {
 /**
  * Contains the combination of type {@link BlockType} and
  * properties (also sometimes called block state) which
- * describe a block (but does not belong to a specific {@link
- * Block}).
+ * describe a block (but does not belong to a specific
+ * {@link Block}).
  * @example addTranslatedSign.ts
  * ```typescript
  * import { world, BlockPermutation, BlockSignComponent, BlockComponentTypes, DimensionLocation } from '@minecraft/server';
@@ -5439,7 +5643,7 @@ export class BlockRecordPlayerComponent extends BlockComponent {
      * Ejects the currently set record of this record-playing
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -5464,7 +5668,7 @@ export class BlockRecordPlayerComponent extends BlockComponent {
      * Pauses the currently playing record of this record-playing
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -5473,7 +5677,7 @@ export class BlockRecordPlayerComponent extends BlockComponent {
      * @remarks
      * Plays the currently set record of this record-playing block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -5482,7 +5686,7 @@ export class BlockRecordPlayerComponent extends BlockComponent {
      * @remarks
      * Sets and plays a record based on an item type.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param startPlaying
      * Defaults to: true
@@ -5712,7 +5916,7 @@ export class BlockSignComponent extends BlockComponent {
      * @remarks
      * Sets the text of the sign component.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param message
      * The message to set on the sign. If set to a string, then
@@ -5732,7 +5936,7 @@ export class BlockSignComponent extends BlockComponent {
      * @remarks
      * Sets the dye color of the text.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param color
      * The dye color to apply to the sign or undefined to clear the
@@ -5750,7 +5954,7 @@ export class BlockSignComponent extends BlockComponent {
      * @remarks
      * Makes it so players cannot edit this sign.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -5952,6 +6156,36 @@ export class BlockVolumeBase {
     getCapacity(): number;
     /**
      * @remarks
+     * Returns a list of block positions within the volume that are
+     * closest to a given location, sorted by distance (nearest
+     * first)
+     *
+     * @param count
+     * Number of closest positions to return
+     * @param location
+     * Position to measure distance from
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.ArgumentOutOfBoundsError}
+     */
+    getClosest(count: number, location: Vector3): Vector3[];
+    /**
+     * @remarks
+     * Returns a list of block positions within the volume that are
+     * farthest from a given location, sorted by distance (farthest
+     * first)
+     *
+     * @param count
+     * Number of farthest positions to return
+     * @param location
+     * Position to measure distance from
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.ArgumentOutOfBoundsError}
+     */
+    getFarthest(count: number, location: Vector3): Vector3[];
+    /**
+     * @remarks
      * Get the largest corner position of the volume (guaranteed to
      * be >= min)
      *
@@ -6076,9 +6310,9 @@ export class ButtonPushAfterEventSignal {
      * @remarks
      * Adds a callback that will be called when a button is pushed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ButtonPushAfterEvent) => void): (arg0: ButtonPushAfterEvent) => void;
@@ -6087,9 +6321,9 @@ export class ButtonPushAfterEventSignal {
      * Removes a callback from being called when a button is
      * pushed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ButtonPushAfterEvent) => void): void;
@@ -6111,9 +6345,20 @@ export class Camera {
     readonly isValid: boolean;
     /**
      * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link minecraftcommon.ArgumentOutOfBoundsError}
+     *
+     * {@link InvalidEntityError}
+     */
+    addShake(shakeCameraOptions: CameraShakeOptions): void;
+    /**
+     * @remarks
      * Attaches the camera to a non-player entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param attachCameraOptions
      * Options for the entity the camera is attaching to. Contains
@@ -6128,7 +6373,7 @@ export class Camera {
      * perspectives, including any eased camera motions, and return
      * to their normal perspective.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -6138,7 +6383,7 @@ export class Camera {
      * Begins a camera fade transition. A fade transition is a
      * full-screen color that fades-in, holds, and then fades-out.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param fadeCameraOptions
      * Additional options around camera fade operations.
@@ -6147,7 +6392,7 @@ export class Camera {
     fade(fadeCameraOptions?: CameraFadeOptions): void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -6156,7 +6401,7 @@ export class Camera {
      * @remarks
      * Sets the current active camera for the specified player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param cameraPreset
      * Identifier of a camera preset file defined within JSON.
@@ -6180,7 +6425,7 @@ export class Camera {
      * resets the position and rotation to the values defined in
      * the JSON.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param cameraPreset
      * Identifier of a camera preset file defined within JSON.
@@ -6192,11 +6437,20 @@ export class Camera {
     setDefaultCamera(cameraPreset: string, easeOptions?: EaseOptions): void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
     setFov(fovCameraOptions?: CameraFovOptions): void;
+    /**
+     * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link InvalidEntityError}
+     */
+    stopShaking(): void;
 }
 
 /**
@@ -6207,7 +6461,7 @@ export class CatmullRomSpline {
      * @remarks
      * Control points for the CatmullRom curve.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     controlPoints: Vector3[];
@@ -6417,7 +6671,7 @@ export class Container {
      * items of the same type. Note, use {@link Container.setItem}
      * if you wish to set the item in a particular slot.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param itemStack
      * The stack of items to add.
@@ -6432,7 +6686,7 @@ export class Container {
      * @remarks
      * Clears all inventory items in the container.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws
      * Throws if the container is invalid.
@@ -6496,8 +6750,8 @@ export class Container {
      * Gets an {@link ItemStack} of the item at the specified slot.
      * If the slot is empty, returns `undefined`. This method does
      * not change or clear the contents of the specified slot. To
-     * get a reference to a particular slot, see {@link
-     * Container.getSlot}.
+     * get a reference to a particular slot, see
+     * {@link Container.getSlot}.
      *
      * @param slot
      * Zero-based index of the slot to retrieve items from.
@@ -6546,7 +6800,7 @@ export class Container {
      * Moves an item from one slot to another, potentially across
      * containers.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param fromSlot
      * Zero-based index of the slot to transfer an item from, on
@@ -6598,7 +6852,7 @@ export class Container {
      * @remarks
      * Sets an item stack within a particular slot.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param slot
      * Zero-based index of the slot to set an item at.
@@ -6619,7 +6873,7 @@ export class Container {
      * @remarks
      * Swaps items between two different slots within containers.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param slot
      * Zero-based index of the slot to swap from this container.
@@ -6644,7 +6898,7 @@ export class Container {
      * Moves an item from one slot to another container, or to the
      * first available slot in the same container.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param fromSlot
      * Zero-based index of the slot to transfer an item from, on
@@ -6705,7 +6959,7 @@ export class ContainerSlot {
      * 1-255. The provided value will be clamped to the item's
      * maximum stack size.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * Bounds: [1, 255]
      * @throws
@@ -6736,7 +6990,7 @@ export class ContainerSlot {
      * @remarks
      * Gets or sets whether the item is kept on death.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * @throws
      * Throws if the slot's container is invalid.
@@ -6747,7 +7001,7 @@ export class ContainerSlot {
      * Gets or sets the item's lock mode. The default value is
      * `ItemLockMode.none`.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * @throws
      * Throws if the slot's container is invalid.
@@ -6771,7 +7025,7 @@ export class ContainerSlot {
      * when hovering over the item. Setting the name tag to an
      * empty string or `undefined` will remove the name tag.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * @throws
      * Throws if the slot's container is invalid. Also throws if
@@ -6906,8 +7160,8 @@ export class ContainerSlot {
     /**
      * @remarks
      * Returns the lore value - a secondary display string - for an
-     * ItemStack. String lore lines will be converted to a {@link
-     * RawMessage} and put under {@link RawMessage.text}.
+     * ItemStack. String lore lines will be converted to a
+     * {@link RawMessage} and put under {@link RawMessage.text}.
      *
      * @returns
      * An array of lore lines. If the item does not have lore,
@@ -6979,7 +7233,7 @@ export class ContainerSlot {
      * mode. The block names are displayed in the item's tooltip.
      * Setting the value to undefined will clear the list.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockIdentifiers
      * The list of blocks, given by their identifiers.
@@ -6999,7 +7253,7 @@ export class ContainerSlot {
      * block names are displayed in the item's tooltip. Setting the
      * value to undefined will clear the list.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockIdentifiers
      * The list of blocks, given by their identifiers.
@@ -7053,7 +7307,7 @@ export class ContainerSlot {
      * Sets the given ItemStack in the slot, replacing any existing
      * item.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param itemStack
      * The ItemStack to be placed in the slot.
@@ -7070,7 +7324,7 @@ export class ContainerSlot {
      * Sets the lore value - a secondary display string - for an
      * ItemStack.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param loreList
      * A list of lore strings. Setting this argument to undefined
@@ -7131,9 +7385,9 @@ export class CustomCommandRegistry {
      * Registers a custom command that when executed triggers a
      * script callback.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * The callback triggered when the command executes.
@@ -7153,9 +7407,9 @@ export class CustomCommandRegistry {
      * @remarks
      * Registers a custom command enum.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -7237,9 +7491,9 @@ export class DataDrivenEntityTriggerAfterEventSignal {
      * Adds a callback that will be called after a data driven
      * entity event is triggered.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -7251,9 +7505,9 @@ export class DataDrivenEntityTriggerAfterEventSignal {
      * Removes a callback that will be called after a data driven
      * entity event is triggered.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: DataDrivenEntityTriggerAfterEvent) => void): void;
@@ -7316,6 +7570,39 @@ export class Dimension {
         biomeToFind: BiomeType | string,
         options?: BiomeSearchOptions,
     ): Vector3 | undefined;
+    /**
+     * @remarks
+     * Clones a region of blocks from one area of the dimension to
+     * another.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param beginLocation
+     * The lower northwest starting corner of the area to clone
+     * from.
+     * @param endLocation
+     * The upper southeast ending corner of the area to clone from.
+     * @param destination
+     * The lower northwest starting corner of the area to clone to.
+     * @param cloneMode
+     * Specifies how the cloned blocks should be placed at the
+     * destination.
+     * @param filter
+     * An optional block filter used to include only matching
+     * blocks from the source area.
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link LocationOutOfWorldBoundariesError}
+     */
+    cloneBlocks(
+        beginLocation: Vector3,
+        endLocation: Vector3,
+        destination: Vector3,
+        cloneMode: CloneMode,
+        filter?: BlockFilter,
+    ): void;
     /**
      * @remarks
      * Checks if an area contains the specified biomes. If the area
@@ -7388,7 +7675,7 @@ export class Dimension {
      * @remarks
      * Creates an explosion at the specified location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * The location of the explosion.
@@ -7446,7 +7733,7 @@ export class Dimension {
      * @remarks
      * Fills an area of blocks with a specific block type.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param volume
      * Volume of blocks to be filled.
@@ -7559,9 +7846,6 @@ export class Dimension {
      *
      * @param volume
      * Volume of blocks that will be checked.
-     * @param filter
-     * Block filter that will be checked against each block in the
-     * volume.
      * @param allowUnloadedChunks
      * If set to true will suppress the UnloadedChunksError if some
      * or all of the block volume is outside of the loaded chunks.
@@ -7581,7 +7865,7 @@ export class Dimension {
      *
      * {@link UnloadedChunksError}
      */
-    getBlocks(volume: BlockVolumeBase, filter: BlockFilter, allowUnloadedChunks?: boolean): ListBlockVolume;
+    getBlocks(volume: BlockVolumeBase, options: BlockQueryOptions, allowUnloadedChunks?: boolean): ListBlockVolume;
     /**
      * @remarks
      * Returns a set of entities based on a set of conditions
@@ -7770,7 +8054,7 @@ export class Dimension {
      * Places the given feature into the dimension at the specified
      * location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param featureName
      * The string identifier for the feature.
@@ -7800,7 +8084,7 @@ export class Dimension {
      * Places the given feature rule into the dimension at the
      * specified location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param featureRuleName
      * The string identifier for the feature rule.
@@ -7820,7 +8104,7 @@ export class Dimension {
      * @remarks
      * Plays a sound for all players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param soundId
      * Identifier of the sound.
@@ -7845,7 +8129,7 @@ export class Dimension {
      * Runs a command synchronously using the context of the
      * broader dimenion.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param commandString
      * Command to run. Note that command strings should not start
@@ -7868,7 +8152,7 @@ export class Dimension {
      * Sets a block in the world using a BlockPermutation.
      * BlockPermutations are blocks with a particular state.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * The location within the dimension to set the block.
@@ -7887,7 +8171,7 @@ export class Dimension {
      * @remarks
      * Sets a block at a given location within the dimension.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * The location within the dimension to set the block.
@@ -7910,7 +8194,7 @@ export class Dimension {
      * @remarks
      * Sets the current weather within the dimension
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param weatherType
      * Set the type of weather to apply.
@@ -7927,7 +8211,7 @@ export class Dimension {
      * Creates a new entity (e.g., a mob) at the specified
      * location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * Identifier of the type of entity to spawn. If no namespace
@@ -8007,7 +8291,7 @@ export class Dimension {
      * Creates a new item stack as an entity at the specified
      * location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * The location at which to create the item stack.
@@ -8061,7 +8345,7 @@ export class Dimension {
      * Creates a new particle emitter at a specified location in
      * the world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param effectName
      * Identifier of the particle to create.
@@ -8111,7 +8395,7 @@ export class DimensionRegistry {
      * the system startup event. The dimension will be created
      * using the void generator.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param typeId
      * The namespaced identifier for the custom dimension (e.g.,
@@ -8158,18 +8442,22 @@ export class DimensionTypes {
     /**
      * @remarks
      * Retrieves a dimension type using a string-based identifier.
-     * Currently only works with Vanilla dimensions.
+     * Works with both vanilla dimensions and custom dimensions.
+     * Custom dimensions cannot be retrieved until after the system
+     * startup event has completed.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     static get(dimensionTypeId: string): DimensionType | undefined;
     /**
      * @remarks
-     * Retrieves an array of all dimension types. Currently only
-     * works with Vanilla dimensions.
+     * Retrieves an array of all dimension types. Includes both
+     * vanilla dimensions and custom dimensions. Custom dimensions
+     * are not included until after the system startup event has
+     * completed.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     static getAll(): DimensionType[];
@@ -8200,8 +8488,8 @@ export class Effect {
     /**
      * @remarks
      * Gets the entire specified duration, in ticks, of this
-     * effect. There are 20 ticks per second. Use {@link
-     * TicksPerSecond} constant to convert between ticks and
+     * effect. There are 20 ticks per second. Use
+     * {@link TicksPerSecond} constant to convert between ticks and
      * seconds.
      *
      * @throws This property can throw when used.
@@ -8254,9 +8542,9 @@ export class EffectAddAfterEventSignal {
      * Adds a callback that will be called when an effect is added
      * to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -8268,9 +8556,9 @@ export class EffectAddAfterEventSignal {
      * Removes a callback from being called when an effect is added
      * to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EffectAddAfterEvent) => void): void;
@@ -8319,9 +8607,9 @@ export class EffectAddBeforeEventSignal {
      * Adds a callback that will be called when an effect is added
      * to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -8334,9 +8622,9 @@ export class EffectAddBeforeEventSignal {
      * Removes a callback from being called when an effect is added
      * to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -8370,8 +8658,6 @@ export class EffectTypes {
      * @remarks
      * Effect type for the given identifier.
      *
-     * This function can't be called in restricted-execution mode.
-     *
      * @param identifier
      * The identifier for the effect.
      * @returns
@@ -8382,8 +8668,6 @@ export class EffectTypes {
     /**
      * @remarks
      * Gets all effects.
-     *
-     * This function can't be called in restricted-execution mode.
      *
      * @returns
      * A list of all effects.
@@ -8594,7 +8878,7 @@ export class Entity {
      * Whether the entity is sneaking - that is, moving more slowly
      * and more quietly.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     isSneaking: boolean;
@@ -8651,7 +8935,7 @@ export class Entity {
      * Boolean which determines if the player nameplate should be
      * depth tested for visibility.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     nameplateDepthTested: boolean;
@@ -8660,7 +8944,7 @@ export class Entity {
      * Float that determines the render distance of this entity's
      * nameplate.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     nameplateRenderDistance: number;
@@ -8668,7 +8952,7 @@ export class Entity {
      * @remarks
      * Given name of the entity.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     nameTag: string;
@@ -8691,7 +8975,7 @@ export class Entity {
      * @remarks
      * Adds or updates an effect, like poison, to the entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param effectType
      * Type of effect to add to the entity.
@@ -8763,7 +9047,7 @@ export class Entity {
      * @remarks
      * Adds an item to the entity's inventory.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * Returns undefined if the item was fully added or returns an
@@ -8783,7 +9067,7 @@ export class Entity {
      * @remarks
      * Adds a specified tag to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param tag
      * Content of the tag to add. The tag must be less than 256
@@ -8825,7 +9109,7 @@ export class Entity {
      * @remarks
      * Applies a set of damage to an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param amount
      * Amount of damage to apply.
@@ -8869,7 +9153,7 @@ export class Entity {
      * Applies impulse vector to the current velocity of the
      * entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param vector
      * Impulse vector.
@@ -8899,7 +9183,7 @@ export class Entity {
      * Applies impulse vector to the current velocity of the
      * entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param verticalStrength
      * Knockback strength for the vertical vector.
@@ -8945,7 +9229,7 @@ export class Entity {
      * @remarks
      * Sets the current velocity of the Entity to zero.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -8972,7 +9256,7 @@ export class Entity {
      * you can call getComponent('minecraft:onfire') and, if
      * present, the entity is on fire.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param useEffects
      * Whether to show any visual effects connected to the
@@ -9308,7 +9592,7 @@ export class Entity {
      * @remarks
      * Kills this entity. The entity will drop loot as normal.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * Returns true if entity can be killed (even if it is already
@@ -9348,7 +9632,7 @@ export class Entity {
      * mobs where the pitch controls the head tilt and the yaw
      * controls the body rotation.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param targetLocation
      * The target location that this entity should face/look
@@ -9385,7 +9669,7 @@ export class Entity {
      * @remarks
      * Cause the entity to play the given animation.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param animationName
      * The animation identifier. e.g. animation.creeper.swelling
@@ -9403,7 +9687,7 @@ export class Entity {
      * entity will not perform a death animation or drop loot upon
      * removal.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -9417,7 +9701,7 @@ export class Entity {
      * Removes the specified EffectType on the entity, or returns
      * false if the effect is not present.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param effectType
      * The effect identifier.
@@ -9435,7 +9719,7 @@ export class Entity {
      * @remarks
      * Removes a specified tag from an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param tag
      * Content of the tag to remove.
@@ -9452,7 +9736,7 @@ export class Entity {
      * specified in the Entity's definition. This property change
      * is not applied until the next tick.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The Entity Property identifier.
@@ -9475,7 +9759,7 @@ export class Entity {
      * @remarks
      * Runs a synchronous command on the entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param commandString
      * The command string. Note: This should not include a leading
@@ -9527,7 +9811,7 @@ export class Entity {
      * that you can call getComponent('minecraft:onfire') and, if
      * present, the entity is on fire.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param seconds
      * Length of time to set the entity on fire.
@@ -9569,7 +9853,7 @@ export class Entity {
      * Sets an Entity Property to the provided value. This property
      * change is not applied until the next tick.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The Entity Property identifier.
@@ -9597,7 +9881,7 @@ export class Entity {
      * @remarks
      * Sets the main rotation of the entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param rotation
      * The x and y rotation of the entity (in degrees). For most
@@ -9612,13 +9896,15 @@ export class Entity {
      * @remarks
      * Teleports the selected entity to a new location
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * New location for the entity.
      * @param teleportOptions
      * Options regarding the teleport operation.
      * @throws This function can throw errors.
+     *
+     * {@link Error}
      *
      * {@link InvalidEntityError}
      *
@@ -9674,7 +9960,7 @@ export class Entity {
      * behaviors; for example, creepers have a
      * minecraft:start_exploding type event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param eventName
      * Name of the entity type event to trigger. If a namespace is
@@ -9717,7 +10003,7 @@ export class Entity {
      * teleport operation (for example, if there are blocks at the
      * destination.)
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * Location to teleport the entity to.
@@ -9728,6 +10014,8 @@ export class Entity {
      * destination chunk is unloaded or if the teleport would
      * result in intersecting with blocks.
      * @throws This function can throw errors.
+     *
+     * {@link Error}
      *
      * {@link InvalidEntityError}
      *
@@ -9855,7 +10143,7 @@ export class EntityAttributeComponent extends EntityComponent {
      * Resets the current value of this attribute to the defined
      * default value.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -9865,7 +10153,7 @@ export class EntityAttributeComponent extends EntityComponent {
      * Resets the current value of this attribute to the maximum
      * defined value.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -9875,7 +10163,7 @@ export class EntityAttributeComponent extends EntityComponent {
      * Resets the current value of this attribute to the minimum
      * defined value.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -9884,7 +10172,7 @@ export class EntityAttributeComponent extends EntityComponent {
      * @remarks
      * Sets the current value of this attribute.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws
      * If the value is out of bounds, an ArgumentOutOfBounds Error
@@ -10055,7 +10343,7 @@ export class EntityColorComponent extends EntityComponent {
      * @remarks
      * Value of this particular color.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     value: number;
@@ -10106,9 +10394,9 @@ export class EntityContainerClosedAfterEventSignal {
      * Adds a callback that will be called when an entity container
      * is closed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10120,9 +10408,9 @@ export class EntityContainerClosedAfterEventSignal {
      * Removes a callback from being called when an entity
      * container is closed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityContainerClosedAfterEvent) => void): void;
@@ -10154,9 +10442,9 @@ export class EntityContainerOpenedAfterEventSignal {
      * Adds a callback that will be called when an entity container
      * is opened.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10168,9 +10456,9 @@ export class EntityContainerOpenedAfterEventSignal {
      * Removes a callback from being called when an entity
      * container is opened.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityContainerOpenedAfterEvent) => void): void;
@@ -10239,9 +10527,9 @@ export class EntityDieAfterEventSignal {
      * @remarks
      * Subscribes to an event that fires when an entity dies.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function to call when an entity dies.
@@ -10261,9 +10549,9 @@ export class EntityDieAfterEventSignal {
      * Stops this event from calling your function when an entity
      * dies.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityDieAfterEvent) => void): void;
@@ -10359,7 +10647,7 @@ export class EntityEquippableComponent extends EntityComponent {
      * @remarks
      * Replaces the item in the given EquipmentSlot.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param equipmentSlot
      * The equipment slot. e.g. "head", "chest", "offhand".
@@ -10410,7 +10698,7 @@ export class EntityFlyingSpeedComponent extends EntityComponent {
      * @remarks
      * Current value of the flying speed of the associated entity.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     value: number;
@@ -10529,9 +10817,9 @@ export class EntityHealAfterEventSignal {
      * Adds a callback that will be called when an entity is
      * healed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10543,9 +10831,9 @@ export class EntityHealAfterEventSignal {
      * Removes a callback from being called when an entity is
      * healed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityHealAfterEvent) => void): void;
@@ -10589,9 +10877,9 @@ export class EntityHealBeforeEventSignal {
      * Adds a callback that will be called when an entity will be
      * healed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -10607,9 +10895,9 @@ export class EntityHealBeforeEventSignal {
      * Removes a callback from being called when an entity will be
      * healed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -10669,9 +10957,9 @@ export class EntityHealthChangedAfterEventSignal {
      * Adds a callback that will be called when the health of an
      * entity changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10683,9 +10971,9 @@ export class EntityHealthChangedAfterEventSignal {
      * Removes a callback from being called when the health of an
      * entity changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityHealthChangedAfterEvent) => void): void;
@@ -10760,9 +11048,9 @@ export class EntityHitBlockAfterEventSignal {
      * Adds a callback that will be called when an entity hits a
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10774,9 +11062,9 @@ export class EntityHitBlockAfterEventSignal {
      * Removes a callback from being called when an entity hits a
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityHitBlockAfterEvent) => void): void;
@@ -10813,9 +11101,9 @@ export class EntityHitEntityAfterEventSignal {
      * Adds a callback that will be called when an entity hits
      * another entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10827,9 +11115,9 @@ export class EntityHitEntityAfterEventSignal {
      * Removes a callback from being called when an entity makes a
      * melee attack on another entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityHitEntityAfterEvent) => void): void;
@@ -10881,9 +11169,9 @@ export class EntityHurtAfterEventSignal {
      * @remarks
      * Adds a callback that will be called when an entity is hurt.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -10894,9 +11182,9 @@ export class EntityHurtAfterEventSignal {
      * @remarks
      * Removes a callback from being called when an entity is hurt.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityHurtAfterEvent) => void): void;
@@ -10940,9 +11228,9 @@ export class EntityHurtBeforeEventSignal {
      * Adds a callback that will be called when an entity will be
      * hurt.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -10958,9 +11246,9 @@ export class EntityHurtBeforeEventSignal {
      * Removes a callback from being called when an entity will be
      * hurt.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -11236,9 +11524,9 @@ export class EntityItemDropAfterEventSignal {
      * Adds a callback that will be called when an entity has
      * dropped items.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -11250,9 +11538,9 @@ export class EntityItemDropAfterEventSignal {
      * Removes a callback from being called when an entity has
      * dropped items.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityItemDropAfterEvent) => void): void;
@@ -11289,9 +11577,9 @@ export class EntityItemPickupAfterEventSignal {
      * Adds a callback that will be called when an entity has
      * picked up items.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -11303,9 +11591,9 @@ export class EntityItemPickupAfterEventSignal {
      * Removes a callback from being called when an entity has
      * picked up items.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityItemPickupAfterEvent) => void): void;
@@ -11348,9 +11636,9 @@ export class EntityItemPickupBeforeEventSignal {
      * Adds a callback that will be called when an entity will pick
      * up an item.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -11366,9 +11654,9 @@ export class EntityItemPickupBeforeEventSignal {
      * Removes a callback from being called when an entity will
      * pick up an item.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -11466,7 +11754,7 @@ export class EntityLeashableComponent extends EntityComponent {
      * @remarks
      * Leashes this entity to another entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param leashHolder
      * The entity to leash this entity to.
@@ -11479,7 +11767,7 @@ export class EntityLeashableComponent extends EntityComponent {
      * @remarks
      * Unleashes this entity if it is leashed to another entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -11497,7 +11785,7 @@ export class EntityLoadAfterEvent {
      * @remarks
      * Entity that was loaded.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     entity: Entity;
@@ -11514,9 +11802,9 @@ export class EntityLoadAfterEventSignal {
      * Method to register an event handler for what happens when an
      * entity loads.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function that handles the load event.
@@ -11527,9 +11815,9 @@ export class EntityLoadAfterEventSignal {
      * Unregisters a method that was previously subscribed to the
      * subscription event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Original function that was passed into the subscribe event,
@@ -11964,7 +12252,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * The fraction of the projectile's speed maintained every tick
      * while traveling through air.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     airInertia: number;
@@ -11975,7 +12263,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * modified via the onFireTime property. The entity will not
      * catch fire if immune or if the entity is wet.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     catchFireOnHurt: boolean;
@@ -11984,7 +12272,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * If true, the projectile will spawn crit particles when hit
      * by a player. E.g. Player attacking a Shulker bullet.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     critParticlesOnProjectileHurt: boolean;
@@ -11993,7 +12281,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * If true, the projectile will be destroyed when it takes
      * damage. E.g. Player attacking a Shulker bullet.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     destroyOnProjectileHurt: boolean;
@@ -12005,7 +12293,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * higher the value, the faster the projectile falls. If
      * negative, the entity will rise instead of fall.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     gravity: number;
@@ -12013,7 +12301,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * @remarks
      * The sound that plays when the projectile hits an entity.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     hitEntitySound?: string;
@@ -12021,7 +12309,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * @remarks
      * The sound that plays when the projectile hits a block.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     hitGroundSound?: string;
@@ -12029,7 +12317,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * @remarks
      * The particle that spawns when the projectile hits something.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     hitParticle?: string;
@@ -12040,7 +12328,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * when hit. E.g. A thrown Trident with the Channeling
      * enchantment.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     lightningStrikeOnHit: boolean;
@@ -12049,7 +12337,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * The fraction of the projectile's speed maintained every tick
      * while traveling through a liquid.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     liquidInertia: number;
@@ -12058,7 +12346,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * Duration in seconds that the entity hit will be on fire for
      * when catchFireOnHurt is set to true.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     onFireTime: number;
@@ -12068,7 +12356,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * the projectile can collide with and damage. It also
      * determines which entity is assigned as the attacker.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     owner?: Entity;
@@ -12077,7 +12365,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * If true, the projectile will bounce off mobs when no damage
      * is taken. E.g. A spawning wither.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     shouldBounceOnHit: boolean;
@@ -12087,7 +12375,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * hit as thought it had been blocked. E.g. Thrown trident on
      * hit behavior.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     stopOnHit: boolean;
@@ -12097,7 +12385,7 @@ export class EntityProjectileComponent extends EntityComponent {
      * Shoots the projectile with a given velocity. The projectile
      * will be shot from its current location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param velocity
      * The velocity to fire the projectile. This controls both the
@@ -12160,9 +12448,9 @@ export class EntityRemoveAfterEventSignal {
      * Will call your function every time an entity is removed from
      * the game.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function to call.
@@ -12181,9 +12469,9 @@ export class EntityRemoveAfterEventSignal {
      * Unsubscribes your function from subsequent calls when an
      * entity is removed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityRemoveAfterEvent) => void): void;
@@ -12216,9 +12504,9 @@ export class EntityRemoveBeforeEventSignal {
      * Will call your function every time an entity is being
      * removed from the game.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function to call.
@@ -12234,9 +12522,9 @@ export class EntityRemoveBeforeEventSignal {
      * Unsubscribes your function from subsequent calls when an
      * entity is being removed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -12331,7 +12619,7 @@ export class EntityRideableComponent extends EntityComponent {
      * @remarks
      * Adds an entity to this entity as a rider.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param rider
      * Entity that will become the rider of this entity.
@@ -12364,7 +12652,7 @@ export class EntityRideableComponent extends EntityComponent {
      * @remarks
      * Ejects the specified rider of this entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param rider
      * Entity that should be ejected from this entity.
@@ -12375,7 +12663,7 @@ export class EntityRideableComponent extends EntityComponent {
      * @remarks
      * Ejects all riders of this entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -12505,7 +12793,7 @@ export class EntitySpawnAfterEvent {
      * @remarks
      * Entity that was spawned.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     entity: Entity;
@@ -12522,9 +12810,9 @@ export class EntitySpawnAfterEventSignal {
      * Method to register an event handler for what happens when an
      * entity spawns.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function that handles the spawn event.
@@ -12558,15 +12846,107 @@ export class EntitySpawnAfterEventSignal {
      * Unregisters a method that was previously subscribed to the
      * subscription event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Original function that was passed into the subscribe event,
      * that is to be unregistered.
      */
     unsubscribe(callback: (arg0: EntitySpawnAfterEvent) => void): void;
+}
+
+/**
+ * Contains data related to an entity beginning to sneak.
+ */
+export class EntityStartSneakingAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Entity that has started sneaking.
+     *
+     */
+    readonly entity: Entity;
+}
+
+/**
+ * Manages callbacks that are connected to when an entity
+ * begins sneaking.
+ */
+export class EntityStartSneakingAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when an entity begins
+     * sneaking.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    subscribe(
+        callback: (arg0: EntityStartSneakingAfterEvent) => void,
+        options?: EntitySneakingChangedEventOptions,
+    ): (arg0: EntityStartSneakingAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when an entity begins
+     * sneaking.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: EntityStartSneakingAfterEvent) => void): void;
+}
+
+/**
+ * Contains data related to an entity stopping sneaking.
+ */
+export class EntityStopSneakingAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Entity that has stopped sneaking.
+     *
+     */
+    readonly entity: Entity;
+}
+
+/**
+ * Manages callbacks that are connected to when an entity stops
+ * sneaking.
+ */
+export class EntityStopSneakingAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be called when an entity stops
+     * sneaking.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    subscribe(
+        callback: (arg0: EntityStopSneakingAfterEvent) => void,
+        options?: EntitySneakingChangedEventOptions,
+    ): (arg0: EntityStopSneakingAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being called when an entity stops
+     * sneaking.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: EntityStopSneakingAfterEvent) => void): void;
 }
 
 /**
@@ -12645,7 +13025,7 @@ export class EntityTameableComponent extends EntityComponent {
      * @remarks
      * Set this entity as tamed by the given player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param player
      * The player that this entity should be tamed by.
@@ -12654,6 +13034,101 @@ export class EntityTameableComponent extends EntityComponent {
      * @throws This function can throw errors.
      */
     tame(player: Player): boolean;
+}
+
+/**
+ * Contains data related to an entity being tamed.
+ */
+export class EntityTamedAfterEvent {
+    private constructor();
+    readonly entity: Entity;
+    readonly tamingEntity: Entity;
+}
+
+/**
+ * Manages callbacks that are connected to when an entity is
+ * tamed.
+ */
+export class EntityTamedAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    subscribe(
+        callback: (arg0: EntityTamedAfterEvent) => void,
+        options?: EntityTamedEventOptions,
+    ): (arg0: EntityTamedAfterEvent) => void;
+    /**
+     * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: EntityTamedAfterEvent) => void): void;
+}
+
+/**
+ * Contains information regarding an event before an entity is
+ * tamed.
+ */
+export class EntityTamedBeforeEvent {
+    private constructor();
+    /**
+     * @remarks
+     * When set to true will cancel the event.
+     *
+     */
+    cancel: boolean;
+    /**
+     * @remarks
+     * The entity that is being tamed.
+     *
+     */
+    readonly entity: Entity;
+    /**
+     * @remarks
+     * The entity that is attempting to tame the entity.
+     *
+     */
+    readonly tamingEntity: Entity;
+}
+
+/**
+ * Manages callbacks that are connected to before an entity is
+ * tamed.
+ */
+export class EntityTamedBeforeEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     * @param callback
+     * This closure is called with restricted-execution privilege.
+     * @returns
+     * Closure that is called with restricted-execution privilege.
+     */
+    subscribe(
+        callback: (arg0: EntityTamedBeforeEvent) => void,
+        options?: EntityTamedEventOptions,
+    ): (arg0: EntityTamedBeforeEvent) => void;
+    /**
+     * @remarks
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     * @param callback
+     * This closure is called with restricted-execution privilege.
+     */
+    unsubscribe(callback: (arg0: EntityTamedBeforeEvent) => void): void;
 }
 
 /**
@@ -12698,7 +13173,7 @@ export class EntityTameMountComponent extends EntityComponent {
      * @remarks
      * Sets this rideable entity as tamed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param showParticles
      * Whether to show effect particles when this entity is tamed.
@@ -12709,7 +13184,7 @@ export class EntityTameMountComponent extends EntityComponent {
      * @remarks
      * Sets this rideable entity as tamed by the given player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param showParticles
      * Whether to show effect particles when this entity is tamed.
@@ -12825,9 +13300,9 @@ export class EntityUpgradeAfterEventSignal {
      * Adds a callback that will be called after a data driven
      * entity version upgrade is triggered.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -12839,9 +13314,9 @@ export class EntityUpgradeAfterEventSignal {
      * Removes a callback that will be called after a data driven
      * entity version upgrade is triggered.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: EntityUpgradeAfterEvent) => void): void;
@@ -12971,9 +13446,9 @@ export class ExplosionAfterEventSignal {
      * Adds a callback that will be called when an explosion
      * occurs.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ExplosionAfterEvent) => void): (arg0: ExplosionAfterEvent) => void;
@@ -12982,9 +13457,9 @@ export class ExplosionAfterEventSignal {
      * Removes a callback from being called when an explosion
      * occurs.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ExplosionAfterEvent) => void): void;
@@ -13026,9 +13501,9 @@ export class ExplosionBeforeEventSignal {
      * occurs. The callback can optionally change or cancel
      * explosion behavior.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -13041,9 +13516,9 @@ export class ExplosionBeforeEventSignal {
      * Removes a callback from being called from before when an
      * explosion would occur.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -13174,6 +13649,137 @@ export class FluidContainer {
 }
 
 /**
+ * Provides access to the fog definitions stack of a player
+ * entity, allowing scripts to push, pop, remove, and query
+ * active fog definitions.
+ */
+export class FogSettings {
+    private constructor();
+    /**
+     * @remarks
+     * Returns the list of fog identifiers currently on the
+     * player's fog stack, ordered from bottom to top.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @returns
+     * An array of fog definition identifiers currently on the
+     * stack.
+     * @throws
+     * Throws if the entity is invalid.
+     *
+     * {@link InvalidEntityError}
+     */
+    getStack(): string[];
+    /**
+     * @remarks
+     * Returns the list of tags currently present on the player's
+     * fog stack.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @returns
+     * An array of tag strings associated with fog settings on the
+     * stack.
+     * @throws
+     * Throws if the entity is invalid.
+     *
+     * {@link InvalidEntityError}
+     */
+    getTags(): string[];
+    /**
+     * @remarks
+     * Removes the most recently pushed fog definition from the
+     * player's fog stack.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param tag
+     * An optional tag identifying which entry to pop. If provided,
+     * searches the stack from top to bottom and removes the most
+     * recently pushed entry with this tag. If omitted, removes the
+     * most recently pushed entry regardless of tag.
+     * @returns
+     * Returns the identifier of the popped fog definition, or
+     * undefined if the stack was unchanged.
+     * @throws
+     * Throws if the entity is invalid.
+     *
+     * {@link InvalidEntityError}
+     */
+    pop(tag?: string): string | undefined;
+    /**
+     * @remarks
+     * Pushes a new fog definition onto the player's fog stack.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param fogId
+     * The identifier of the fog definition to push onto the stack
+     * (e.g. 'minecraft:fog_bamboo_jungle').
+     * @param tag
+     * An optional tag used to label this fog definition on the
+     * stack, allowing it to be targeted by pop or remove. If
+     * omitted, the entry is stored with the tag 'untagged'.
+     * @returns
+     * Returns the zero-based index at which the fog definition was
+     * inserted into the stack.
+     * @throws
+     * Throws if the entity is invalid, the fog identifier is
+     * invalid, or if the stack limit of 16 has been exceeded.
+     *
+     * {@link FogSettingsError}
+     *
+     * {@link InvalidEntityError}
+     */
+    push(fogId: string, tag?: string): number;
+    /**
+     * @remarks
+     * Removes all fog definitions with the given tag from the
+     * player's fog stack. If no tag is provided, clears all fog
+     * definitions.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param tag
+     * An optional tag identifying which the entries to remove. If
+     * omitted, clears all fog definitions regardless of tag.
+     * @returns
+     * Returns true if at least one entry was removed, or false if
+     * the stack was unchanged.
+     * @throws
+     * Throws if the entity is invalid.
+     *
+     * {@link InvalidEntityError}
+     */
+    remove(tag?: string): boolean;
+    /**
+     * @remarks
+     * Sets the player's fog stack to the given list of fog
+     * identifiers, replacing any existing entries.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @param fogIds
+     * A stack of fog definition identifiers to set on the player's
+     * fog stack (e.g. ['minecraft:fog_bamboo_jungle']). Maximum of
+     * 16 entries.
+     * @param tag
+     * An optional tag to associate with the new entries, used to
+     * target them with pop or remove.
+     * @throws
+     * Throws if the entity is invalid, if more than 16 fog
+     * identifiers are provided, or if any fog identifier is
+     * invalid.
+     *
+     * {@link FogSettingsError}
+     *
+     * {@link InvalidEntityError}
+     */
+    setStack(fogIds: string[], tag?: string): void;
+}
+
+/**
  * Contains information regarding a changed world.gameRules
  * property.
  */
@@ -13206,9 +13812,9 @@ export class GameRuleChangeAfterEventSignal {
      * Adds a callback that will be called when a world.gameRules
      * property is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: GameRuleChangeAfterEvent) => void): (arg0: GameRuleChangeAfterEvent) => void;
@@ -13217,9 +13823,9 @@ export class GameRuleChangeAfterEventSignal {
      * Removes a callback from being called when a world.gameRules
      * property is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: GameRuleChangeAfterEvent) => void): void;
@@ -13232,223 +13838,223 @@ export class GameRules {
     private constructor();
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     commandBlockOutput: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     commandBlocksEnabled: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doDayLightCycle: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doEntityDrops: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doFireTick: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doImmediateRespawn: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doInsomnia: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doLimitedCrafting: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doMobLoot: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doMobSpawning: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doTileDrops: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     doWeatherCycle: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     drowningDamage: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     fallDamage: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     fireDamage: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     freezeDamage: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     functionCommandLimit: number;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     keepInventory: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     maxCommandChainLength: number;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     mobGriefing: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     naturalRegeneration: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     playersSleepingPercentage: number;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     projectilesCanBreakBlocks: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     pvp: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     randomTickSpeed: number;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     recipesUnlock: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     respawnBlocksExplode: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     sendCommandFeedback: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showBorderEffect: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showCoordinates: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showDaysPlayed: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showDeathMessages: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showRecipeMessages: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     showTags: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     spawnRadius: number;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     tntExplodes: boolean;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     tntExplosionDropDecay: boolean;
@@ -13481,6 +14087,13 @@ export class InputInfo {
      */
     readonly touchOnlyAffectsHotbar: boolean;
     /**
+     * @remarks
+     * Retrieves the current state of a button. If a player presses
+     * and releases a button really fast this may not ever be set
+     * to true. To capture all button state changes, use
+     * {@link PlayerButtonInputAfterEvent} via
+     * {@link WorldAfterEvents.playerButtonInput}
+     *
      * @throws This function can throw errors.
      *
      * {@link minecraftcommon.EngineError}
@@ -13507,6 +14120,61 @@ export class IsBabyCondition extends LootItemCondition {
 
 export class ISerializable {
     private constructor();
+}
+
+/**
+ * Represents the dynamic properties of a block. Only available
+ * from block entities. Up to 1KBytes of data can be stored per
+ * content pack per block entity in their dynamic properties
+ * storage.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class ItemBlockDynamicPropertiesComponent extends ItemComponent {
+    private constructor();
+    static readonly componentId = 'minecraft:block_actor_dynamic_properties';
+    /**
+     * @remarks
+     * Returns a DynamicProperty that was stored with the provided
+     * key. Keys are unique to each content pack and cannot be used
+     * to retrieve dynamic properties set from other content packs.
+     * Returns undefined if the key was not found.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link InvalidItemStackError}
+     */
+    get(key: string): boolean | number | string | Vector3 | undefined;
+    /**
+     * @remarks
+     * Sets a dynamic property with the provided key and value.
+     * Keys are unique to each content pack and cannot be used to
+     * set dynamic properties for other content packs. Values can
+     * be either a Number, a String or a Vector3. Setting a
+     * property with an undefined value will remove it from the
+     * storage. Storage size usage is counted towards the 1KBytes
+     * limit per content pack.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link Error}
+     *
+     * {@link InvalidItemStackError}
+     */
+    set(key: string, value?: boolean | number | string | Vector3): void;
+    /**
+     * @remarks
+     * Returns the current size, in bytes, of the dynamic
+     * properties storage for this block. The byte count only
+     * accounts for properties set by your content pack. The
+     * 1KBytes limit is per content pack.
+     *
+     * @throws This function can throw errors.
+     *
+     * {@link InvalidItemStackError}
+     */
+    totalByteCount(): number;
 }
 
 /**
@@ -13556,9 +14224,9 @@ export class ItemBookComponent extends ItemComponent {
     readonly pageCount: number;
     /**
      * @remarks
-     * The contents of pages in the book that are in {@link
-     * RawMessage} format. Entries not in {@link RawMessage} format
-     * will be undefined.
+     * The contents of pages in the book that are in
+     * {@link RawMessage} format. Entries not in {@link RawMessage}
+     * format will be undefined.
      *
      * @throws This property can throw when used.
      *
@@ -13613,14 +14281,14 @@ export class ItemBookComponent extends ItemComponent {
      * well as the JSON representation of a {@link RawMessage}.
      * Books have a maximum limit of 50 pages.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param pageIndex
      * The index of the page.
      * @param content
      * The content to set for the page. Can be a single string or
-     * {@link RawMessage} or an array of strings and/or {@link
-     * RawMessage}s
+     * {@link RawMessage} or an array of strings and/or
+     * {@link RawMessage}s
      * @throws This function can throw errors.
      *
      * {@link BookError}
@@ -13635,7 +14303,7 @@ export class ItemBookComponent extends ItemComponent {
      * Removes a page at a given index. Existing pages following
      * this page will be moved backward to fill the empty space.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param pageIndex
      * The index of the page.
@@ -13652,7 +14320,7 @@ export class ItemBookComponent extends ItemComponent {
      * well as the JSON representation of a {@link RawMessage}.
      * Books have a maximum limit of 50 pages.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param contents
      * An array of each page's contents. Each page can be a single
@@ -13676,14 +14344,14 @@ export class ItemBookComponent extends ItemComponent {
      * well as the JSON representation of a {@link RawMessage}.
      * Books have a maximum limit of 50 pages.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param pageIndex
      * The index of the page.
      * @param content
      * The content to set for the page. Can be a single string or
-     * {@link RawMessage} or an array of strings and/or {@link
-     * RawMessage}s
+     * {@link RawMessage} or an array of strings and/or
+     * {@link RawMessage}s
      * @throws This function can throw errors.
      *
      * {@link BookError}
@@ -13699,7 +14367,7 @@ export class ItemBookComponent extends ItemComponent {
      * players can no longer directly edit the book.
      * Titles have a maximum character limit of 16.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param title
      * The title to give the book.
@@ -13754,9 +14422,9 @@ export class ItemCompleteUseAfterEventSignal {
      * Adds a callback that will be called when a chargeable item
      * completes charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemCompleteUseAfterEvent) => void): (arg0: ItemCompleteUseAfterEvent) => void;
@@ -13765,9 +14433,9 @@ export class ItemCompleteUseAfterEventSignal {
      * Removes a callback from being called when a chargeable item
      * completes charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemCompleteUseAfterEvent) => void): void;
@@ -13937,7 +14605,7 @@ export class ItemComponentRegistry {
      * Registers an item custom component that can be used in item
      * JSON configuration.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param name
      * The id that represents this custom component. Must have a
@@ -14054,7 +14722,7 @@ export class ItemCooldownComponent extends ItemComponent {
     static readonly componentId = 'minecraft:cooldown';
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -14064,7 +14732,7 @@ export class ItemCooldownComponent extends ItemComponent {
      * Will return true if the item is the cooldown category passed
      * in and false otherwise.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param cooldownCategory
      * The cooldown category that might be associated with this
@@ -14078,7 +14746,7 @@ export class ItemCooldownComponent extends ItemComponent {
      * @remarks
      * Starts a new cooldown period for this item.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -14136,7 +14804,7 @@ export class ItemDurabilityComponent extends ItemComponent {
      * @remarks
      * Returns the current damage level of this particular item.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     damage: number;
@@ -14154,7 +14822,7 @@ export class ItemDurabilityComponent extends ItemComponent {
      * temporarily removes item's durability HUD, and freezes
      * durability loss on item.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     unbreakable: boolean;
@@ -14165,7 +14833,7 @@ export class ItemDurabilityComponent extends ItemComponent {
      * using the damageRange property, given an unbreaking
      * enchantment level.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param unbreakingEnchantmentLevel
      * Unbreaking factor to consider in factoring the damage
@@ -14182,7 +14850,7 @@ export class ItemDurabilityComponent extends ItemComponent {
      * chance for an item. The damage chance will fall within this
      * range.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -14199,7 +14867,7 @@ export class ItemDyeableComponent extends ItemComponent {
      * @remarks
      * Sets and returns the current color of the item.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     color?: RGB;
@@ -14229,7 +14897,7 @@ export class ItemEnchantableComponent extends ItemComponent {
      * @remarks
      * Adds an enchantment to the item stack.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param enchantment
      * The enchantment interface to be added.
@@ -14259,7 +14927,7 @@ export class ItemEnchantableComponent extends ItemComponent {
      * @remarks
      * Adds a list of enchantments to the item stack.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param enchantments
      * The list of enchantments to be added.
@@ -14354,7 +15022,7 @@ export class ItemEnchantableComponent extends ItemComponent {
      * @remarks
      * Removes all enchantments applied to this item stack.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -14363,7 +15031,7 @@ export class ItemEnchantableComponent extends ItemComponent {
      * @remarks
      * Removes an enchantment of the given type.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param enchantmentType
      * The enchantment type to remove.
@@ -14510,9 +15178,9 @@ export class ItemReleaseUseAfterEventSignal {
      * Adds a callback that will be called when a chargeable item
      * is released from charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemReleaseUseAfterEvent) => void): (arg0: ItemReleaseUseAfterEvent) => void;
@@ -14521,9 +15189,9 @@ export class ItemReleaseUseAfterEventSignal {
      * Removes a callback from being called when a chargeable item
      * is released from charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemReleaseUseAfterEvent) => void): void;
@@ -14614,7 +15282,7 @@ export class ItemStack {
      * 1-255. The provided value will be clamped to the item's
      * maximum stack size.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * Bounds: [1, 255]
      * @throws
@@ -14633,7 +15301,7 @@ export class ItemStack {
      * @remarks
      * Gets or sets whether the item is kept on death.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     keepOnDeath: boolean;
@@ -14652,7 +15320,7 @@ export class ItemStack {
      * Gets or sets the item's lock mode. The default value is
      * `ItemLockMode.none`.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     lockMode: ItemLockMode;
@@ -14670,7 +15338,7 @@ export class ItemStack {
      * when hovering over the item. Setting the name tag to an
      * empty string or `undefined` will remove the name tag.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      * @throws
      * Throws if the length exceeds 255 characters.
@@ -14705,9 +15373,7 @@ export class ItemStack {
      * world.
      *
      * @param itemType
-     * Type of item to create. See the {@link
-     * @minecraft/vanilla-data.MinecraftItemTypes} enumeration for
-     * a list of standard item types in Minecraft experiences.
+     * Type of item to create.
      * @param amount
      * Number of items to place in the stack, between 1-255. The
      * provided value will be clamped to the item's maximum stack
@@ -14741,7 +15407,7 @@ export class ItemStack {
      * Get the list of block types this item can break in Adventure
      * mode.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     getCanDestroy(): string[];
@@ -14750,7 +15416,7 @@ export class ItemStack {
      * Get the list of block types this item can be placed on in
      * Adventure mode.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     getCanPlaceOn(): string[];
@@ -14762,9 +15428,9 @@ export class ItemStack {
      * @param componentId
      * The identifier of the component (e.g., 'minecraft:food'). If
      * no namespace prefix is specified, 'minecraft:' is assumed.
-     * Available component IDs are those in the {@link
-     * ItemComponentTypes} enum and custom component IDs registered
-     * with the {@link ItemComponentRegistry}.
+     * Available component IDs are those in the
+     * {@link ItemComponentTypes} enum and custom component IDs
+     * registered with the {@link ItemComponentRegistry}.
      * @returns
      * Returns the component if it exists on the item stack,
      * otherwise undefined.
@@ -14851,8 +15517,8 @@ export class ItemStack {
     /**
      * @remarks
      * Returns the lore value - a secondary display string - for an
-     * ItemStack. String lore lines will be converted to a {@link
-     * RawMessage} and put under {@link RawMessage.text}.
+     * ItemStack. String lore lines will be converted to a
+     * {@link RawMessage} and put under {@link RawMessage.text}.
      *
      * @returns
      * An array of lore lines. If the item does not have lore,
@@ -14924,7 +15590,7 @@ export class ItemStack {
      * mode. The block names are displayed in the item's tooltip.
      * Setting the value to undefined will clear the list.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockIdentifiers
      * String list of block types that the item can destroy.
@@ -14958,7 +15624,7 @@ export class ItemStack {
      * block names are displayed in the item's tooltip. Setting the
      * value to undefined will clear the list.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param blockIdentifiers
      * String list of block types that the item can be placed on.
@@ -15024,7 +15690,7 @@ export class ItemStack {
      * ItemStack. The lore list is cleared if set to an empty
      * string or undefined.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param loreList
      * List of lore lines. Each element in the list represents a
@@ -15095,9 +15761,9 @@ export class ItemStartUseAfterEventSignal {
      * Adds a callback that will be called when a chargeable item
      * starts charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemStartUseAfterEvent) => void): (arg0: ItemStartUseAfterEvent) => void;
@@ -15106,9 +15772,9 @@ export class ItemStartUseAfterEventSignal {
      * Removes a callback from being called when a chargeable item
      * starts charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemStartUseAfterEvent) => void): void;
@@ -15163,9 +15829,9 @@ export class ItemStartUseOnAfterEventSignal {
      * Adds a callback that will be called when an item is used on
      * a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemStartUseOnAfterEvent) => void): (arg0: ItemStartUseOnAfterEvent) => void;
@@ -15174,9 +15840,9 @@ export class ItemStartUseOnAfterEventSignal {
      * Removes a callback from being called when an item is used on
      * a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemStartUseOnAfterEvent) => void): void;
@@ -15224,9 +15890,9 @@ export class ItemStopUseAfterEventSignal {
      * Adds a callback that will be called when a chargeable item
      * stops charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemStopUseAfterEvent) => void): (arg0: ItemStopUseAfterEvent) => void;
@@ -15235,9 +15901,9 @@ export class ItemStopUseAfterEventSignal {
      * Removes a callback from being called when a chargeable item
      * stops charging.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemStopUseAfterEvent) => void): void;
@@ -15285,9 +15951,9 @@ export class ItemStopUseOnAfterEventSignal {
      * Adds a callback that will be called when an item stops being
      * used on a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemStopUseOnAfterEvent) => void): (arg0: ItemStopUseOnAfterEvent) => void;
@@ -15296,9 +15962,9 @@ export class ItemStopUseOnAfterEventSignal {
      * Removes a callback from being called when an item is used on
      * a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemStopUseOnAfterEvent) => void): void;
@@ -15375,9 +16041,9 @@ export class ItemUseAfterEventSignal {
      * @remarks
      * Adds a callback that will be called when an item is used.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ItemUseAfterEvent) => void): (arg0: ItemUseAfterEvent) => void;
@@ -15385,9 +16051,9 @@ export class ItemUseAfterEventSignal {
      * @remarks
      * Removes a callback from being called when an item is used.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ItemUseAfterEvent) => void): void;
@@ -15416,9 +16082,9 @@ export class ItemUseBeforeEventSignal {
      * @remarks
      * Adds a callback that will be called before an item is used.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -15430,9 +16096,9 @@ export class ItemUseBeforeEventSignal {
      * @remarks
      * Removes a callback from being called before an item is used.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -15607,9 +16273,9 @@ export class LeverActionAfterEventSignal {
      * Adds a callback that will be called when a lever is moved
      * (activates or deactivates).
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: LeverActionAfterEvent) => void): (arg0: LeverActionAfterEvent) => void;
@@ -15618,9 +16284,9 @@ export class LeverActionAfterEventSignal {
      * Removes a callback from being called when a lever is moved
      * (activates or deactivates).
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: LeverActionAfterEvent) => void): void;
@@ -15634,7 +16300,7 @@ export class LinearSpline {
      * @remarks
      * Control points for the Linear spline.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     controlPoints: Vector3[];
@@ -15691,7 +16357,7 @@ export class LocationWaypoint extends Waypoint {
      * Updates the dimension and location that this waypoint points
      * to.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param dimensionLocation
      * The new {@link DimensionLocation} (dimension and
@@ -15777,7 +16443,7 @@ export class LocatorBar {
      * waypoint already exists, the maximum waypoint limit has been
      * reached, or the waypoint is invalid.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param waypoint
      * The {@link Waypoint} to add to the locator bar.
@@ -15795,7 +16461,7 @@ export class LocatorBar {
      * Returns an array of all waypoints currently in the locator
      * bar.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     getAllWaypoints(): Waypoint[];
@@ -15804,7 +16470,7 @@ export class LocatorBar {
      * Checks whether the specified waypoint exists in the locator
      * bar.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param waypoint
      * The {@link Waypoint} to check for.
@@ -15815,7 +16481,7 @@ export class LocatorBar {
      * Removes all waypoints from the locator bar, clearing it
      * completely.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -15827,7 +16493,7 @@ export class LocatorBar {
      * Removes a specific waypoint from the locator bar. Returns an
      * error if the waypoint does not exist in the locator bar.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param waypoint
      * The {@link Waypoint} to remove from the locator bar.
@@ -16262,12 +16928,12 @@ export class MolangVariableMap {
      * @remarks
      * Adds the following variables to Molang:
      * - `<variable_name>.speed` - Speed number provided
-     * - `<variable_name>.direction_x` - X value from the {@link
-     * Vector3} provided
-     * - `<variable_name>.direction_y` - Y value from the {@link
-     * Vector3} provided
-     * - `<variable_name>.direction_z` - Z value from the {@link
-     * Vector3} provided
+     * - `<variable_name>.direction_x` - X value from the
+     * {@link Vector3} provided
+     * - `<variable_name>.direction_y` - Y value from the
+     * {@link Vector3} provided
+     * - `<variable_name>.direction_z` - Z value from the
+     * {@link Vector3} provided
      *
      * @throws This function can throw errors.
      */
@@ -16376,9 +17042,9 @@ export class PistonActivateAfterEventSignal {
     private constructor();
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @example pistonAfterEvent.ts
      * ```typescript
@@ -16433,9 +17099,9 @@ export class PistonActivateAfterEventSignal {
      * Removes a callback from being called when a piston expands
      * or retracts.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PistonActivateAfterEvent) => void): void;
@@ -16463,10 +17129,17 @@ export class Player extends Entity {
     readonly clientSystemInfo: ClientSystemInfo;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     commandPermissionLevel: CommandPermissionLevel;
+    /**
+     * @remarks
+     * Contains methods for manipulating the render distance fog
+     * settings of a Player.
+     *
+     */
+    readonly fogSettings: FogSettings;
     /**
      * @remarks
      * Gets the current graphics mode of the player's client. This
@@ -16558,7 +17231,7 @@ export class Player extends Entity {
     readonly playerPermissionLevel: PlayerPermissionLevel;
     /**
      * @remarks
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     selectedSlotIndex: number;
@@ -16582,7 +17255,7 @@ export class Player extends Entity {
      * Adds/removes experience to/from the Player and returns the
      * current experience of the Player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param amount
      * Amount of experience to add. Note that this can be negative.
@@ -16598,7 +17271,7 @@ export class Player extends Entity {
      * Adds/removes level to/from the Player and returns the
      * current level of the Player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param amount
      * Amount to add to the player. Min/max bounds at -2^24 ~ 2^24
@@ -16614,7 +17287,7 @@ export class Player extends Entity {
      * Properties on the target Entity. This change is not applied
      * until the next tick and will not apply to other players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param targetEntity
      * The Entity or the ID of the Entity whose Entity Property
@@ -16675,7 +17348,7 @@ export class Player extends Entity {
      * Plays a music track that only this particular player can
      * hear.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param trackId
      * Identifier of the music track to play.
@@ -16688,7 +17361,7 @@ export class Player extends Entity {
      * @remarks
      * Plays a sound that only this particular player can hear.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param soundOptions
      * Additional optional options for the sound.
@@ -16726,14 +17399,14 @@ export class Player extends Entity {
      * }
      * ```
      */
-    playSound(soundId: string, soundOptions?: PlayerSoundOptions): SoundInstance;
+    playSound(soundId: SoundDefinition | string, soundOptions?: PlayerSoundOptions): SoundInstance;
     /**
      * @remarks
      * Queues an additional music track that only this particular
      * player can hear. If a track is not playing, a music track
      * will play.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param trackId
      * Identifier of the music track to play.
@@ -16751,7 +17424,7 @@ export class Player extends Entity {
      * This change is not applied until the next tick and will not
      * apply to other players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param targetEntity
      * The Entity whose Entity Property override is being removed.
@@ -16768,7 +17441,7 @@ export class Player extends Entity {
      * @remarks
      * Resets the level of the player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -16867,7 +17540,7 @@ export class Player extends Entity {
      * preset must be set by scripts like with camera.setCamera()
      * or commands.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param controlScheme
      * Control scheme type. If this argument is undefined, this
@@ -16891,7 +17564,7 @@ export class Player extends Entity {
      * @remarks
      * Sets a gamemode override for this player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param gameMode
      * Active gamemode.
@@ -16905,7 +17578,7 @@ export class Player extends Entity {
      * synced. This change is not applied until the next tick and
      * will not apply to other players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param targetEntity
      * The Entity whose Entity Property is being overriden.
@@ -16930,7 +17603,7 @@ export class Player extends Entity {
      * Sets the current starting spawn point for this particular
      * player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -16944,7 +17617,7 @@ export class Player extends Entity {
      * Creates a new particle emitter at a specified location in
      * the world. Only visible to the target player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param effectName
      * Identifier of the particle to create.
@@ -16991,7 +17664,7 @@ export class Player extends Entity {
      * Sets the item cooldown time for a particular cooldown
      * category.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param cooldownCategory
      * Specifies the cooldown category to retrieve the current
@@ -17007,7 +17680,7 @@ export class Player extends Entity {
      * Stops any music tracks from playing for this particular
      * player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -17030,7 +17703,7 @@ export class PlayerAimAssist {
      * @remarks
      * Sets the player's aim-assist settings.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param settings
      * Aim-assist settings to activate for the player, if undefined
@@ -17099,9 +17772,9 @@ export class PlayerBreakBlockAfterEventSignal {
      * Adds a callback that will be called when a block is broken
      * by a player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17113,9 +17786,9 @@ export class PlayerBreakBlockAfterEventSignal {
      * Removes a callback from being called when a player breaks a
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerBreakBlockAfterEvent) => void): void;
@@ -17160,9 +17833,9 @@ export class PlayerBreakBlockBeforeEventSignal {
      * Adds a callback that will be called before a block is broken
      * by a player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -17178,9 +17851,9 @@ export class PlayerBreakBlockBeforeEventSignal {
      * Removes a callback from being called before a player breaks
      * a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -17223,9 +17896,9 @@ export class PlayerButtonInputAfterEventSignal {
      * Adds a callback that will be called after the player
      * performs an input.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17237,9 +17910,9 @@ export class PlayerButtonInputAfterEventSignal {
      * Removes a callback from being called after the player
      * performs an input.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerButtonInputAfterEvent) => void): void;
@@ -17298,9 +17971,9 @@ export class PlayerCancelBreakingBlockAfterEventSignal {
      * Adds a callback that will be called when a player cancels
      * breaking a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17312,9 +17985,9 @@ export class PlayerCancelBreakingBlockAfterEventSignal {
      * Removes a callback from being called when a player cancels
      * breaking a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerCancelBreakingBlockAfterEvent) => void): void;
@@ -17340,7 +18013,7 @@ export class PlayerCursorInventoryComponent extends EntityComponent {
      * @remarks
      * Clears the players cursor inventory.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -17397,9 +18070,9 @@ export class PlayerDimensionChangeAfterEventSignal {
      * Subscribes the specified callback to a player dimension
      * change after event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17410,9 +18083,9 @@ export class PlayerDimensionChangeAfterEventSignal {
      * Removes the specified callback from a player dimension
      * change after event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerDimensionChangeAfterEvent) => void): void;
@@ -17428,17 +18101,17 @@ export class PlayerEmoteAfterEventSignal {
     private constructor();
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PlayerEmoteAfterEvent) => void): (arg0: PlayerEmoteAfterEvent) => void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerEmoteAfterEvent) => void): void;
@@ -17481,9 +18154,9 @@ export class PlayerGameModeChangeAfterEventSignal {
      * Adds a callback that will be called after a players game
      * mode is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PlayerGameModeChangeAfterEvent) => void): (arg0: PlayerGameModeChangeAfterEvent) => void;
@@ -17492,9 +18165,9 @@ export class PlayerGameModeChangeAfterEventSignal {
      * Removes a callback from being called after a players game
      * mode is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerGameModeChangeAfterEvent) => void): void;
@@ -17543,9 +18216,9 @@ export class PlayerGameModeChangeBeforeEventSignal {
      * Adds a callback that will be called before a players game
      * mode is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -17560,9 +18233,9 @@ export class PlayerGameModeChangeBeforeEventSignal {
      * Removes a callback from being called before a players game
      * mode is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -17613,9 +18286,9 @@ export class PlayerHotbarSelectedSlotChangeAfterEventSignal {
      * Adds a callback that will be called after a player selected
      * hotbar slot is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function callback that is called when this event fires.
@@ -17631,9 +18304,9 @@ export class PlayerHotbarSelectedSlotChangeAfterEventSignal {
      * Removes a callback from being called after a player selected
      * hotbar slot is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerHotbarSelectedSlotChangeAfterEvent) => void): void;
@@ -17674,9 +18347,9 @@ export class PlayerInputModeChangeAfterEventSignal {
      * Adds a callback that will be called after the player input
      * mode changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17687,9 +18360,9 @@ export class PlayerInputModeChangeAfterEventSignal {
      * Removes a callback from being called after the player input
      * mode changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerInputModeChangeAfterEvent) => void): void;
@@ -17732,9 +18405,9 @@ export class PlayerInputPermissionCategoryChangeAfterEventSignal {
      * Adds a callback that will be called after a players input
      * permissions change.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17745,9 +18418,9 @@ export class PlayerInputPermissionCategoryChangeAfterEventSignal {
      * Removes a callback from being called after a players input
      * permissions change.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerInputPermissionCategoryChangeAfterEvent) => void): void;
@@ -17762,7 +18435,7 @@ export class PlayerInputPermissions {
      * @remarks
      * Returns true if an input permission is enabled.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -17772,7 +18445,7 @@ export class PlayerInputPermissions {
      * Enable or disable an input permission. When enabled the
      * input will work, when disabled will not work.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -17845,9 +18518,9 @@ export class PlayerInteractWithBlockAfterEventSignal {
      * Adds a callback that will be called after a player interacts
      * with a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -17858,9 +18531,9 @@ export class PlayerInteractWithBlockAfterEventSignal {
      * Removes a callback from being called after a player
      * interacts with a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerInteractWithBlockAfterEvent) => void): void;
@@ -17931,9 +18604,9 @@ export class PlayerInteractWithBlockBeforeEventSignal {
      * Adds a callback that will be called before a player
      * interacts with a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -17948,9 +18621,9 @@ export class PlayerInteractWithBlockBeforeEventSignal {
      * Removes a callback from being called before a player
      * interacts with a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -18003,9 +18676,9 @@ export class PlayerInteractWithEntityAfterEventSignal {
      * Adds a callback that will be called after a player interacts
      * with an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -18016,9 +18689,9 @@ export class PlayerInteractWithEntityAfterEventSignal {
      * Removes a callback from being called after a player
      * interacts with an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerInteractWithEntityAfterEvent) => void): void;
@@ -18068,9 +18741,9 @@ export class PlayerInteractWithEntityBeforeEventSignal {
      * Adds a callback that will be called before a player
      * interacts with an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -18085,9 +18758,9 @@ export class PlayerInteractWithEntityBeforeEventSignal {
      * Removes a callback from being called before a player
      * interacts with an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -18144,9 +18817,9 @@ export class PlayerInventoryItemChangeAfterEventSignal {
      * Adds a callback that will be called after a player's
      * inventory item is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function callback that is called when this event fires.
@@ -18162,9 +18835,9 @@ export class PlayerInventoryItemChangeAfterEventSignal {
      * Removes a callback from being called after a player's
      * inventory item is changed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerInventoryItemChangeAfterEvent) => void): void;
@@ -18203,9 +18876,9 @@ export class PlayerJoinAfterEventSignal {
      * Adds a callback that will be called when a player joins the
      * world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PlayerJoinAfterEvent) => void): (arg0: PlayerJoinAfterEvent) => void;
@@ -18214,9 +18887,9 @@ export class PlayerJoinAfterEventSignal {
      * Removes a callback from being called when a player joins the
      * world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerJoinAfterEvent) => void): void;
@@ -18254,9 +18927,9 @@ export class PlayerLeaveAfterEventSignal {
      * Adds a callback that will be called when a player leaves the
      * world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PlayerLeaveAfterEvent) => void): (arg0: PlayerLeaveAfterEvent) => void;
@@ -18265,9 +18938,9 @@ export class PlayerLeaveAfterEventSignal {
      * Removes a callback from being called when a player leaves
      * the world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerLeaveAfterEvent) => void): void;
@@ -18298,9 +18971,9 @@ export class PlayerLeaveBeforeEventSignal {
      * Adds a callback that will be called when a player leaves the
      * world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -18313,9 +18986,9 @@ export class PlayerLeaveBeforeEventSignal {
      * Removes a callback that will be called when a player leaves
      * the world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -18349,9 +19022,9 @@ export class PlayerPlaceBlockAfterEventSignal {
      * Adds a callback that will be called when a block is placed
      * by a player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -18363,9 +19036,9 @@ export class PlayerPlaceBlockAfterEventSignal {
      * Removes a callback from being called when an block is placed
      * by a player.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerPlaceBlockAfterEvent) => void): void;
@@ -18382,7 +19055,7 @@ export class PlayerSpawnAfterEvent {
      * If true, this is the initial spawn of a player after joining
      * the game.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     initialSpawn: boolean;
@@ -18390,7 +19063,7 @@ export class PlayerSpawnAfterEvent {
      * @remarks
      * Object that represents the player that joined the game.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     player: Player;
@@ -18407,9 +19080,9 @@ export class PlayerSpawnAfterEventSignal {
      * Registers a new event receiver for this particular type of
      * event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PlayerSpawnAfterEvent) => void): (arg0: PlayerSpawnAfterEvent) => void;
@@ -18417,9 +19090,9 @@ export class PlayerSpawnAfterEventSignal {
      * @remarks
      * De-registers an event receiver for the player spawn event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerSpawnAfterEvent) => void): void;
@@ -18471,9 +19144,9 @@ export class PlayerStartBreakingBlockAfterEventSignal {
      * Adds a callback that will be called when a player starts
      * breaking a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -18485,9 +19158,9 @@ export class PlayerStartBreakingBlockAfterEventSignal {
      * Removes a callback from being called when a player starts
      * breaking a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerStartBreakingBlockAfterEvent) => void): void;
@@ -18514,8 +19187,8 @@ export class PlayerSwingStartAfterEvent {
     readonly player: Player;
     /**
      * @remarks
-     * The source of the Player swing, see {@link
-     * EntitySwingSource}.
+     * The source of the Player swing, see
+     * {@link EntitySwingSource}.
      *
      */
     readonly swingSource: EntitySwingSource;
@@ -18534,9 +19207,9 @@ export class PlayerSwingStartAfterEventSignal {
      * swing their arm (e.g. attacking, using an item,
      * interacting).
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -18549,18 +19222,18 @@ export class PlayerSwingStartAfterEventSignal {
      * swing their arm (e.g. attacking, using an item,
      * interacting).
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PlayerSwingStartAfterEvent) => void): void;
 }
 
 /**
- * Waypoint that tracks a player's position. Extends {@link
- * EntityWaypoint} with additional player-specific visibility
- * rules such as hidden state and spectator mode.
+ * Waypoint that tracks a player's position. Extends
+ * {@link EntityWaypoint} with additional player-specific
+ * visibility rules such as hidden state and spectator mode.
  */
 // @ts-ignore Class inheritance allowed for native defined classes
 export class PlayerWaypoint extends EntityWaypoint {
@@ -18712,9 +19385,9 @@ export class PressurePlatePopAfterEventSignal {
      * Adds a callback that will be called when a pressure plate is
      * popped.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PressurePlatePopAfterEvent) => void): (arg0: PressurePlatePopAfterEvent) => void;
@@ -18723,9 +19396,9 @@ export class PressurePlatePopAfterEventSignal {
      * Removes a callback from being called when a pressure plate
      * is popped.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PressurePlatePopAfterEvent) => void): void;
@@ -18771,9 +19444,9 @@ export class PressurePlatePushAfterEventSignal {
      * Adds a callback that will be called when a pressure plate is
      * pushed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: PressurePlatePushAfterEvent) => void): (arg0: PressurePlatePushAfterEvent) => void;
@@ -18782,9 +19455,9 @@ export class PressurePlatePushAfterEventSignal {
      * Removes a callback from being called when a pressure plate
      * is pushed.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: PressurePlatePushAfterEvent) => void): void;
@@ -18920,6 +19593,17 @@ export class PrimitiveShapesManager {
     addText(text: TextPrimitive, dimension?: Dimension): void;
     /**
      * @remarks
+     * Fetches and queries all primitive shapes stored in the
+     * manager and returns the results as an array of shape
+     * handles.
+     *
+     * @param options
+     * Optional options for querying existing shapes to narrow down
+     * the results.
+     */
+    getShapes(options?: PrimitiveShapeQueryOptions): PrimitiveShape[];
+    /**
+     * @remarks
      * Removes all text primitives from the world.
      *
      */
@@ -18974,7 +19658,7 @@ export class ProjectileHitBlockAfterEvent {
      * Contains additional information about the block that was hit
      * by the projectile.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     getBlockHit(): BlockHitInformation;
@@ -18991,9 +19675,9 @@ export class ProjectileHitBlockAfterEventSignal {
      * Adds a callback that will be called when a projectile hits a
      * block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ProjectileHitBlockAfterEvent) => void): (arg0: ProjectileHitBlockAfterEvent) => void;
@@ -19002,9 +19686,9 @@ export class ProjectileHitBlockAfterEventSignal {
      * Removes a callback from being called when a projectile hits
      * a block.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ProjectileHitBlockAfterEvent) => void): void;
@@ -19051,7 +19735,7 @@ export class ProjectileHitEntityAfterEvent {
      * Contains additional information about an entity that was
      * hit.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     getEntityHit(): EntityHitInformation;
@@ -19068,9 +19752,9 @@ export class ProjectileHitEntityAfterEventSignal {
      * Adds a callback that will be called when a projectile hits
      * an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: ProjectileHitEntityAfterEvent) => void): (arg0: ProjectileHitEntityAfterEvent) => void;
@@ -19079,9 +19763,9 @@ export class ProjectileHitEntityAfterEventSignal {
      * Removes a callback from being called when a projectile hits
      * an entity.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ProjectileHitEntityAfterEvent) => void): void;
@@ -19250,7 +19934,7 @@ export class Scoreboard {
      * @remarks
      * Adds a new objective to the scoreboard.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      * @example updateScoreboard.ts
@@ -19298,7 +19982,7 @@ export class Scoreboard {
      * @remarks
      * Clears the objective that occupies a display slot.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     clearObjectiveAtDisplaySlot(displaySlotId: DisplaySlotId): ScoreboardObjective | undefined;
@@ -19333,7 +20017,7 @@ export class Scoreboard {
      * @remarks
      * Removes an objective from the scoreboard.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      */
@@ -19343,7 +20027,7 @@ export class Scoreboard {
      * Sets an objective into a display slot with specified
      * additional display settings.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * Returns the previous `ScoreboardObjective` set at the
@@ -19428,7 +20112,7 @@ export class ScoreboardObjective {
      * @remarks
      * Adds a score to the given participant and objective.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param participant
      * Participant to apply the scoreboard value addition to.
@@ -19471,7 +20155,7 @@ export class ScoreboardObjective {
      * @remarks
      * Removes a participant from this scoreboard objective.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param participant
      * Participant to remove from being tracked with this
@@ -19483,7 +20167,7 @@ export class ScoreboardObjective {
      * @remarks
      * Sets a score for a participant.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param participant
      * Identity of the participant.
@@ -19582,7 +20266,7 @@ export class ScreenDisplay {
     readonly isValid: boolean;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19591,7 +20275,7 @@ export class ScreenDisplay {
     getHiddenHudElements(): HudElement[];
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19600,7 +20284,7 @@ export class ScreenDisplay {
     hideAllExcept(hudElements?: HudElement[]): void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19609,7 +20293,7 @@ export class ScreenDisplay {
     isForcedHidden(hudElement: HudElement): boolean;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19621,7 +20305,7 @@ export class ScreenDisplay {
      * Set the action bar text - a piece of text that displays
      * beneath the title and above the hot-bar.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param text
      * New value for the action bar text.
@@ -19637,7 +20321,7 @@ export class ScreenDisplay {
      * Sets visibility of a particular element of the heads up
      * display (HUD).
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param visible
      * Whether to set the HUD element to invisible, or to reset it
@@ -19656,7 +20340,7 @@ export class ScreenDisplay {
      * can optionally specify an additional subtitle as well as
      * fade in, stay and fade out times.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19725,7 +20409,7 @@ export class ScreenDisplay {
      * Updates the subtitle if the subtitle was previously
      * displayed via the setTitle method.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -19820,9 +20504,9 @@ export class ScriptEventCommandMessageAfterEventSignal {
      * @remarks
      * Registers a new ScriptEvent handler.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(
@@ -19833,9 +20517,9 @@ export class ScriptEventCommandMessageAfterEventSignal {
      * @remarks
      * Unsubscribes a particular handler for a ScriptEvent event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: ScriptEventCommandMessageAfterEvent) => void): void;
@@ -20109,9 +20793,9 @@ export class ShutdownBeforeEventSignal {
      * @remarks
      * Adds a new subscriber callback to this event.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function callback that is called when this event fires.
@@ -20125,9 +20809,9 @@ export class ShutdownBeforeEventSignal {
      * Removes a subscriber callback previously subscribed to via
      * the subscribe method.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function closure that was previously passed to the subscribe
@@ -20155,6 +20839,149 @@ export class SmeltItemFunction extends LootItemFunction {
 }
 
 /**
+ * Contains information about a sound thats declared duration
+ * elapsed.
+ */
+export class SoundCompletedAfterEvent {
+    private constructor();
+    /**
+     * @remarks
+     * Identifier of the sound instance that completed. Matches the
+     * `id` property of the `SoundInstance` returned when the sound
+     * was played.
+     *
+     */
+    readonly soundInstanceId: string;
+}
+
+/**
+ * Manages callbacks that are invoked when a tracked sound's
+ * declared duration elapses.
+ */
+export class SoundCompletedAfterEventSignal {
+    private constructor();
+    /**
+     * @remarks
+     * Adds a callback that will be invoked when a tracked sound's
+     * declared duration elapses.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    subscribe(callback: (arg0: SoundCompletedAfterEvent) => void): (arg0: SoundCompletedAfterEvent) => void;
+    /**
+     * @remarks
+     * Removes a callback from being invoked when a tracked sound's
+     * declared duration elapses.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
+     *
+     */
+    unsubscribe(callback: (arg0: SoundCompletedAfterEvent) => void): void;
+}
+
+/**
+ * Static metadata about a sound declared in a
+ * sound_definitions.json file.
+ */
+export class SoundDefinition {
+    private constructor();
+    /**
+     * @remarks
+     * Duration metadata declared for this sound. Undefined when
+     * the sound definition does not specify a duration.
+     *
+     */
+    readonly durationInfo?: SoundDefinitionDurationInfo;
+    /**
+     * @remarks
+     * Music metadata declared for this sound. Undefined when the
+     * sound definition does not specify a music_info block.
+     *
+     */
+    readonly musicInfo?: SoundDefinitionMusicInfo;
+    /**
+     * @remarks
+     * Identifier of the sound event this definition declares, in
+     * the form 'namespace:name'.
+     *
+     */
+    readonly soundEventId: string;
+    /**
+     * @remarks
+     * Tag metadata declared for this sound, as a record mapping
+     * each tag name to its declared values. A tag declared with a
+     * single string value is exposed as a single-element array.
+     * Undefined when the sound definition does not specify any
+     * tags.
+     *
+     */
+    readonly tags?: Record<string, string[]>;
+}
+
+/**
+ * Provides read-only access to the sound definitions loaded
+ * for the current world.
+ */
+export class SoundDefinitionRegistry {
+    private constructor();
+    /**
+     * @remarks
+     * Returns the sound definitions in the registry, optionally
+     * narrowed by a filter.
+     *
+     * @param filter
+     * Optional filter applied to each definition. When omitted,
+     * every definition is returned.
+     * @returns
+     * All sound definitions matching the filter, or every sound
+     * definition when no filter is supplied.
+     * @throws
+     * An error will be thrown if filter.minDuration is greater
+     * than filter.maxDuration.
+     *
+     * {@link minecraftcommon.InvalidArgumentError}
+     */
+    getDefinitions(filter?: SoundDefinitionFilter): SoundDefinition[];
+}
+
+/**
+ * Provides duration and playback information for a sound whose
+ * definition declares a duration.
+ */
+export class SoundDurationInfo {
+    private constructor();
+    /**
+     * @remarks
+     * Gets the total duration of the sound in seconds.
+     *
+     */
+    readonly duration: number;
+    /**
+     * @remarks
+     * Gets whether the sound is still being tracked.
+     *
+     */
+    readonly isActive: boolean;
+    /**
+     * @remarks
+     * Returns the current playback position within the sound, in
+     * seconds, measured from the beginning of the sound.
+     *
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
+     *
+     * @returns
+     * Current playback position in seconds, measured from the
+     * beginning of the sound.
+     */
+    getPlaybackPosition(): number;
+}
+
+/**
  * Represents a handle to a sound that has been played. The
  * handle is required to control the sound while it is playing
  * (for example, to call `stop`, `setVolume`, `setPitch`,
@@ -20167,9 +20994,34 @@ export class SoundInstance {
     private constructor();
     /**
      * @remarks
+     * Gets duration and playback information for this sound.
+     *
+     */
+    readonly durationInfo?: SoundDurationInfo;
+    /**
+     * @remarks
+     * Unique identifier of this sound instance.
+     *
+     */
+    readonly id: string;
+    /**
+     * @remarks
+     * Gets the player this sound was played for.
+     *
+     */
+    readonly recipient?: Player;
+    /**
+     * @remarks
+     * Gets the identifier of the sound event this instance was
+     * started with.
+     *
+     */
+    readonly soundEventId: string;
+    /**
+     * @remarks
      * Stops this sound instance from playing.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     stop(): void;
@@ -20189,9 +21041,9 @@ export class StartupBeforeEventSignal {
     private constructor();
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with early-execution privilege.
@@ -20201,9 +21053,9 @@ export class StartupBeforeEventSignal {
     subscribe(callback: (arg0: StartupEvent) => void): (arg0: StartupEvent) => void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with early-execution privilege.
@@ -20215,25 +21067,25 @@ export class StartupEvent {
     private constructor();
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly blockComponentRegistry: BlockComponentRegistry;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly customCommandRegistry: CustomCommandRegistry;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly dimensionRegistry: DimensionRegistry;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemComponentRegistry: ItemComponentRegistry;
@@ -20316,7 +21168,7 @@ export class Structure extends ISerializable {
      * @remarks
      * Creates a copy of a Structure and saves it with a new name.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The name of the newly created Structure.
@@ -20342,7 +21194,7 @@ export class Structure extends ISerializable {
      * @remarks
      * Saves a modified Structure to the world file.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws
      * Throws if the Structure has been deleted.
@@ -20354,7 +21206,7 @@ export class Structure extends ISerializable {
      * @remarks
      * Sets a BlockPermutation within a Structure.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param location
      * The block location relative to the Structure's origin.
@@ -20388,11 +21240,12 @@ export class StructureManager {
     private constructor();
     /**
      * @remarks
-     * Creates an empty Structure in memory. Use {@link
-     * Structure.setBlockPermutation} to populate the structure
-     * with blocks and save changes with {@link Structure.saveAs}.
+     * Creates an empty Structure in memory. Use
+     * {@link Structure.setBlockPermutation} to populate the
+     * structure with blocks and save changes with
+     * {@link Structure.saveAs}.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The name of the structure. A valid identifier must include a
@@ -20420,7 +21273,7 @@ export class StructureManager {
      * Creates a new Structure from blocks in the world. This is
      * functionally equivalent to the /structure save command.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The name of the structure. A valid identifier must include a
@@ -20453,7 +21306,7 @@ export class StructureManager {
      * Deletes a structure from memory and from the world if it
      * exists.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param structure
      * The structure identifier or Structure object that should be
@@ -20472,7 +21325,7 @@ export class StructureManager {
      * @remarks
      * Gets a Structure that is saved to memory or the world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The name of the structure to get.
@@ -20486,7 +21339,7 @@ export class StructureManager {
      * packs. Does not include structures saved to the world or in
      * memory.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * The list of structure identifiers.
@@ -20498,7 +21351,7 @@ export class StructureManager {
      * memory. Does not include structures contained in behavior
      * packs.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @returns
      * The list of structure identifiers.
@@ -20509,7 +21362,7 @@ export class StructureManager {
      * Places a structure in the world. Structures placed in
      * unloaded chunks will be queued for loading.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param structure
      * The structure's identifier or a Structure object.
@@ -20543,7 +21396,7 @@ export class StructureManager {
      * Places a partial jigsaw structure in the world. This is
      * useful for debugging connections between jigsaw blocks.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param pool
      * The identifier of the template pool to start from.
@@ -20586,7 +21439,7 @@ export class StructureManager {
      * @remarks
      * Places a jigsaw structure in the world.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param identifier
      * The identifier of the jigsaw structure.
@@ -20630,7 +21483,7 @@ export class System {
      * Returns a collection of after-events for system-level
      * operations.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly afterEvents: SystemAfterEvents;
@@ -20639,7 +21492,7 @@ export class System {
      * Returns a collection of before-events for system-level
      * operations.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly beforeEvents: SystemBeforeEvents;
@@ -20647,7 +21500,7 @@ export class System {
      * @remarks
      * Represents the current world tick of the server.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly currentTick: number;
@@ -20656,7 +21509,7 @@ export class System {
      * Returns true if this is a world where the editor is
      * currently loaded, returns false otherwise.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly isEditorWorld: boolean;
@@ -20664,16 +21517,16 @@ export class System {
      * @remarks
      * Contains the device information for the server.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly serverSystemInfo: SystemInfo;
     /**
      * @remarks
-     * Cancels the execution of a job queued via {@link
-     * System.runJob}.
+     * Cancels the execution of a job queued via
+     * {@link System.runJob}.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param jobId
      * The job ID returned from {@link System.runJob}.
@@ -20684,7 +21537,7 @@ export class System {
      * Cancels the execution of a function run that was previously
      * scheduled via {@link System.run}.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     clearRun(runId: number): void;
@@ -20699,7 +21552,7 @@ export class System {
      * tick. Note, however, that depending on load on the system,
      * running in the same or next tick is not guaranteed.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Function callback to run at the next game tick.
@@ -20729,7 +21582,7 @@ export class System {
      * @remarks
      * Runs a set of code on an interval.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Functional code that will run when this interval occurs.
@@ -20759,13 +21612,13 @@ export class System {
      * will be given a time slice each tick, and will be run until
      * it yields or completes.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param generator
      * The instance of the generator to run.
      * @returns
-     * An opaque handle that can be used with {@link
-     * System.clearJob} to stop the run of this generator.
+     * An opaque handle that can be used with
+     * {@link System.clearJob} to stop the run of this generator.
      * @example cubeGenerator.ts
      * ```typescript
      * import { system, BlockPermutation, DimensionLocation } from '@minecraft/server';
@@ -20796,7 +21649,7 @@ export class System {
      * @remarks
      * Runs a set of code at a future time specified by tickDelay.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * Functional code that will run when this timeout occurs.
@@ -20835,7 +21688,7 @@ export class System {
      * waitTicks returns a promise that resolves after the
      * requested number of ticks.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param ticks
      * The amount of ticks to wait. Minimum value is 1.
@@ -20861,7 +21714,7 @@ export class SystemAfterEvents {
      * provides a way for commands and other systems to trigger
      * behavior within script.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly scriptEventReceive: ScriptEventCommandMessageAfterEventSignal;
@@ -20878,13 +21731,13 @@ export class SystemBeforeEvents {
     private constructor();
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly shutdown: ShutdownBeforeEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly startup: StartupBeforeEventSignal;
@@ -20947,9 +21800,9 @@ export class TargetBlockHitAfterEventSignal {
      * Adds a callback that will be called when a target block is
      * hit.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: TargetBlockHitAfterEvent) => void): (arg0: TargetBlockHitAfterEvent) => void;
@@ -20958,9 +21811,9 @@ export class TargetBlockHitAfterEventSignal {
      * Removes a callback from being called when a target block is
      * hit.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: TargetBlockHitAfterEvent) => void): void;
@@ -21059,7 +21912,7 @@ export class TickingAreaManager {
      * Creates a ticking area. Promise will return when all the
      * chunks in the area are loaded and ticking.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21072,7 +21925,7 @@ export class TickingAreaManager {
      * @remarks
      * Gets all ticking areas added by this manager.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21083,7 +21936,7 @@ export class TickingAreaManager {
      * @remarks
      * Tries to get specific ticking area by identifier.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21096,7 +21949,7 @@ export class TickingAreaManager {
      * the ticking area and false otherwise. Will also return false
      * if the length or width exceeds the 255 chunk limit.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     hasCapacity(options: TickingAreaOptions): boolean;
@@ -21105,7 +21958,7 @@ export class TickingAreaManager {
      * Returns true if the identifier is already in the manager and
      * false otherwise.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     hasTickingArea(identifier: string): boolean;
@@ -21113,7 +21966,7 @@ export class TickingAreaManager {
      * @remarks
      * Removes all ticking areas added by this manager.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21124,7 +21977,7 @@ export class TickingAreaManager {
      * @remarks
      * Removes specific ticking area by unique identifier.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21254,9 +22107,9 @@ export class TripWireTripAfterEventSignal {
      * Adds a callback that will be called when a trip wire is
      * tripped.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: TripWireTripAfterEvent) => void): (arg0: TripWireTripAfterEvent) => void;
@@ -21265,9 +22118,9 @@ export class TripWireTripAfterEventSignal {
      * Removes a callback from being called when a trip wire is
      * tripped.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: TripWireTripAfterEvent) => void): void;
@@ -21293,7 +22146,7 @@ export class Waypoint {
      * Optional {@link RGB} color tint applied to the waypoint
      * icon. If not specified, the waypoint uses its default color.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     color?: RGB;
@@ -21303,7 +22156,7 @@ export class Waypoint {
      * player's screen. When disabled, the waypoint is hidden but
      * remains valid.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     isEnabled: boolean;
@@ -21320,7 +22173,7 @@ export class Waypoint {
      * icon texture is displayed for the waypoint based on distance
      * or other criteria.
      *
-     * This property can't be edited in restricted-execution mode.
+     * @privilege restricted-execution-read-only - This property can't be edited in restricted-execution mode.
      *
      */
     textureSelector: WaypointTextureSelector;
@@ -21331,7 +22184,7 @@ export class Waypoint {
      * position. For location waypoints, this returns the stored
      * location.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21346,7 +22199,7 @@ export class Waypoint {
      * to. This affects all players who have this waypoint in their
      * locator bar.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     remove(): void;
@@ -21387,9 +22240,9 @@ export class WeatherChangeAfterEventSignal {
      * @remarks
      * Adds a callback that will be called when weather changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: WeatherChangeAfterEvent) => void): (arg0: WeatherChangeAfterEvent) => void;
@@ -21397,9 +22250,9 @@ export class WeatherChangeAfterEventSignal {
      * @remarks
      * Removes a callback from being called when weather changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: WeatherChangeAfterEvent) => void): void;
@@ -21448,9 +22301,9 @@ export class WeatherChangeBeforeEventSignal {
      * @remarks
      * Adds a callback that will be called before weather changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -21462,9 +22315,9 @@ export class WeatherChangeBeforeEventSignal {
      * @remarks
      * Removes a callback from being called before weather changes.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      * @param callback
      * This closure is called with restricted-execution privilege.
@@ -21484,7 +22337,7 @@ export class World {
      * of the world.  Event callbacks are called in a deferred
      * manner. Event callbacks are executed in read-write mode.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly afterEvents: WorldAfterEvents;
@@ -21494,7 +22347,7 @@ export class World {
      * of the world. Event callbacks are called immediately. Event
      * callbacks are executed in read-only mode.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      * @example customCommand.ts
      * ```typescript
@@ -21552,6 +22405,13 @@ export class World {
      *
      */
     readonly seed: string;
+    /**
+     * @remarks
+     * Provides read-only access to the sound definitions loaded
+     * for this world.
+     *
+     */
+    readonly soundDefinitionRegistry: SoundDefinitionRegistry;
     /**
      * @remarks
      * Returns the manager for {@link Structure} related APIs.
@@ -21762,10 +22622,10 @@ export class World {
      * @remarks
      * Returns a map of pack setting name and value pairs.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
-    getPackSettings(): Record<string, boolean | number | string>;
+    getPackSettings(): Record<string, string[] | boolean | number | string>;
     /**
      * @remarks
      * Returns a set of players based on a set of conditions
@@ -21796,7 +22656,7 @@ export class World {
      * @remarks
      * Plays a particular music track for all players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @throws This function can throw errors.
      *
@@ -21836,7 +22696,7 @@ export class World {
      * Queues an additional music track for players. If a track is
      * not playing, a music track will play.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param trackId
      * Identifier of the music track to play.
@@ -21866,7 +22726,7 @@ export class World {
      * @remarks
      * Sets the world time.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param absoluteTime
      * The world time, in ticks.
@@ -21876,7 +22736,7 @@ export class World {
      * @remarks
      * Sets a default spawn location for all players.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param spawnLocation
      * Location of the spawn point. Note that this is assumed to be
@@ -21893,7 +22753,7 @@ export class World {
      * @remarks
      * Sets the worlds difficulty.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param difficulty
      * The difficulty we want to set the world to.
@@ -21995,7 +22855,7 @@ export class World {
      * @remarks
      * Sets the time of day.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      * @param timeOfDay
      * The time of day, in ticks, between 0 and 24000.
@@ -22008,7 +22868,7 @@ export class World {
      * @remarks
      * Stops any music tracks from playing.
      *
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
      */
     stopMusic(): void;
@@ -22024,7 +22884,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a block container is closed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly blockContainerClosed: BlockContainerClosedAfterEventSignal;
@@ -22032,7 +22892,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a block container is opened.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly blockContainerOpened: BlockContainerOpenedAfterEventSignal;
@@ -22042,7 +22902,7 @@ export class WorldAfterEvents {
      * explosion. It is fired after the blocks have already been
      * destroyed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly blockExplode: BlockExplodeAfterEventSignal;
@@ -22050,7 +22910,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a button is pushed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly buttonPush: ButtonPushAfterEventSignal;
@@ -22060,7 +22920,7 @@ export class WorldAfterEvents {
      * that will update the component definition state of an
      * entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly dataDrivenEntityTrigger: DataDrivenEntityTriggerAfterEventSignal;
@@ -22069,7 +22929,7 @@ export class WorldAfterEvents {
      * This event fires when an effect, like poisoning, is added to
      * an entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly effectAdd: EffectAddAfterEventSignal;
@@ -22077,7 +22937,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity container is closed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityContainerClosed: EntityContainerClosedAfterEventSignal;
@@ -22085,7 +22945,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity container is opened.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityContainerOpened: EntityContainerOpenedAfterEventSignal;
@@ -22093,13 +22953,13 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity dies.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityDie: EntityDieAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHeal: EntityHealAfterEventSignal;
@@ -22107,7 +22967,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when entity health changes in any degree.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHealthChanged: EntityHealthChangedAfterEventSignal;
@@ -22116,7 +22976,7 @@ export class WorldAfterEvents {
      * This event fires when an entity hits (that is, melee
      * attacks) a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHitBlock: EntityHitBlockAfterEventSignal;
@@ -22125,7 +22985,7 @@ export class WorldAfterEvents {
      * This event fires when an entity hits (that is, melee
      * attacks) another entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHitEntity: EntityHitEntityAfterEventSignal;
@@ -22133,7 +22993,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity is hurt (takes damage).
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHurt: EntityHurtAfterEventSignal;
@@ -22141,7 +23001,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity drops items.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityItemDrop: EntityItemDropAfterEventSignal;
@@ -22149,7 +23009,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity picks up items.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityItemPickup: EntityItemPickupAfterEventSignal;
@@ -22157,7 +23017,7 @@ export class WorldAfterEvents {
      * @remarks
      * Fires when an entity is loaded.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityLoad: EntityLoadAfterEventSignal;
@@ -22166,7 +23026,7 @@ export class WorldAfterEvents {
      * Fires when an entity is removed (for example, potentially
      * unloaded, or removed after being killed).
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityRemove: EntityRemoveAfterEventSignal;
@@ -22174,13 +23034,37 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when an entity is spawned.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entitySpawn: EntitySpawnAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * This event fires when an entity starts sneaking.
+     *
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
+     *
+     */
+    readonly entityStartSneaking: EntityStartSneakingAfterEventSignal;
+    /**
+     * @remarks
+     * This event fires when an entity stops sneaking.
+     *
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
+     *
+     */
+    readonly entityStopSneaking: EntityStopSneakingAfterEventSignal;
+    /**
+     * @remarks
+     * This event fires when an entity is tamed.
+     *
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
+     *
+     */
+    readonly entityTamed: EntityTamedAfterEventSignal;
+    /**
+     * @remarks
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityUpgrade: EntityUpgradeAfterEventSignal;
@@ -22188,7 +23072,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event is fired after an explosion occurs.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly explosion: ExplosionAfterEventSignal;
@@ -22197,7 +23081,7 @@ export class WorldAfterEvents {
      * This event fires when a world.gameRules property has
      * changed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly gameRuleChange: GameRuleChangeAfterEventSignal;
@@ -22205,7 +23089,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a chargeable item completes charging.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemCompleteUse: ItemCompleteUseAfterEventSignal;
@@ -22214,7 +23098,7 @@ export class WorldAfterEvents {
      * This event fires when a chargeable item is released from
      * charging.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemReleaseUse: ItemReleaseUseAfterEventSignal;
@@ -22222,7 +23106,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a chargeable item starts charging.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemStartUse: ItemStartUseAfterEventSignal;
@@ -22234,7 +23118,7 @@ export class WorldAfterEvents {
      * occur once at the beginning of the block placement. Note:
      * This event cannot be used with Hoe or Axe items.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemStartUseOn: ItemStartUseOnAfterEventSignal;
@@ -22242,7 +23126,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a chargeable item stops charging.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemStopUse: ItemStopUseAfterEventSignal;
@@ -22252,7 +23136,7 @@ export class WorldAfterEvents {
      * Block button after successfully using an item. Note: This
      * event cannot be used with Hoe or Axe items.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemStopUseOn: ItemStopUseOnAfterEventSignal;
@@ -22261,7 +23145,7 @@ export class WorldAfterEvents {
      * This event fires when an item is successfully used by a
      * player.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemUse: ItemUseAfterEventSignal;
@@ -22269,7 +23153,7 @@ export class WorldAfterEvents {
      * @remarks
      * A lever has been pulled.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly leverAction: LeverActionAfterEventSignal;
@@ -22277,7 +23161,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a piston expands or retracts.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly pistonActivate: PistonActivateAfterEventSignal;
@@ -22285,7 +23169,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires for a block that is broken by a player.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerBreakBlock: PlayerBreakBlockAfterEventSignal;
@@ -22294,7 +23178,7 @@ export class WorldAfterEvents {
      * This event fires when an {@link InputButton} state is
      * changed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerButtonInput: PlayerButtonInputAfterEventSignal;
@@ -22302,7 +23186,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player cancels breaking a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerCancelBreakingBlock: PlayerCancelBreakingBlockAfterEventSignal;
@@ -22310,19 +23194,19 @@ export class WorldAfterEvents {
      * @remarks
      * Fires when a player moved to a different dimension.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerDimensionChange: PlayerDimensionChangeAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerEmote: PlayerEmoteAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerGameModeChange: PlayerGameModeChangeAfterEventSignal;
@@ -22330,7 +23214,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player's selected slot changes.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerHotbarSelectedSlotChange: PlayerHotbarSelectedSlotChangeAfterEventSignal;
@@ -22338,7 +23222,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player's {@link InputMode} changes.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInputModeChange: PlayerInputModeChangeAfterEventSignal;
@@ -22346,7 +23230,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a players input permissions change.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInputPermissionCategoryChange: PlayerInputPermissionCategoryChangeAfterEventSignal;
@@ -22354,7 +23238,7 @@ export class WorldAfterEvents {
      * @remarks
      * An event for when a player interacts with a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInteractWithBlock: PlayerInteractWithBlockAfterEventSignal;
@@ -22362,7 +23246,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player interacts with an entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInteractWithEntity: PlayerInteractWithEntityAfterEventSignal;
@@ -22371,7 +23255,7 @@ export class WorldAfterEvents {
      * This event fires when an item gets added or removed to the
      * player's inventory.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInventoryItemChange: PlayerInventoryItemChangeAfterEventSignal;
@@ -22381,7 +23265,7 @@ export class WorldAfterEvents {
      * playerSpawn for another related event you can trap for when
      * a player is spawned the first time within a world.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerJoin: PlayerJoinAfterEventSignal;
@@ -22389,7 +23273,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player leaves a world.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerLeave: PlayerLeaveAfterEventSignal;
@@ -22397,7 +23281,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires for a block that is placed by a player.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerPlaceBlock: PlayerPlaceBlockAfterEventSignal;
@@ -22407,7 +23291,7 @@ export class WorldAfterEvents {
      * an additional flag within this event will tell you whether
      * the player is spawning right after join vs. a respawn.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerSpawn: PlayerSpawnAfterEventSignal;
@@ -22415,13 +23299,13 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a player starts breaking a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerStartBreakingBlock: PlayerStartBreakingBlockAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerSwingStart: PlayerSwingStartAfterEventSignal;
@@ -22430,7 +23314,7 @@ export class WorldAfterEvents {
      * A pressure plate has popped back up (i.e., there are no
      * entities on the pressure plate.)
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly pressurePlatePop: PressurePlatePopAfterEventSignal;
@@ -22439,7 +23323,7 @@ export class WorldAfterEvents {
      * A pressure plate has pushed (at least one entity has moved
      * onto a pressure plate.)
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly pressurePlatePush: PressurePlatePushAfterEventSignal;
@@ -22447,7 +23331,7 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a projectile hits a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly projectileHitBlock: ProjectileHitBlockAfterEventSignal;
@@ -22455,15 +23339,23 @@ export class WorldAfterEvents {
      * @remarks
      * This event fires when a projectile hits an entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly projectileHitEntity: ProjectileHitEntityAfterEventSignal;
     /**
      * @remarks
+     * A tracked sound's declared duration elapsed.
+     *
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
+     *
+     */
+    readonly soundCompleted: SoundCompletedAfterEventSignal;
+    /**
+     * @remarks
      * A target block was hit.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly targetBlockHit: TargetBlockHitAfterEventSignal;
@@ -22471,7 +23363,7 @@ export class WorldAfterEvents {
      * @remarks
      * A trip wire was tripped.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly tripWireTrip: TripWireTripAfterEventSignal;
@@ -22480,13 +23372,13 @@ export class WorldAfterEvents {
      * This event will be triggered when the weather changes within
      * Minecraft.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly weatherChange: WeatherChangeAfterEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly worldLoad: WorldLoadAfterEventSignal;
@@ -22506,19 +23398,19 @@ export class WorldBeforeEvents {
      * This event is triggered after an event has been added to an
      * entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly effectAdd: EffectAddBeforeEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHeal: EntityHealBeforeEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityHurt: EntityHurtBeforeEventSignal;
@@ -22526,7 +23418,7 @@ export class WorldBeforeEvents {
      * @remarks
      * This event fires before an entity picks up an item.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityItemPickup: EntityItemPickupBeforeEventSignal;
@@ -22535,15 +23427,23 @@ export class WorldBeforeEvents {
      * Fires before an entity is removed from the world (for
      * example, unloaded or removed after being killed.)
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly entityRemove: EntityRemoveBeforeEventSignal;
     /**
      * @remarks
+     * Fires before an entity is tamed.
+     *
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
+     *
+     */
+    readonly entityTamed: EntityTamedBeforeEventSignal;
+    /**
+     * @remarks
      * This event is fired after an explosion occurs.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly explosion: ExplosionBeforeEventSignal;
@@ -22552,7 +23452,7 @@ export class WorldBeforeEvents {
      * This event fires when an item is successfully used by a
      * player.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemUse: ItemUseBeforeEventSignal;
@@ -22560,13 +23460,13 @@ export class WorldBeforeEvents {
      * @remarks
      * This event fires before a block is broken by a player.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerBreakBlock: PlayerBreakBlockBeforeEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerGameModeChange: PlayerGameModeChangeBeforeEventSignal;
@@ -22574,7 +23474,7 @@ export class WorldBeforeEvents {
      * @remarks
      * Fires before a player interacts with a block.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInteractWithBlock: PlayerInteractWithBlockBeforeEventSignal;
@@ -22582,7 +23482,7 @@ export class WorldBeforeEvents {
      * @remarks
      * Fires before a player interacts with an entity.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerInteractWithEntity: PlayerInteractWithEntityBeforeEventSignal;
@@ -22590,13 +23490,13 @@ export class WorldBeforeEvents {
      * @remarks
      * Fires when a player leaves the game.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly playerLeave: PlayerLeaveBeforeEventSignal;
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly weatherChange: WeatherChangeBeforeEventSignal;
@@ -22610,17 +23510,17 @@ export class WorldLoadAfterEventSignal {
     private constructor();
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     subscribe(callback: (arg0: WorldLoadAfterEvent) => void): (arg0: WorldLoadAfterEvent) => void;
     /**
      * @remarks
-     * This function can't be called in restricted-execution mode.
+     * @privilege no-restricted-execution - This function can't be called in restricted-execution mode.
      *
-     * This function can be called in early-execution mode.
+     * @privilege early-execution-allowed - This function can be called in early-execution mode.
      *
      */
     unsubscribe(callback: (arg0: WorldLoadAfterEvent) => void): void;
@@ -22688,17 +23588,15 @@ export interface BiomeSearchOptions {
  * A BlockBoundingBox is an interface to an object which
  * represents an AABB aligned rectangle.
  * The BlockBoundingBox assumes that it was created in a valid
- * state (min <= max) but cannot guarantee it (unless it was
- * created using the associated {@link
- * @minecraft/server.BlockBoundingBoxUtils} utility functions.
+ * state (min <= max) but cannot guarantee it.
  * The min/max coordinates represent the diametrically opposite
  * corners of the rectangle.
  * The BlockBoundingBox is not a representation of blocks - it
  * has no association with any type, it is just a mathematical
  * construct - so a rectangle with
  * ( 0,0,0 ) -> ( 0,0,0 )
- * has a size of ( 0,0,0 ) (unlike the very similar {@link
- * BlockVolume} object)
+ * has a size of ( 0,0,0 ) (unlike the very similar
+ * {@link BlockVolume} object)
  */
 export interface BlockBoundingBox {
     /**
@@ -22950,6 +23848,39 @@ export interface BlockHitInformation {
 }
 
 /**
+ * Options for querying blocks in a volume. Extends BlockFilter
+ * with additional sorting and limiting options based on
+ * distance from a location.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export interface BlockQueryOptions extends BlockFilter {
+    /**
+     * @remarks
+     * If specified, returns the closest N blocks to the location.
+     * Must be greater than 0. Cannot be used with farthest.
+     * Requires location to be set.
+     *
+     */
+    closest?: number;
+    /**
+     * @remarks
+     * If specified, returns the farthest N blocks from the
+     * location. Must be greater than 0. Cannot be used with
+     * closest. Requires location to be set.
+     *
+     */
+    farthest?: number;
+    /**
+     * @remarks
+     * Location used as the reference point for closest or farthest
+     * distance calculations. Required when closest or farthest is
+     * specified.
+     *
+     */
+    location?: Vector3;
+}
+
+/**
  * Contains information for block raycast hit results.
  */
 export interface BlockRaycastHit {
@@ -23117,6 +24048,43 @@ export interface CameraSetRotOptions {
     easeOptions?: EaseOptions;
     location?: Vector3;
     rotation: Vector2;
+}
+
+/**
+ * Options for applying a camera shake effect to a player's
+ * camera via `Camera.addShake`. Each call to `addShake` queues
+ * a new independent shake event for the specified `type`;
+ * positional and rotational shakes are tracked in separate
+ * queues and run concurrently. The rendered intensity at any
+ * moment is the sum of all active events' intensities for that
+ * type, capped at `4.0`. Events expire naturally when their
+ * `duration` elapses.
+ */
+export interface CameraShakeOptions {
+    /**
+     * @remarks
+     * How long this shake event lasts, in seconds. Must be a
+     * positive value.
+     *
+     */
+    duration: number;
+    /**
+     * @remarks
+     * The intensity of this shake event. Must be a positive value
+     * with a maximum of `4.0`. Multiple active events of the same
+     * `type` are summed, capped at `4.0`.
+     *
+     */
+    intensity: number;
+    /**
+     * @remarks
+     * The type of camera shake to apply. Positional and rotational
+     * shakes maintain separate event queues and are applied
+     * concurrently, so adding a shake of each type does not cause
+     * them to interfere with one another.
+     *
+     */
+    type: CameraShakeType;
 }
 
 /**
@@ -23758,9 +24726,10 @@ export interface EntityHurtBeforeEventOptions {
 }
 
 /**
- * An interface that is passed into {@link
- * EntityItemDropAfterEventSignal.subscribe} that filters out
- * which events are passed to the provided callback.
+ * An interface that is passed into
+ * {@link EntityItemDropAfterEventSignal.subscribe} that
+ * filters out which events are passed to the provided
+ * callback.
  */
 export interface EntityItemDropEventOptions {
     /**
@@ -23780,10 +24749,11 @@ export interface EntityItemDropEventOptions {
 }
 
 /**
- * An interface that is passed into {@link
- * EntityItemPickupAfterEventSignal.subscribe} and {@link
- * EntityItemPickupBeforeEventSignal.subscribe} that filters
- * out which events are passed to the provided callback.
+ * An interface that is passed into
+ * {@link EntityItemPickupAfterEventSignal.subscribe} and
+ * {@link EntityItemPickupBeforeEventSignal.subscribe} that
+ * filters out which events are passed to the provided
+ * callback.
  */
 export interface EntityItemPickupEventOptions {
     /**
@@ -24125,6 +25095,22 @@ export interface EntityRaycastOptions extends EntityFilter {
 }
 
 /**
+ * Options used to filter entity start sneaking and stop
+ * sneaking events.
+ */
+export interface EntitySneakingChangedEventOptions {
+    entityFilter?: EntityFilter;
+}
+
+/**
+ * Contains options for filtering entity tamed events.
+ */
+export interface EntityTamedEventOptions {
+    entityFilter?: EntityFilter;
+    tamingEntityFilter?: EntityFilter;
+}
+
+/**
  * Controls when a waypoint is visible based on the state of
  * the entity it tracks. These rules allow filtering waypoint
  * visibility by entity conditions like sneaking, invisibility,
@@ -24167,8 +25153,8 @@ export interface EqualsComparison {
 }
 
 /**
- * Additional configuration options for the {@link
- * Dimension.createExplosion} method.
+ * Additional configuration options for the
+ * {@link Dimension.createExplosion} method.
  * @example createNoBlockExplosion.ts
  * ```typescript
  * import { DimensionLocation } from '@minecraft/server';
@@ -24289,9 +25275,10 @@ export interface HotbarEventOptions {
 }
 
 /**
- * An interface that is passed into {@link
- * PlayerButtonInputAfterEventSignal.subscribe} that filters
- * out which events are passed to the provided callback.
+ * An interface that is passed into
+ * {@link PlayerButtonInputAfterEventSignal.subscribe} that
+ * filters out which events are passed to the provided
+ * callback.
  */
 export interface InputEventOptions {
     /**
@@ -24436,8 +25423,8 @@ export interface ItemFilter {
 }
 
 /**
- * Provides additional options for {@link
- * StructureManager.placeJigsaw}.
+ * Provides additional options for
+ * {@link StructureManager.placeJigsaw}.
  */
 export interface JigsawPlaceOptions {
     /**
@@ -24464,8 +25451,8 @@ export interface JigsawPlaceOptions {
 }
 
 /**
- * Provides additional options for {@link
- * StructureManager.placeJigsawStructure}.
+ * Provides additional options for
+ * {@link StructureManager.placeJigsawStructure}.
  */
 export interface JigsawStructurePlaceOptions {
     /**
@@ -24524,8 +25511,8 @@ export interface LessThanOrEqualsComparison {
 }
 
 /**
- * Additional configuration options for {@link
- * World.playMusic}/{@link World.queueMusic} methods.
+ * Additional configuration options for
+ * {@link World.playMusic}/{@link World.queueMusic} methods.
  */
 export interface MusicOptions {
     /**
@@ -24630,8 +25617,9 @@ export interface PlayerAimAssistSettings {
 }
 
 /**
- * An interface that is passed into {@link
- * PlayerStartBreakingBlockAfterEventSignal.subscribe} or
+ * An interface that is passed into
+ * {@link PlayerStartBreakingBlockAfterEventSignal.subscribe}
+ * or
  * {@link PlayerCancelBreakingBlockAfterEventSignal.subscribe}
  * that filters out which events are passed to the provided
  * callback.
@@ -24681,8 +25669,8 @@ export interface PlayerSoundOptions {
 }
 
 /**
- * An interface that is passed into {@link
- * @minecraft/server.PlayerSwingStartAfterEvent.subscribe} that
+ * An interface that is passed into
+ * {@link PlayerSwingStartAfterEventSignal.subscribe} that
  * filters out which events are passed to the provided
  * callback.
  */
@@ -24735,6 +25723,42 @@ export interface PlayerVisibilityRules extends EntityVisibilityRules {
      *
      */
     showSpectatorToSpectator?: boolean;
+}
+
+/**
+ * Contains optional filters that control which primitive
+ * shapes are returned from a primitive shapes query.
+ */
+export interface PrimitiveShapeQueryOptions {
+    /**
+     * @remarks
+     * If specified, only returns shapes attached to this entity.
+     *
+     */
+    attachedTo?: Entity;
+    /**
+     * @remarks
+     * Adds a seed location to the query that is used in
+     * conjunction with distance properties.
+     *
+     */
+    location?: Vector3;
+    /**
+     * @remarks
+     * If specified, only includes shapes that are less than this
+     * distance away from the location specified in the location
+     * property.
+     *
+     */
+    maxDistance?: number;
+    /**
+     * @remarks
+     * If specified, only includes shapes that are at least this
+     * distance away from the location specified in the location
+     * property.
+     *
+     */
+    minDistance?: number;
 }
 
 /**
@@ -25059,6 +26083,133 @@ export interface ScriptEventMessageFilterOptions {
 }
 
 /**
+ * Duration metadata declared in a sound definition.
+ */
+export interface SoundDefinitionDurationInfo {
+    /**
+     * @remarks
+     * Total duration of the sound in seconds, as declared in the
+     * sound definition.
+     *
+     */
+    duration: number;
+}
+
+/**
+ * Criteria used to narrow a set of sound definitions. Each
+ * field is optional and applies its constraint only when
+ * defined; a definition must satisfy every defined field to
+ * pass.
+ */
+export interface SoundDefinitionFilter {
+    /**
+     * @remarks
+     * Artist names to match against the definition's
+     * music_info.artist. Comparison is case-insensitive. When
+     * defined as a non-empty array, a definition passes only when
+     * its declared artist matches one of the supplied values. When
+     * undefined, no constraint on artist is applied.
+     *
+     */
+    artists?: string[];
+    /**
+     * @remarks
+     * Genres to match against the definition's music_info.genres.
+     * Comparison is case-insensitive. When defined as a non-empty
+     * array, a definition passes only when at least one of its
+     * declared genres matches one of the supplied values. When
+     * undefined, no constraint on genres is applied.
+     *
+     */
+    genres?: string[];
+    /**
+     * @remarks
+     * Upper bound in seconds, inclusive. When defined, definitions
+     * with a longer duration and definitions without a declared
+     * duration are excluded. When undefined, no upper bound is
+     * applied.
+     *
+     */
+    maxDuration?: number;
+    /**
+     * @remarks
+     * Lower bound in seconds, inclusive. When defined, definitions
+     * with a shorter duration and definitions without a declared
+     * duration are excluded. When undefined, no lower bound is
+     * applied.
+     *
+     */
+    minDuration?: number;
+    /**
+     * @remarks
+     * Moods to match against the definition's music_info.moods.
+     * Comparison is case-insensitive. When defined as a non-empty
+     * array, a definition passes only when at least one of its
+     * declared moods matches one of the supplied values. When
+     * undefined, no constraint on moods is applied.
+     *
+     */
+    moods?: string[];
+    /**
+     * @remarks
+     * Tag constraints to match against the definition's tags.
+     * Comparisons of tag names and values are case-insensitive.
+     * When defined as a non-empty record, a definition passes only
+     * when, for each entry with a non-empty value array, the tag
+     * name is present on the definition with at least one matching
+     * value. When undefined, no constraint on tags is applied.
+     *
+     */
+    tags?: Record<string, string[]>;
+    /**
+     * @remarks
+     * Titles to match against the definition's music_info.title.
+     * Comparison is case-insensitive. When defined as a non-empty
+     * array, a definition passes only when its declared title
+     * matches one of the supplied values. When undefined, no
+     * constraint on title is applied.
+     *
+     */
+    titles?: string[];
+}
+
+/**
+ * Music metadata declared on a sound definition. Each field is
+ * optional and is undefined when the sound definition does not
+ * declare a value for it.
+ */
+export interface SoundDefinitionMusicInfo {
+    /**
+     * @remarks
+     * Artist declared for this sound. Undefined when no artist was
+     * declared.
+     *
+     */
+    artist?: string;
+    /**
+     * @remarks
+     * Genres declared for this sound. Undefined when no genres
+     * were declared.
+     *
+     */
+    genres?: string[];
+    /**
+     * @remarks
+     * Moods declared for this sound. Undefined when no moods were
+     * declared.
+     *
+     */
+    moods?: string[];
+    /**
+     * @remarks
+     * Title declared for this sound. Undefined when no title was
+     * declared.
+     *
+     */
+    title?: string;
+}
+
+/**
  * Contains additional options for spawning an Entity.
  */
 export interface SpawnEntityOptions {
@@ -25105,8 +26256,8 @@ export interface SplineAnimation {
 }
 
 /**
- * Provides additional options for {@link
- * StructureManager.createFromWorld}
+ * Provides additional options for
+ * {@link StructureManager.createFromWorld}
  */
 export interface StructureCreateOptions {
     /**
@@ -25133,8 +26284,8 @@ export interface StructureCreateOptions {
 }
 
 /**
- * Provides additional options for {@link
- * StructureManager.place}
+ * Provides additional options for
+ * {@link StructureManager.place}
  */
 export interface StructurePlaceOptions {
     /**
@@ -25167,8 +26318,8 @@ export interface StructurePlaceOptions {
      * @remarks
      * What percentage of blocks should be placed. A value of 1
      * will place 100% of the blocks while a value of 0 will place
-     * none. The blocks are chosen randomly based on the {@link
-     * StructurePlaceOptions.integritySeed}.
+     * none. The blocks are chosen randomly based on the
+     * {@link StructurePlaceOptions.integritySeed}.
      *
      */
     integrity?: number;
@@ -25270,6 +26421,7 @@ export interface TeleportOptions {
      *
      */
     facingLocation?: Vector3;
+    forceProvidedPositionOnDimensionChange?: boolean;
     /**
      * @remarks
      * Whether to retain the entities velocity after teleport.
@@ -25324,8 +26476,8 @@ export interface TickingArea {
 }
 
 /**
- * Options to create a ticking area using the {@link
- * TickingAreaManager}.
+ * Options to create a ticking area using the
+ * {@link TickingAreaManager}.
  */
 export interface TickingAreaOptions {
     /**
@@ -25372,8 +26524,8 @@ export interface TitleDisplayOptions {
     /**
      * @remarks
      * Amount of time for the title and subtitle to stay in place,
-     * in ticks. There are 20 ticks per second. Use {@link
-     * TicksPerSecond} constant to convert between ticks and
+     * in ticks. There are 20 ticks per second. Use
+     * {@link TicksPerSecond} constant to convert between ticks and
      * seconds.
      *
      */
@@ -25524,8 +26676,8 @@ export class BlockCustomComponentReloadVersionError extends Error {
 }
 
 /**
- * Errors that can be thrown when using {@link
- * ItemBookComponent}.
+ * Errors that can be thrown when using
+ * {@link ItemBookComponent}.
  */
 // @ts-ignore Class inheritance allowed for native defined classes
 export class BookError extends Error {
@@ -25534,16 +26686,16 @@ export class BookError extends Error {
      * @remarks
      * The reason for the error.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: BookErrorReason;
 }
 
 /**
- * The error called if page content being set on an {@link
- * ItemBookComponent} are invalid ie. exceeding the maximum
- * page length.
+ * The error called if page content being set on an
+ * {@link ItemBookComponent} are invalid ie. exceeding the
+ * maximum page length.
  */
 // @ts-ignore Class inheritance allowed for native defined classes
 export class BookPageContentError extends Error {
@@ -25552,7 +26704,7 @@ export class BookPageContentError extends Error {
      * @remarks
      * The index of the page requested to be modified.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly pageIndex: number;
@@ -25560,7 +26712,7 @@ export class BookPageContentError extends Error {
      * @remarks
      * The reason for the error.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: BookErrorReason;
@@ -25582,7 +26734,7 @@ export class ContainerRulesError extends Error {
      * @remarks
      * The specific reason the error was thrown.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: ContainerRulesErrorReason;
@@ -25598,7 +26750,7 @@ export class CustomCommandError extends Error {
      * @remarks
      * Reason for the error.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: CustomCommandErrorReason;
@@ -25614,7 +26766,7 @@ export class CustomComponentNameError extends Error {
     private constructor();
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: CustomComponentNameErrorReason;
@@ -25679,6 +26831,16 @@ export class EntitySpawnError extends Error {
 }
 
 /**
+ * Error thrown by {@link FogSettings} operations when the fog
+ * stack limit is exceeded or an invalid fog identifier is
+ * provided.
+ */
+// @ts-ignore Class inheritance allowed for native defined classes
+export class FogSettingsError extends Error {
+    private constructor();
+}
+
+/**
  * The error can occur when a block is invalid. This can also
  * occur when accessing components on a block that doesn't have
  * them.
@@ -25726,7 +26888,7 @@ export class InvalidEntityError extends Error {
      * @remarks
      * The id of the entity that is now invalid.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly id: string;
@@ -25734,7 +26896,7 @@ export class InvalidEntityError extends Error {
      * @remarks
      * The type of the entity that is now invalid.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly type: string;
@@ -25751,7 +26913,7 @@ export class InvalidItemStackError extends Error {
      * @remarks
      * The type of the item that is now invalid.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly itemType: ItemType;
@@ -25864,7 +27026,7 @@ export class LocatorBarError extends Error {
      * The {@link LocatorBarErrorReason} code that indicates why
      * the locator bar operation failed.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: LocatorBarErrorReason;
@@ -25879,7 +27041,7 @@ export class NamespaceNameError extends Error {
     private constructor();
     /**
      * @remarks
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: NamespaceNameErrorReason;
@@ -25911,7 +27073,7 @@ export class TickingAreaError extends Error {
      * @remarks
      * The specific reason that the error was thrown.
      *
-     * This property can be read in early-execution mode.
+     * @privilege early-execution-readable - This property can be read in early-execution mode.
      *
      */
     readonly reason: TickingAreaErrorReason;

@@ -25,6 +25,19 @@
                 },
                 {
                     "type": "item",
+                    "name": "atomic:circuit_board",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 8
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "atomic:grenade",
                     "functions": [
                         {

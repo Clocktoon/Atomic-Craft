@@ -1,10 +1,13 @@
 {
-  "format_version": "1.26.40",
+  "format_version": "1.26.50",
   "minecraft:block": {
     "description": {
       "identifier": "atomic:gadget_bomb",
       "menu_category": {
         "category": "items"
+      },
+      "states": {
+        "atomic:activated": [false,true]
       },
       "traits": {
                 "minecraft:placement_direction": {
@@ -50,17 +53,22 @@
         "min_power": 1,
         "propagates_power": true
         },
-        "atomic:gadget": {
-
-        },
-        "atomic:redstone_nuke": {
-            "atom": true
-        },
+        
         "minecraft:redstone_conductivity": {
             "redstone_conductor": true
             }
     },
     "permutations": [
+        {
+            "condition": "!q.block_state('atomic:activated')",
+            "components": {
+                "atomic:gadget": {
+                },
+                "atomic:redstone_nuke": {
+                "atom": true
+                }
+            }
+        },
             {
                 "condition": "q.block_state('minecraft:cardinal_direction') == 'north'",
                 "components": {

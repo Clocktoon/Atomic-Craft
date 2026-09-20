@@ -52,6 +52,7 @@ const ticksTime = 10
 world.afterEvents.entitySpawn.subscribe((ev) => {
     const entity = ev.entity
     if(entity.typeId === "atomic:anti_missile") {
+        console.warn("Anti missile system up")
     const tracker = system.runInterval(() => {
         if(!entity.isValid) {
             system.clearRun(tracker)

@@ -1,4 +1,4 @@
-import { Entity, Dimension } from "@minecraft/server";
+import { Entity, Dimension, Player } from "@minecraft/server";
 
 /**
  * Radiation effects system - single source of truth for dose -> effect mapping.
@@ -6,6 +6,7 @@ import { Entity, Dimension } from "@minecraft/server";
  */
 export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
     if (!entity.isValid) return;
+    const player = entity as Player
 
     const dose = entity.getDynamicProperty("atomic:radiation_dose") as number ?? 0;
 
@@ -17,6 +18,10 @@ export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
         entity.removeEffect("slowness");
         entity.removeEffect("poison");
         entity.removeEffect("blindness");
+        if(player) {
+            if(player.fogSettings.getTags().includes("radiationfog"))
+                player.fogSettings.remove("radiationfog")
+        }
         return;
     }
 
@@ -29,6 +34,10 @@ export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
     applyOrRemove(entity, "wither", dose >= 500, 3);
 
     // Escalating damage if deeper into radiation sickness
+    if(dose >= 50) {
+        if(player)
+            player.fogSettings.push("atomic:radiation_fog","radiationfog")
+    }
     if (dose >= 400) {
         entity.applyDamage(4);
     } else if (dose >= 200) {

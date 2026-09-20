@@ -69,7 +69,7 @@
 			},
 			"minecraft:particle_initial_speed": "math.random_integer(1,2)",
 			"minecraft:particle_motion_parametric": {
-				"relative_position": ["math.cos(variable.particle_random_1 * 360) - variable.nuclearcurve", "math.min(-30 + variable.particle_age * 3.2, 29)", "math.sin(variable.particle_random_1 * 360) + variable.nuclearcurve"]
+				"relative_position": ["math.cos(variable.particle_random_1 * 360) - variable.nuclearcurve", "math.min(-30 + variable.particle_age * 3.2, 30)", "math.sin(variable.particle_random_1 * 360) + variable.nuclearcurve"]
 			},
 			"minecraft:particle_kill_plane": [0, 0, 1, 1.1],
 			"minecraft:particle_appearance_billboard": {

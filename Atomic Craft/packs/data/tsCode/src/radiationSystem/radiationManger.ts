@@ -70,9 +70,15 @@ system.runInterval(() => {
 world.afterEvents.worldLoad.subscribe(() => {
     world.afterEvents.playerSpawn.subscribe((ev) => {
         const player = ev.player
+        const radiation = player.getDynamicProperty("atomic:radiation_exposure")
+        const dose = player.getDynamicProperty("atomic:radiation_exposure")
 
-        if(player && typeof player.getDynamicProperty("atomic:radiation_exposure") === "number") {
+        if(player && typeof radiation === "number" && typeof dose === "number") {
+            if(radiation >= 2 || dose >= 1) {
             player.setDynamicProperty("atomic:radiation_exposure", undefined)
+            player.setDynamicProperty("atomic:radiation_dose", undefined)
+            console.warn("player radiation cleared")
+            }
         }
     })
 })
