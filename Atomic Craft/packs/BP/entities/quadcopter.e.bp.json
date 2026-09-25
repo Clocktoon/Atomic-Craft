@@ -1,0 +1,78 @@
+{
+  "format_version": "1.26.50",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "atomic:quadcopter",
+      "is_spawnable": false,
+      "is_summonable": true,
+      "properties": {
+        "atomic:drone_mode": {
+          "type": "enum",
+          "default": "fpvmode",
+          "values": ["fpvmode","controllermode"]
+        },
+        "atomic:drone_on": {
+          "type": "bool",
+          "default": false
+        }
+      }
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 10,
+        "max": 10
+      },
+      "minecraft:collision_box": {
+        "width": 1,
+        "height": 0.3
+      },
+      "minecraft:movement": {
+        "value": 1,
+        "max": 1
+      },
+      "minecraft:navigation.fly": {
+        "avoid_damage_blocks": false,
+        "avoid_portals": false,
+        "avoid_sun": false,
+        "avoid_water": false,
+        "can_break_doors": false,
+        "can_jump": true,
+        "can_path_from_air": false,
+        "can_path_over_lava": false,
+        "can_path_over_water": false,
+        "can_sink": true,
+        "can_swim": false,
+        "can_walk": true,
+        "can_walk_in_lava": false,
+        "is_amphibious": false
+      },
+      "minecraft:jump.dynamic": {
+        "regular_skip_data": {
+            "height": 0.1
+        }
+      },
+      "minecraft:movement.basic": {
+        "max_turn": 30
+      },
+      "minecraft:physics": {
+        "has_collision": true,
+        "has_gravity": true
+      },
+      "minecraft:type_family": {
+        "family": [
+            "atomic:drone"
+        ]
+      },
+      "minecraft:can_fly": true,
+      "minecraft:custom_hit_test": {
+        "hitboxes": [
+          {
+            "width": 1,
+            "height": 0.3,
+            "pivot": [0, 0.15, 0]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -97,13 +97,19 @@ class ChunkTicker {
   options: TickingAreaOptions,
 ): Promise<TickingArea> {
 
-  if (!this.#tickingarea.hasCapacity(options)) {
-    throw new Error("Ticking area manager became full");
+  // If a ticking area with this name already exists, reuse it instead
+  // of falling through into createTickingArea, which would throw on a
+  // duplicate name and burn every retry attempt for no reason -- and
+  // leave this existing area untouched and unaccounted for either way.
+  const existing = this.#tickingarea.getTickingArea(this.#name);
+  if (existing) {
+    if (world.getDynamicProperty("logs") === true)
+      world.sendMessage("ticking area " + this.#name + " already exists, reusing it");
+    return existing;
   }
 
-  if (this.#tickingarea.hasTickingArea(this.#name)) {
-    if (world.getDynamicProperty("logs") === true)
-      world.sendMessage("ticking area " + this.#name + " is loaded");
+  if (!this.#tickingarea.hasCapacity(options)) {
+    throw new Error("Ticking area manager became full");
   }
 
   try {

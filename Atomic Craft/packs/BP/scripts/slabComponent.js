@@ -24,10 +24,10 @@ export class slabComponent {
             aboveState: aboveBlock.permutation.getState('minecraft:vertical_half'),
         };
         const blockedStates = {
-            nbState: northBlock.permutation.getState('namespace:blocked'),
-            sbState: southBlock.permutation.getState('namespace:blocked'),
-            ebState: eastBlock.permutation.getState('namespace:blocked'),
-            wbState: westBlock.permutation.getState('namespace:blocked'),
+            nbState: northBlock.permutation.getState('atomic:blocked'),
+            sbState: southBlock.permutation.getState('atomic:blocked'),
+            ebState: eastBlock.permutation.getState('atomic:blocked'),
+            wbState: westBlock.permutation.getState('atomic:blocked'),
         };
         const mainhand = itemInteract(player);
         if (!mainhand.hasItem())

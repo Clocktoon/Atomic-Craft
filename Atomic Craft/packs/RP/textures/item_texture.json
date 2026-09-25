@@ -2,6 +2,12 @@
 	"resource_pack_name": "Atomic Craft",
 	"texture_name": "atlas.items",
 	"texture_data": {
+		"atomic_drone_controller": {
+			"textures": "textures/items/drone_controller"
+		},
+		"atomic_quadcopter": {
+			"textures": "textures/items/quadcopter_item"
+		},
 		"atomic_raw_lead": {
 			"textures": "textures/items/raw_lead"
 		},

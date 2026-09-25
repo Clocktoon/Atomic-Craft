@@ -118,26 +118,9 @@ export function nuclearBombFisson(block: Block, playerEntity: Player, dimension:
               if (eny.typeId === "atomic:plane") continue;
 
               const dist = distance(block.location, eny.location);
-
-              const hit = dimension.getBlockFromRay(
-                eny.location,
-                directionTo(block.location, eny.location),
-                { maxDistance: dist },
-              );
-
-              if (hit) {
-                const shielding = getBlastResistance(hit.block);
-                if (shielding >= 1200) {
-                  continue;
-                } else {
-                  const resistance = shielding * 2;
-                  addRadiationDose(eny, 40 - resistance);
-                }
-              } else {
                 eny.setOnFire(20);
                 addRadiationDose(eny, 150);
               }
-            }
 
             for (const playerRadi of players) {
               const dist = distance(block.location, playerRadi.location);

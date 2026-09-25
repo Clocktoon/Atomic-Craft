@@ -1,0 +1,16 @@
+{
+    "format_version": "1.26.0",
+    "render_controllers": {
+        "controller.render.quadcopter": {
+            "textures": [
+                "Texture.default"
+            ],
+            "geometry": "geometry.default",
+            "materials": [
+                {
+                    "*": "material.default"
+                }
+            ]
+        }
+    }
+}

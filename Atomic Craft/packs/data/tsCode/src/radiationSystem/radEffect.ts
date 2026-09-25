@@ -18,7 +18,7 @@ export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
         entity.removeEffect("slowness");
         entity.removeEffect("poison");
         entity.removeEffect("blindness");
-        if(player) {
+        if(player.typeId === "minecraft:player") {
             if(player.fogSettings.getTags().includes("radiationfog"))
                 player.fogSettings.remove("radiationfog")
         }
@@ -35,7 +35,7 @@ export function applyRadiationEffects(entity: Entity, dimension: Dimension) {
 
     // Escalating damage if deeper into radiation sickness
     if(dose >= 50) {
-        if(player)
+        if(player && player.typeId === "minecraft:player")
             player.fogSettings.push("atomic:radiation_fog","radiationfog")
     }
     if (dose >= 400) {

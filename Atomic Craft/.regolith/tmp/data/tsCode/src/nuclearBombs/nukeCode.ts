@@ -126,13 +126,13 @@ export function nuclearBombFisson(block: Block, playerEntity: Player, dimension:
               );
 
               if (hit) {
-                const shielding = getBlastResistance(hit.block);
-                if (shielding >= 1200) {
-                  continue;
-                } else {
-                  const resistance = shielding * 2;
-                  addRadiationDose(eny, 40 - resistance);
-                }
+                // const shielding = getBlastResistance(hit.block);
+                // if (shielding >= 1200) {
+                //   continue;
+                // } else {
+                //   const resistance = shielding * 2;
+                //   addRadiationDose(eny, 40 - resistance);
+                // }
               } else {
                 eny.setOnFire(20);
                 addRadiationDose(eny, 150);

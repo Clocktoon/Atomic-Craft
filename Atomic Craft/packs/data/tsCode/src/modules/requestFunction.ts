@@ -3,7 +3,7 @@ import {
   Block,
   TickingArea,
 } from "@minecraft/server";
-import { globalChunkFiller, pha } from "../chunkLoaders/chunkFillerClass";
+import { globalChunkFiller, Phase } from "../chunkLoaders/chunkFillerClass";
 /**
  * UNUSED FOR NOW, MAY SWITCH OUT CURRENT SYSTEM WITH THIS IF I FEEL LIKE IT, 
  * WORKS MOSTLY THE SAME BESIDES BEING EASIER TO USE
@@ -26,7 +26,7 @@ export function enqueueChunkFill(
   area: TickingArea,
   block: Block,
   name: string,
-  phase: pha,
+  phase: Phase,
   minY?: number,
   maxY?: number,
 ) {
@@ -66,7 +66,7 @@ export async function enqueueChunkFillAndRun(
   area: TickingArea,
   block: Block,
   name: string,
-  phase: pha,
+  phase: Phase,
   minY?: number,
   maxY?: number,
   ticksPerFrame = 50,
@@ -81,7 +81,7 @@ export function enqueueChunkFillWithGenerator(
   area: TickingArea,
   block: Block,
   name: string,
-  phase: pha,
+  phase: Phase,
   minY?: number,
   maxY?: number,
 ) {

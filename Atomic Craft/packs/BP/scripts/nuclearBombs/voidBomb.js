@@ -1,7 +1,38 @@
 import { system, world, BlockVolume, EntityDamageCause, } from "@minecraft/server";
-import { chunkBoundsFromBlock, fillGeneratorSequential } from "../nuclearTransforms/volumeCode";
+import { chunkBoundsFromBlock } from "../nuclearTransforms/volumeCode";
 import { loadTickingAreaWithRetry } from "../nuclearTransforms/volumeCode";
 import { MessageBox } from "@minecraft/server-ui";
+/**
+ * manually iterates the generator across ticks, only way to stop several of them running at once
+ */
+export async function fillGeneratorSequential(generator, ticks) {
+    return new Promise((resolve, reject) => {
+        /**
+         * processes a set number of yields per tick
+         */
+        const maxTicksPerFrame = ticks;
+        const interval = system.runInterval(() => {
+            let yielded = 0;
+            while (yielded < maxTicksPerFrame) {
+                let result;
+                try {
+                    result = generator.next();
+                }
+                catch (err) {
+                    system.clearRun(interval);
+                    reject(err);
+                    return;
+                }
+                if (result.done) {
+                    system.clearRun(interval);
+                    resolve();
+                    return;
+                }
+                yielded++;
+            }
+        }, 1);
+    });
+}
 //Re used alot from nuclearArea since well it just works for the VOID part of the well.. void explosion
 async function voidCrater(block, dimension, maxDepth, maxHeight) {
     const location = block.location;

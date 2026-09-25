@@ -90,14 +90,13 @@ export function nuclearBombFisson(block, playerEntity, dimension, doMenu) {
                         const dist = distance(block.location, eny.location);
                         const hit = dimension.getBlockFromRay(eny.location, directionTo(block.location, eny.location), { maxDistance: dist });
                         if (hit) {
-                            const shielding = getBlastResistance(hit.block);
-                            if (shielding >= 1200) {
-                                continue;
-                            }
-                            else {
-                                const resistance = shielding * 2;
-                                addRadiationDose(eny, 40 - resistance);
-                            }
+                            // const shielding = getBlastResistance(hit.block);
+                            // if (shielding >= 1200) {
+                            //   continue;
+                            // } else {
+                            //   const resistance = shielding * 2;
+                            //   addRadiationDose(eny, 40 - resistance);
+                            // }
                         }
                         else {
                             eny.setOnFire(20);
