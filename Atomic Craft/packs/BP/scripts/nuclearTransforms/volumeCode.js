@@ -60,31 +60,19 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, r
         }
     });
     const dimension = world.getDimension(dimensionid);
-    // 1. Build every chunk coordinate in the blast radius, then sort by
-    //    distance from the epicenter so processing order spreads outward
-    //    instead of raster-scanning row by row.
-    //
-    //    This uses Euclidean distance for a circular wavefront. The phase
-    //    boundary below still uses Chebyshev (unchanged from the original
-    //    square-ring logic), so the visual wave and the phase-1/phase-2
-    //    boundary won't perfectly coincide at the edges -- that's a
-    //    cosmetic mismatch, not a bug. Switch distFromCenter to Chebyshev
-    //    too if you want the wave to line up exactly with the phase ring.
     const chunkCoords = [];
     for (let x = location.x - size; x <= location.x + size; x += 16) {
         for (let z = location.z - size; z <= location.z + size; z += 16) {
             chunkCoords.push({ x, z });
         }
     }
-    const distFromCenter = (x, z) => Math.hypot(x - location.x, z - location.z);
+    const distFromCenter = (x, z) => Math.max(Math.abs(x - location.x), Math.abs(z - location.z));
     chunkCoords.sort((a, b) => distFromCenter(a.x, a.z) - distFromCenter(b.x, b.z));
-    // 2. Kicks off a ticking-area load for one chunk without awaiting it.
     const loadFor = (coord) => {
         const nameId = `NK_${coord.x},${coord.z},${dimension.id}`;
         const bounds = chunkBoundsFromBlock(coord.x, coord.z, 0, 255);
         return loadTickingAreaWithRetry(dimension, nameId, { x: coord.x + 8, y: 64, z: coord.z + 8 }, bounds);
     };
-    // 3. One chunk's fill pipeline, once its ticking area is ready.
     const fillChunk = async (coord, tickingArea) => {
         const nameId = `NK_${coord.x},${coord.z},${dimension.id}`;
         const logs = world.getDynamicProperty("logs") === true;
@@ -94,8 +82,6 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, r
         const distanceFromCenter = Math.max(Math.abs(coord.x - location.x), Math.abs(coord.z - location.z));
         const currentPhase = distanceFromCenter > change ? 1 : 2;
         const radLevel = currentPhase === 2 ? radiationAmount : radiationAmount / 5;
-        // Phase 1 (scorch) only needs a thin surface band; phase 2 (crater)
-        // keeps the full column. Caller-supplied miny/maxy always win.
         let fillMinY = miny;
         let fillMaxY = maxy;
         if (currentPhase === 1 && miny === undefined && maxy === undefined) {
@@ -110,23 +96,11 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, r
             world.sendMessage(`Ticking area filled: ${nameId}`);
         world.tickingAreaManager.removeTickingArea(tickingArea);
     };
-    // 4. Prefetch pipeline. At most two ticking areas exist at once: the
-    //    one currently filling, and the next one loading in the
-    //    background. Fills themselves stay strictly one at a time, in
-    //    ascending distance order, so completion order -- and therefore
-    //    the visible destruction -- is a clean outward wave. Only the
-    //    load-wait is overlapped, since that's the part that's actually
-    //    parallel-safe (fill work all shares one per-tick job budget
-    //    regardless of how many generators are queued, so running fills
-    //    concurrently wouldn't make them faster, just harder to reason
-    //    about visually).
     let chunkCount = 0;
     let nextAreaPromise = chunkCoords.length > 0 ? loadFor(chunkCoords[0]) : null;
     for (let i = 0; i < chunkCoords.length; i++) {
         const coord = chunkCoords[i];
         const tickingArea = await nextAreaPromise;
-        // Start the NEXT chunk's load now, without awaiting it -- it loads
-        // in the background while this chunk's fill runs below.
         if (i + 1 < chunkCoords.length) {
             nextAreaPromise = loadFor(chunkCoords[i + 1]);
         }
@@ -140,11 +114,6 @@ export async function nuclearArea(dimensionid, location, blocky, size, change, r
             await fillChunk(coord, tickingArea);
         }
         else {
-            // The prefetch failed -- often transient capacity pressure from
-            // having two areas alive at once, which has likely cleared by
-            // now since the previous chunk's area was just removed above.
-            // One synchronous retry catches that case without giving up on
-            // the chunk outright.
             const retryArea = await loadFor(coord);
             if (retryArea) {
                 await fillChunk(coord, retryArea);

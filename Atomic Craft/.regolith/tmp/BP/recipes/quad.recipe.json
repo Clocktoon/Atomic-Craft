@@ -1,0 +1,38 @@
+{
+    "format_version": "1.26.50",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "atomic:quad_recipe"
+        },
+        "tags": ["atomic:mech"],
+        "ingredients": [
+            {
+                "item": "atomic:circuit_board",
+                "count": 1
+            },
+            {
+                "item": "minecraft:iron_ingot",
+                "count": 1
+            },
+            {
+                "item": "minecraft:observer",
+                "count": 1
+            }
+        ],
+        "unlock": [
+            {
+                "item": "atomic:circuit_board"
+            },
+            {
+                "item": "minecraft:iron_ingot"
+            },
+            {
+                "item": "minecraft:observer"
+            }
+        ],
+        "result": {
+            "item": "atomic:quadcopter_item",
+            "count": 1
+        }
+    }
+}

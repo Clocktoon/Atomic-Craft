@@ -1,0 +1,45 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.quadcopter.idle": {
+			"animation_length": 0.625,
+			"bones": {
+				"bone": {
+					"rotation": [0, 0, 0],
+					"position": [0, 0, 0],
+					"scale": 1
+				}
+			}
+		},
+		"animation.quadcopter.fly": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"wings": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.2083": [0, -180, 0]
+					}
+				},
+				"wings2": {
+					"rotation": {
+						"0.0": [0, 180, 0],
+						"0.2083": [0, -180, 0]
+					}
+				},
+				"wings3": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.2083": [0, 180, 0]
+					}
+				},
+				"wings4": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.2083": [0, 180, 0]
+					}
+				}
+			}
+		}
+	}
+}

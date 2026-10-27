@@ -370,6 +370,7 @@ ${Math.round(rot.x)}`;
  * @param {Player} player
  */
 export async function travelSystem(x, y, z, name, entity, player) {
+    name = `${name}_${entity.id}`;
     const launchPos = entity.location;
     const dx = x - launchPos.x;
     const dy = y - launchPos.y;
@@ -416,6 +417,15 @@ export async function travelSystem(x, y, z, name, entity, player) {
         })
             .then(() => {
             const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+            const areaCleanup = system.runInterval(() => {
+                if (target.isValid && (entity.isValid || warhead?.isValid))
+                    return;
+                system.clearRun(areaCleanup);
+                if (target.isValid)
+                    target.remove();
+                if (world.tickingAreaManager.hasTickingArea(name))
+                    world.tickingAreaManager.removeTickingArea(name);
+            }, 1);
             initializeMissile(entity, target.location);
             entity.setProperty("atomic:blastoff", true);
             entity.triggerEvent("atomic:onn");
@@ -463,6 +473,15 @@ export async function travelSystem(x, y, z, name, entity, player) {
         })
             .then(() => {
             const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+            const areaCleanup = system.runInterval(() => {
+                if (target.isValid && (entity.isValid || warhead?.isValid))
+                    return;
+                system.clearRun(areaCleanup);
+                if (target.isValid)
+                    target.remove();
+                if (world.tickingAreaManager.hasTickingArea(name))
+                    world.tickingAreaManager.removeTickingArea(name);
+            }, 1);
             initializeMissile(entity, target.location);
             entity.setProperty("atomic:blastoff", true);
             entity.triggerEvent("atomic:onn");
@@ -611,4 +630,5 @@ world.afterEvents.entityHurt.subscribe((ev) => {
         }
     }
 });
+//# sourceMappingURL=icbmCode.js.map
 //# sourceMappingURL=icbmCode.js.map

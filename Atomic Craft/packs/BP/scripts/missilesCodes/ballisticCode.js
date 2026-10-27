@@ -1,5 +1,5 @@
 import { ItemStack, Player, system, world, } from "@minecraft/server";
-import { CustomForm, ObservableNumber, ObservableString, ObservableBoolean } from "@minecraft/server-ui";
+import { CustomForm, ObservableNumber, ObservableString, ObservableBoolean, } from "@minecraft/server-ui";
 const distanceUiNumber = new ObservableNumber(0);
 let fail = false;
 function initializeMissile(missile, targetPos) {
@@ -20,7 +20,7 @@ function initializeMissile(missile, targetPos) {
     missile.setProperty("atomic:pitch", -45);
     missile.setRotation({ x: -45, y: yaw });
     const fractions = [0.15, 0.35, 0.5, 0.65, 0.75, 0.95];
-    const heights = [0.60, 0.75, 0.90, 0.75, 0.65, 0.20];
+    const heights = [0.6, 0.75, 0.9, 0.75, 0.65, 0.2];
     for (let i = 0; i < 6; i++) {
         missile.setDynamicProperty(`wp${i}x`, launch.x + dx * fractions[i]);
         missile.setDynamicProperty(`wp${i}y`, launch.y + apexHeight * heights[i]);
@@ -136,7 +136,7 @@ function updateMissile(missile, target, payload, name) {
         newPayLoad.dimension.spawnParticle("atomic:icbmunleash", {
             x: newPayLoad.location.x,
             y: newPayLoad.location.y,
-            z: newPayLoad.location.z - 1
+            z: newPayLoad.location.z - 1,
         });
         const yaw = missile.getDynamicProperty("yaw");
         const pitch = missile.getDynamicProperty("pitch");
@@ -158,7 +158,10 @@ function updateMissile(missile, target, payload, name) {
     // soften the pitch near the apex where horizontal distance gets tiny
     if (horizontal < 2) {
         desiredPitch = Math.max(-70, Math.min(70, desiredPitch));
-        desiredPitch = pitch + Math.sign(desiredPitch - pitch) * Math.min(6, Math.abs(desiredPitch - pitch));
+        desiredPitch =
+            pitch +
+                Math.sign(desiredPitch - pitch) *
+                    Math.min(6, Math.abs(desiredPitch - pitch));
     }
     const yawRate = 8;
     let pitchRate;
@@ -226,6 +229,7 @@ function updateMissile(missile, target, payload, name) {
     return payload;
 }
 export function btravelSystem(x, y, z, name, entity, player) {
+    name = `${name}_${entity.id}`;
     const launchPos = entity.location;
     const dx = x - launchPos.x;
     const dy = y - launchPos.y;
@@ -259,6 +263,15 @@ export function btravelSystem(x, y, z, name, entity, player) {
     })
         .then(() => {
         const target = entity.dimension.spawnEntity("atomic:hate", { x, y, z });
+        const areaCleanup = system.runInterval(() => {
+            if (target.isValid && (entity.isValid || payload?.isValid))
+                return;
+            system.clearRun(areaCleanup);
+            if (target.isValid)
+                target.remove();
+            if (world.tickingAreaManager.hasTickingArea(name))
+                world.tickingAreaManager.removeTickingArea(name);
+        }, 1);
         initializeMissile(entity, target.location);
         entity.setProperty("atomic:blastoff", true);
         entity.triggerEvent("atomic:onn");
@@ -302,7 +315,9 @@ world.afterEvents.playerInteractWithEntity.subscribe((ev) => {
                 }
             }
         });
-        const form = new CustomForm(player, { translate: "blas.menu.paneltitle.name" });
+        const form = new CustomForm(player, {
+            translate: "blas.menu.paneltitle.name",
+        });
         form
             .dropdown({ translate: "blas.menu.dropdownname.name" }, cordMode, [
             {
@@ -406,4 +421,5 @@ world.afterEvents.entityHurt.subscribe((ev) => {
         }
     }
 });
+//# sourceMappingURL=ballisticCode.js.map
 //# sourceMappingURL=ballisticCode.js.map

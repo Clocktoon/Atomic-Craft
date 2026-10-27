@@ -4,6 +4,7 @@ world.afterEvents.playerSpawn.subscribe((ev) => {
     const player = ev.player;
     if (initialspawn) {
         player.sendMessage("§6Thank you for playing §jbombs of glory");
+        player.sendMessage("§2Also play Bombs of Glory (the unofficial) remake!");
     }
 });
 //# sourceMappingURL=welcomeText.js.map

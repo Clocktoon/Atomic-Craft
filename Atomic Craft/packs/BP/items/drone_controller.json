@@ -14,7 +14,11 @@
                 }
             },
             "minecraft:display_name": {
-                "value": "secret_weapon"
+                "value": "item.atomic:drone_controller.name"
+            },
+            "minecraft:max_stack_size": 1,
+            "atomic:drone_controller": {
+                
             }
         }
     }

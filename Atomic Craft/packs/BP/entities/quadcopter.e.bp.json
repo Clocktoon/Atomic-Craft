@@ -9,11 +9,35 @@
         "atomic:drone_mode": {
           "type": "enum",
           "default": "fpvmode",
-          "values": ["fpvmode","controllermode"]
+          "values": ["fpvmode","controllermode"],
+          "client_sync": true
         },
         "atomic:drone_on": {
           "type": "bool",
-          "default": false
+          "default": false,
+          "client_sync": true
+        }
+      }
+    },
+    "component_groups": {
+      "atomic:fpv_group" : {
+        "minecraft:physics": {
+          "has_collision": true,
+          "has_gravity": false
+        },
+        "minecraft:damage_sensor": {
+          "triggers": [
+            {
+              "on_damage": {
+                "filters": {
+                  "test": "has_damage",
+                  "subject": "self",
+                  "value": "fall"
+                }
+              },
+              "deals_damage": "no"
+            }
+          ]
         }
       }
     },
@@ -30,7 +54,10 @@
         "value": 1,
         "max": 1
       },
-      "minecraft:navigation.fly": {
+      "minecraft:movement.hover": {
+        "max_turn": 30
+      },
+      "minecraft:navigation.hover": {
         "avoid_damage_blocks": false,
         "avoid_portals": false,
         "avoid_sun": false,
@@ -45,14 +72,14 @@
         "can_walk": true,
         "can_walk_in_lava": false,
         "is_amphibious": false
+      },      
+      "minecraft:behavior.float": {
+        "priority": 7
       },
       "minecraft:jump.dynamic": {
         "regular_skip_data": {
             "height": 0.1
         }
-      },
-      "minecraft:movement.basic": {
-        "max_turn": 30
       },
       "minecraft:physics": {
         "has_collision": true,
@@ -63,7 +90,14 @@
             "atomic:drone"
         ]
       },
-      "minecraft:can_fly": true,
+      "minecraft:interact": {
+        "interactions": [
+          {}
+        ]
+      },
+      "minecraft:can_fly": {
+        
+      },
       "minecraft:custom_hit_test": {
         "hitboxes": [
           {
@@ -72,6 +106,22 @@
             "pivot": [0, 0.15, 0]
           }
         ]
+      }
+    },
+    "events": {
+      "atomic:fpv": {
+        "add": {
+          "component_groups": [
+            "atomic:fpv_group"
+          ]
+        }
+      },
+      "atomic:fpv_off": {
+        "remove": {
+          "component_groups": [
+            "atomic:fpv_group"
+          ]
+        }
       }
     }
   }

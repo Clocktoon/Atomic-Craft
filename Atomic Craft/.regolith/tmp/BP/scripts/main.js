@@ -23,7 +23,7 @@ import("./remoteMissile.js");
 import("./landMineCode.js");
 import("./nuclearBombs/hBombCode.js");
 import("./missilesCodes/icbmComp.js");
-import("./missilesCodes/consoleCode.js");
+import("./missilesCodes/consoleCode");
 import("./techSection/enrichment");
 import("./lead_xp");
 // import("./nonComp.js")
@@ -35,6 +35,7 @@ import("./nuclearBombs/gadget");
 import("./geigerCount");
 import("./radiationSystem/radiationManger");
 import("./nuclearBombs/voidBomb");
+import("./chunkLoaders/robot/drone");
 world.afterEvents.worldLoad.subscribe(() => {
     if (typeof world.getDynamicProperty("powerful") !== "boolean") {
         world.setDynamicProperty("powerful", true);
@@ -44,6 +45,11 @@ world.afterEvents.worldLoad.subscribe(() => {
     }
     if (typeof world.getDynamicProperty("logs") !== "boolean") {
         world.setDynamicProperty("logs", false);
+    }
+    for (const player of world.getPlayers()) {
+        if (typeof player.getDynamicProperty("atomic:drone_weapon") !== "boolean") {
+            player.setDynamicProperty("atomic:drone_weapon", false);
+        }
     }
     import("./explodeTnt.js");
     import("./projectileScript.js");

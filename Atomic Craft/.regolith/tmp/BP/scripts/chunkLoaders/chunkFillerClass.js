@@ -51,6 +51,7 @@ const UNTAGGED_LOGS = [
     "minecraft:pale_oak_log",
     "minecraft:crimson_stem",
     "minecraft:warped_stem",
+    "minecraft:poplar_log"
 ];
 /** Vaporised outright at ground zero. */
 const VAPORISED = [
@@ -175,13 +176,9 @@ class ChunkFiller {
         return this.#currentGenerator;
     }
     *generator() {
-        // Read once per drain, not once per block. These were previously
-        // native property reads inside the innermost loop.
         const logs = world.getDynamicProperty("logs") === true;
-        const powerful = world.getDynamicProperty("powerful") === true;
-        // "powerful" now controls how finely the work is sliced: smaller
-        // slabs mean more yields, smoother frame times, slower wall clock.
-        const slab = powerful ? 16 : 64;
+        const powerful = world.getDynamicProperty("powerful");
+        const slab = !powerful ? 16 : 64;
         const log = (msg) => {
             if (logs)
                 world.sendMessage(msg);
@@ -215,20 +212,18 @@ class ChunkFiller {
                 // ORDER MATTERS. The diamond pass has to run before the bulk
                 // radiation fill, or the ore is already gone by the time we
                 // look for it. (That was the old dead-code bug.)
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:radiation_diamond_block", { includeTypes: DIAMOND_ORE });
-                touched += yield* fillSliced(dim, min, max, slab, log, "minecraft:air", { includeTypes: [...PLANTS, ...VAPORISED] });
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:burned_log", { includeTypes: UNTAGGED_LOGS, includeTags: ["log"] });
-                // Split by type, so wooden slabs actually convert. The old
-                // typeId.includes("slabs") test never matched "wooden_slab".
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:radiation_plank", { includeTypes: ["minecraft:planks"] });
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:radiation_slab", { includeTypes: ["minecraft:wooden_slab"] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:radiation_diamond_block", { includeTypes: DIAMOND_ORE });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "minecraft:air", { includeTypes: [...PLANTS, ...VAPORISED] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:burned_log", { includeTypes: UNTAGGED_LOGS, includeTags: ["log"] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:radiation_plank", { includeTypes: ["minecraft:planks"] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:radiation_slab", { includeTypes: ["minecraft:wooden_slab"] });
                 // Bulk pass last: everything still standing becomes slag.
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:radiation_block", { excludeTypes: BULK_EXCLUDE, excludeTags: ["log"] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:radiation_block", { excludeTypes: BULK_EXCLUDE, excludeTags: ["log"] });
             }
             else {
-                touched += yield* fillSliced(dim, min, max, slab, log, "minecraft:air", { includeTypes: PLANTS, includeTags: ["minecraft:crop", "plant"] });
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:radi_leave", { includeTypes: LEAVES });
-                touched += yield* fillSliced(dim, min, max, slab, log, "atomic:dead_grass", { includeTypes: GROUND_COVER });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "minecraft:air", { includeTypes: PLANTS, includeTags: ["minecraft:crop", "plant"] });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:radi_leave", { includeTypes: LEAVES });
+                touched += yield* fillSliced(dim, min, max, slab, powerful, log, "atomic:dead_grass", { includeTypes: GROUND_COVER });
                 // The only pass that genuinely needs per-block logic: ~20% of
                 // exposed woodwork catches fire. The candidate set is sparse,
                 // so a loop here is cheap.
@@ -248,7 +243,7 @@ class ChunkFiller {
  * Runs one fillBlocks pass over [min, max], cut into Y slabs, yielding
  * between slabs. Returns the number of blocks placed.
  */
-function* fillSliced(dim, min, max, slab, log, blockType, filter) {
+function* fillSliced(dim, min, max, slab, yieldslices, log, blockType, filter) {
     let placed = 0;
     for (let y = min.y; y <= max.y; y += slab) {
         const top = Math.min(y + slab - 1, max.y);
@@ -261,7 +256,8 @@ function* fillSliced(dim, min, max, slab, log, blockType, filter) {
         catch (err) {
             log(`§4fill ${blockType} failed at y=${y}..${top}: ${err}`);
         }
-        yield;
+        if (!yieldslices)
+            yield;
     }
     return placed;
 }

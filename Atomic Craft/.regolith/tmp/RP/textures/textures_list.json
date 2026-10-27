@@ -59,6 +59,7 @@
 	"textures/entity/payload",
 	"textures/entity/plane_bomb_tex",
 	"textures/entity/plane_tex",
+	"textures/entity/quadcopter",
 	"textures/entity/siren_texture",
 	"textures/entity/tactical_ballistic_texture",
 	"textures/entity/vita_tex",
@@ -71,6 +72,8 @@
 	"textures/items/circuit_board",
 	"textures/items/core_texture",
 	"textures/items/dev_item",
+	"textures/items/drone_bomber",
+	"textures/items/drone_controller",
 	"textures/items/engine_tex",
 	"textures/items/gas_maskitem",
 	"textures/items/gas_storage",
@@ -89,6 +92,7 @@
 	"textures/items/non_item",
 	"textures/items/northrop_item",
 	"textures/items/purple_card",
+	"textures/items/quadcopter_item",
 	"textures/items/raw_lead",
 	"textures/items/red_card",
 	"textures/items/Robot egg",
@@ -97,6 +101,7 @@
 	"textures/items/steel_ingot_tex",
 	"textures/items/tablet",
 	"textures/items/tabletatomic",
+	"textures/items/thermo",
 	"textures/items/thermo_core",
 	"textures/items/uraniumver2",
 	"textures/items/uranium_billet",
@@ -126,5 +131,9 @@
 	"textures/particle/void_beam",
 	"textures/particle/void_particle",
 	"textures/particle/void_spine",
-	"textures/particle/whiteplane"
+	"textures/particle/whiteplane",
+	"textures/ui/advancements/atomic",
+	"textures/icons/category/atomic/icon",
+	"textures/icons/advancement/atomic/uranium_fever",
+	"textures/icons/advancement/atomic/incomplete/uranium_fever"
 ]

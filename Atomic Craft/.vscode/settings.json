@@ -12,5 +12,6 @@
     "**/*.rpa": true,
     "**/*.rpymc": true,
     "**/cache/": true
-  }
+  },
+  "workbench.iconTheme": "bedrock-icons"
 }

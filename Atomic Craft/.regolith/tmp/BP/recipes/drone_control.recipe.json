@@ -1,0 +1,30 @@
+{
+    "format_version": "1.26.50",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "atomic:drone_control"
+        },
+        "ingredients": [
+            {
+                "item": "atomic:tablet"
+            },
+            {
+                "item": "atomic:quadcopter_item"
+            }
+        ],
+        "tags": ["atomic:mech"],
+        "unlock": [
+            {
+                "item": "atomic:tablet"
+            },
+            {
+                "item": "atomic:quadcopter_item"
+            }
+        ],
+        "result": {
+            "item": "atomic:drone_controller",
+            "count": 1
+        }
+        
+    }
+}

@@ -202,3 +202,11 @@ atomic.tablet.lorethree.name=You must be uncrouched to detonate the nuke
 
 book.page.one.name=Speech by sgt. Buck: Darkness. The darkness of war has fallen on us, and we must take the call, our enemy may seem strong, but they are weak, general Blast has ordered me to use our base to defend against the evil, to win this war we must
 book.page.two.name=tap into our own, darker natures, into the things we hide as moral normal villagefolk, but once we win, I can assure you not a single atom bomb shall have needed to be dropped, and your families will be fine, but to get that, we must fight, we must win
+item.atomic:quadcopter_item.name=Quadcopter drone
+item.atomic:drone_controller.name=Drone controller
+entity.atomic:quadcopter.name=Quadcopter
+drone.message.name=Make sure you don't have a drone already saved! And that you're not clicking on a different mob
+item.atomic:drone_bomber.name=Drop Drone Bomb
+drone.atomic:drone_bomber_warning.name=You have to use this while controlling a drone in FPV mode silly
+adv.atomic:alyadvancement_uranium_fever.title=Uranium Fever
+adv.atomic:alyadvancement_uranium_fever.desc=Mine a uranium block
