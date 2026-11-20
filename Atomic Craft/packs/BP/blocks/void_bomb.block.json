@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.50",
+    "format_version": "1.26.60",
     "minecraft:block": {
         "description": {
             "identifier": "atomic:void_bomb",
@@ -19,7 +19,20 @@
             }
         },
         "components": {
-            "minecraft:collision_box": true,
+            "minecraft:collision_box": [
+				{
+					"origin": [
+						-8,
+						0,
+						-8
+					],
+					"size": [
+						16,
+						16,
+						16
+					]
+				}
+			],
             "atomic:void": {},
             "minecraft:geometry": "geometry.void_bomb",
             "minecraft:material_instances": {

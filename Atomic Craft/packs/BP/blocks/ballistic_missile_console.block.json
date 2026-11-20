@@ -1,5 +1,5 @@
 {
-	"format_version": "1.26.50",
+	"format_version": "1.26.60",
 	"minecraft:block": {
 		"description": {
 			"identifier": "atomic:ballistic_missile_console",
@@ -16,7 +16,20 @@
 			}
 		},
 		"components": {
-			"minecraft:collision_box": true,
+			"minecraft:collision_box": [
+				{
+					"origin": [
+						-8,
+						0,
+						-8
+					],
+					"size": [
+						16,
+						16,
+						16
+					]
+				}
+			],
 			"minecraft:geometry": "minecraft:geometry.full_block",
 			"minecraft:material_instances": {
 				"east": {

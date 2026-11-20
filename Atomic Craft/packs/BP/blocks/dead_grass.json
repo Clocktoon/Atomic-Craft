@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.50",
+    "format_version": "1.26.60",
     "minecraft:block": {
         "description": {
             "identifier": "atomic:dead_grass"
@@ -25,7 +25,20 @@
                     "texture": "atomic_dead_grass_up"
                 }
             },
-            "minecraft:collision_box": true,
+            "minecraft:collision_box": [
+				{
+					"origin": [
+						-8,
+						0,
+						-8
+					],
+					"size": [
+						16,
+						16,
+						16
+					]
+				}
+			],
             "minecraft:selection_box": true,
             "minecraft:light_dampening": 15,
             "minecraft:light_emission": 0,

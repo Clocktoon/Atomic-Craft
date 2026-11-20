@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.50",
+  "format_version": "1.26.60",
   "minecraft:block": {
     "description": {
       "identifier": "atomic:crsuag_banner",
@@ -25,10 +25,12 @@
         }
       },
       "minecraft:display_name": "tile.atomic:crsuag_banner.name",
-      "minecraft:collision_box": {
+      "minecraft:collision_box": [
+        {
         "origin": [-8, 0, 4],
         "size": [16, 16, 4]
-      },
+        }
+      ],
       "minecraft:selection_box": {
         "origin": [-8, 0, 4],
         "size": [16, 16, 4]

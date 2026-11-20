@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.50",
+  "format_version": "1.26.60",
   "minecraft:block": {
     "description": {
       "identifier": "atomic:radiation_double_slab",
@@ -23,7 +23,20 @@
           "render_method": "opaque"
         }
       },
-      "minecraft:collision_box": true,
+      "minecraft:collision_box": [
+				{
+					"origin": [
+						-8,
+						0,
+						-8
+					],
+					"size": [
+						16,
+						16,
+						16
+					]
+				}
+			],
       "minecraft:selection_box": true,
       "minecraft:tags": [
         "wood",

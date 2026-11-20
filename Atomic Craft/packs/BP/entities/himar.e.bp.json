@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.50",
+  "format_version": "1.26.60",
   "minecraft:entity": {
     "description": {
       "identifier": "atomic:himar",
@@ -119,9 +119,9 @@
         "seat_count": 1,
         "on_rider_enter_event": "atomic:wpn",
         "on_rider_exit_event": "atomic:off",
-        "seats": {
+        "seats": [{
           "position": [0, 1, 0]
-        }
+        }]
       }
     },
     "events": {

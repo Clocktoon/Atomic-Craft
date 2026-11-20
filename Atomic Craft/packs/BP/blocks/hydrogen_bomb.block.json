@@ -1,5 +1,5 @@
 {
-	"format_version": "1.26.50",
+	"format_version": "1.26.60",
 	"minecraft:block": {
 		"description": {
 			"identifier": "atomic:hydrogen_bomb",
@@ -26,7 +26,7 @@
 					"render_method": "alpha_test"
 				}
 			},
-			"minecraft:collision_box": {
+			"minecraft:collision_box": [{
 				"origin": [
 					-6,
 					0,
@@ -37,7 +37,7 @@
 					8,
 					15
 				]
-			},
+			}],
 			"minecraft:selection_box": {
 				"origin": [
 					-6,

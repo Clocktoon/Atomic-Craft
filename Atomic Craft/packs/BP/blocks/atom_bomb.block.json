@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.50",
+    "format_version": "1.26.60",
     "minecraft:block": {
         "description": {
             "identifier": "atomic:atom_bomb",
@@ -26,7 +26,20 @@
                     "render_method": "alpha_test"
                 }
             },
-            "minecraft:collision_box": true,
+            "minecraft:collision_box": [
+				{
+					"origin": [
+						-8,
+						0,
+						-8
+					],
+					"size": [
+						16,
+						16,
+						16
+					]
+				}
+			],
             "minecraft:selection_box": true,
             "minecraft:destructible_by_explosion": true,
             "minecraft:light_dampening": 8,

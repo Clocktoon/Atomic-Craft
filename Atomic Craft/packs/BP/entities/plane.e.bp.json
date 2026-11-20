@@ -1,5 +1,5 @@
 {
-    "format_version": "1.26.50",
+    "format_version": "1.26.60",
     "minecraft:entity": {
         "description": {
             "identifier": "atomic:plane",
@@ -47,13 +47,15 @@
                 "family_types": [
                     "player"
                 ],
-                "seats": {
+                "seats": [
+                    {
                     "position": [
                         0,
                         0.24,
                         0
                     ]
-                },
+                }
+                ],
                 "on_rider_enter_event": "atomic:fly",
                 "on_rider_exit_event": "atomic:grounded",
                 "rider_can_interact": true

@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.50",
+  "format_version": "1.26.60",
   "minecraft:block": {
     "description": {
       "identifier": "atomic:gadget_bomb",
@@ -19,7 +19,7 @@
             }
     },
     "components": {
-      "minecraft:collision_box": {
+      "minecraft:collision_box": [ {
         "origin": [
           -6,
           0,
@@ -30,7 +30,8 @@
           10,
           14
         ]
-      },
+     }
+    ],
       "minecraft:geometry": {
         "identifier": "geometry.bomb_g"
       },

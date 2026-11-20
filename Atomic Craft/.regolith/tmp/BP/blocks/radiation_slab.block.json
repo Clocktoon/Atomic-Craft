@@ -1,5 +1,5 @@
 {
-  "format_version": "1.26.50",
+  "format_version": "1.26.60",
   "minecraft:block": {
     "description": {
       "identifier": "atomic:radiation_slab",
@@ -40,13 +40,13 @@
           "render_method": "opaque"
         }
       },
-      "minecraft:collision_box": {
+      "minecraft:collision_box": [{
         "origin": [ 8, 0, 8 ],
-        "size": [ -16, 8, -16 ]
-      },
+        "size": [ 0, 8, 0 ]
+      }],
       "minecraft:selection_box": {
         "origin": [ 8, 0, 8 ],
-        "size": [ -16, 8, -16 ]
+        "size": [ 0, 8, 0 ]
       },
       "minecraft:support": {
         "shape": "stair"
